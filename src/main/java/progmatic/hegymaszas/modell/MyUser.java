@@ -1,6 +1,7 @@
 package progmatic.hegymaszas.modell;
 
 import org.springframework.security.core.GrantedAuthority;
+import progmatic.hegymaszas.modell.messages.ClimbingLog;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
