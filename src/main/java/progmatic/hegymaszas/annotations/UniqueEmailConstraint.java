@@ -6,14 +6,13 @@ import java.lang.annotation.*;
 
 
 @Documented
-@Constraint(validatedBy = UniqueUsernameValidator.class)
+@Constraint(validatedBy = UniqueEmailValidator.class)
 @Target({ElementType.METHOD, ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface UniqueUsernameConstraint {
-    String message() default "Username already exists";
+public @interface UniqueEmailConstraint {
+    String message() default "E-mail already exists";
 
     Class<?>[] groups() default {};
 
     Class<? extends Payload>[] payload() default {};
 }
-
