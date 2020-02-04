@@ -15,6 +15,10 @@ public class ClimbingPlace {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    @NotNull
+    @NotBlank
+    private String name;
+
     @OneToMany(mappedBy = "climbingPlace")
     private List<Sector> sectors = new ArrayList<>();
 
@@ -68,5 +72,15 @@ public class ClimbingPlace {
 
     public void setApproachGuide(String approachGuide) {
         this.approachGuide = approachGuide;
+    }
+
+
+    public String getName() {
+        return name;
+    }
+
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

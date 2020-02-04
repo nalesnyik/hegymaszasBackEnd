@@ -13,6 +13,10 @@ public class Sector {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    @NotNull
+    @NotBlank
+    private String name;
+
     @OneToMany(mappedBy = "sector")
     private List<Route> routes = new ArrayList<>();
 
@@ -91,4 +95,15 @@ public class Sector {
     public void setLatitude(double latitude) {
         this.latitude = latitude;
     }
+
+
+    public String getName() {
+        return name;
+    }
+
+
+    public void setName(String name) {
+        this.name = name;
+    }
 }
+
