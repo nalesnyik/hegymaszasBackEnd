@@ -1,4 +1,4 @@
-package progmatic.hegymaszas.modell;
+package progmatic.hegymaszas.dto;
 
 import progmatic.hegymaszas.annotations.UniqueUsernameConstraint;
 
