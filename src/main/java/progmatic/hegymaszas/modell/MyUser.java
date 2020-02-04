@@ -2,6 +2,9 @@ package progmatic.hegymaszas.modell;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import progmatic.hegymaszas.modell.messages.ClimbingLog;
+import progmatic.hegymaszas.modell.messages.DirectMessage;
+import progmatic.hegymaszas.modell.messages.Feedback;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
@@ -31,6 +34,15 @@ public class MyUser implements UserDetails {
     @OneToMany(mappedBy = "user")
     private List<ClimbingLog> climbingLogs = new ArrayList<>();
 
+    @OneToMany(mappedBy = "user")
+    private List<Feedback> feedbacks = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user")
+    private List<DirectMessage> sentDirectMsgs = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user")
+    private List<DirectMessage> receivedDirectMsgs = new ArrayList<>();
+
 
     public MyUser() {
     }
@@ -51,29 +63,35 @@ public class MyUser implements UserDetails {
         return null;
     }
 
+
     public String getPassword() {
         return password;
     }
+
 
     @Override
     public String getUsername() {
         return name;
     }
 
+
     @Override
     public boolean isAccountNonExpired() {
         return true;
     }
+
 
     @Override
     public boolean isAccountNonLocked() {
         return true;
     }
 
+
     @Override
     public boolean isCredentialsNonExpired() {
         return true;
     }
+
 
     @Override
     public boolean isEnabled() {
@@ -115,8 +133,38 @@ public class MyUser implements UserDetails {
         this.climbingLogs = climbingLogs;
     }
 
+
     public void addAuthority(MyAuthority authority) {
         roles.add(authority);
+    }
 
+
+    public List<Feedback> getFeedbacks() {
+        return feedbacks;
+    }
+
+
+    public void setFeedbacks(List<Feedback> feedbacks) {
+        this.feedbacks = feedbacks;
+    }
+
+
+    public List<DirectMessage> getSentDirectMsgs() {
+        return sentDirectMsgs;
+    }
+
+
+    public void setSentDirectMsgs(List<DirectMessage> sentDirectMsgs) {
+        this.sentDirectMsgs = sentDirectMsgs;
+    }
+
+
+    public List<DirectMessage> getReceivedDirectMsgs() {
+        return receivedDirectMsgs;
+    }
+
+
+    public void setReceivedDirectMsgs(List<DirectMessage> receivedDirectMsgs) {
+        this.receivedDirectMsgs = receivedDirectMsgs;
     }
 }
