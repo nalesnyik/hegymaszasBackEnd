@@ -1,17 +1,14 @@
 package progmatic.hegymaszas.modell;
 
 import org.springframework.security.core.GrantedAuthority;
-import progmatic.hegymaszas.modell.messages.ClimbingLog;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Entity
-public class MyUser {
+public class MyUser implements UserDetails {
 
     @Id
     @Column(unique = true)
@@ -49,8 +46,38 @@ public class MyUser {
     }
 
 
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return null;
+    }
+
     public String getPassword() {
         return password;
+    }
+
+    @Override
+    public String getUsername() {
+        return name;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 
 
@@ -86,5 +113,10 @@ public class MyUser {
 
     public void setClimbingLogs(List<ClimbingLog> climbingLogs) {
         this.climbingLogs = climbingLogs;
+    }
+
+    public void addAuthority(MyAuthority authority) {
+        roles.add(authority);
+
     }
 }
