@@ -34,8 +34,6 @@ public class Route {
     @OneToMany(mappedBy = "route")
     private List<ClimbingLog> climbingLogs = new ArrayList<>();
 
-    private String tags;
-
     @Lob
     private byte[] photos;
 
@@ -108,16 +106,6 @@ public class Route {
 
     public void setClimbingLogs(List<ClimbingLog> climbingLogs) {
         this.climbingLogs = climbingLogs;
-    }
-
-
-    public String getTags() {
-        return tags;
-    }
-
-
-    public void setTags(String tags) {
-        this.tags = tags;
     }
 
 

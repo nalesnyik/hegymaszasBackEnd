@@ -1,7 +1,6 @@
 package progmatic.hegymaszas.annotations;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import progmatic.hegymaszas.modell.MyUserDto;
 import progmatic.hegymaszas.services.UserService;
 
 import javax.validation.ConstraintValidator;
