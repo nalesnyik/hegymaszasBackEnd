@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 import progmatic.hegymaszas.modell.Sector;
 import progmatic.hegymaszas.services.SectorService;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -17,8 +18,8 @@ public class RestSectorController {
     private SectorService sectorService;
 
     @Autowired
-    public void MapController(SectorService mapService) {
-        this.sectorService = mapService;
+    public RestSectorController(SectorService sectorServiceService) {
+        this.sectorService = sectorServiceService;
     }
 
     @RequestMapping(method = RequestMethod.GET)

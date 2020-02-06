@@ -16,6 +16,6 @@ public class SectorService {
 
     @Transactional
     public List<Sector> getAllSector(){
-        return em.createQuery("SELECT s FROM Sector s").getResultList();
+        return em.createQuery("SELECT s FROM Sector s", Sector.class).getResultList();
     }
 }

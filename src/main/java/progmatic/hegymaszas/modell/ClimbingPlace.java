@@ -52,7 +52,6 @@ public class ClimbingPlace {
         this.sectors = sectors;
     }
 
-
     public ClimbingPlaceType getType() {
         return type;
     }
