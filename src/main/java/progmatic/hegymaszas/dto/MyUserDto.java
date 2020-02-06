@@ -23,6 +23,9 @@ public class MyUserDto {
     @Column(unique = true)
     private String email;
 
+    public MyUserDto() {
+    }
+
     public String getName() {
         return name;
     }
