@@ -26,8 +26,6 @@ public class ClimbingPlace {
     @NotBlank
     private ClimbingPlaceType type;
 
-    @NotNull
-    @NotBlank
     private String approachGuide;
 
 
