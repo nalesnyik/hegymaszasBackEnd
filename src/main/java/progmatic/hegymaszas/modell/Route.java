@@ -1,6 +1,7 @@
 package progmatic.hegymaszas.modell;
 
 import org.springframework.lang.NonNull;
+import progmatic.hegymaszas.dto.RouteCreateDto;
 import progmatic.hegymaszas.modell.enums.Orientation;
 import progmatic.hegymaszas.modell.enums.SteepnessType;
 import progmatic.hegymaszas.modell.enums.WeatherRain;
@@ -52,6 +53,19 @@ public class Route {
     private SteepnessType steepnessType;
     private WeatherRain weatherRain;
     private WeatherSun weatherSun;
+
+
+    public Route() {
+    }
+
+
+    public Route(RouteCreateDto route, Sector sector) {
+        this.name = route.getRouteName();
+        this.grade = route.getGrade();
+        this.height = route.getHeight();
+        this.numOfBolts = route.getNumOfBolts();
+        this.sector = sector;
+    }
 
 
     public long getId() {
@@ -182,5 +196,15 @@ public class Route {
 
     public void setWeatherSun(WeatherSun weatherSun) {
         this.weatherSun = weatherSun;
+    }
+
+
+    public List<Rating> getRatings() {
+        return ratings;
+    }
+
+
+    public void setRatings(List<Rating> ratings) {
+        this.ratings = ratings;
     }
 }
