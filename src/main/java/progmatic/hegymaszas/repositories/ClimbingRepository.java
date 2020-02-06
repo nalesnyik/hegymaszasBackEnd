@@ -1,10 +1,10 @@
-package progmatic.hegymaszas.repositoryes;
+package progmatic.hegymaszas.repositories;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import progmatic.hegymaszas.modell.ClimbingPlace;
 
 @Repository
-public interface ClimbingRepository extends JpaRepository<ClimbingPlace, Integer>, ClimbingRepositoryCustom {
+public interface ClimbingRepository extends JpaRepository<ClimbingPlace, Long>, ClimbingRepositoryCustom {
 
 }

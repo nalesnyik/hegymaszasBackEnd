@@ -6,7 +6,7 @@ import progmatic.hegymaszas.dto.ClimbingPlaceDto;
 import progmatic.hegymaszas.dto.SectorDto;
 import progmatic.hegymaszas.modell.ClimbingPlace;
 import progmatic.hegymaszas.modell.Sector;
-import progmatic.hegymaszas.repositoryes.ClimbingRepository;
+import progmatic.hegymaszas.repositories.ClimbingRepository;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -17,9 +17,8 @@ public class ClimbingService {
     @Autowired
     private ClimbingRepository climbingRepository;
 
-
     public List<ClimbingPlaceDto> showClimbingPlaces() {
-        List<ClimbingPlace> climbingPlaces = climbingRepository.getClimbingPlaces();
+        List<ClimbingPlace> climbingPlaces = climbingRepository.findAll();
 
         return climbingPlaces.stream().map(c -> {
             long id = c.getId();

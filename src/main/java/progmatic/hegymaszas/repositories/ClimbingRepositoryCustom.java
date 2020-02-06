@@ -1,4 +1,4 @@
-package progmatic.hegymaszas.repositoryes;
+package progmatic.hegymaszas.repositories;
 
 import progmatic.hegymaszas.modell.ClimbingPlace;
 import progmatic.hegymaszas.modell.Sector;
