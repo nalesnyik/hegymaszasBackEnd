@@ -16,6 +16,7 @@ public class WebSecConfig extends WebSecurityConfigurerAdapter {
         return new BCryptPasswordEncoder();
     }
 
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         CharacterEncodingFilter filter = new CharacterEncodingFilter();
@@ -29,6 +30,7 @@ public class WebSecConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/loginpage/beforelogin", "/home", "/", "/registerUser", "/register").permitAll()
                 .antMatchers("/users", "/user/changeRole").hasRole("ADMIN")
+                .antMatchers("/areas", "/areas/**").permitAll()
                 .anyRequest().authenticated();
     }
-    }
+}

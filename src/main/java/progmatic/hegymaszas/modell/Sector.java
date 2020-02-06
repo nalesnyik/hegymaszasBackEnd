@@ -7,6 +7,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@NamedQueries(
+        {
+                @NamedQuery(name = "getSectorsOfClimbingPlace",
+                        query = "SELECT s FROM ClimbingPlace c JOIN c.sectors as s WHERE c.id=:id"),
+                @NamedQuery(name = "getNumOfRoutesOfSector",
+                        query = "SELECT count(s) FROM Sector s JOIN s.routes as r WHERE s.id=:id"),
+                @NamedQuery(name = "getNumOfFeedbacksOfSector",
+                        query = "SELECT count(s) FROM Sector s JOIN  s.routes as r JOIN r.feedbacks as f WHERE s.id=:id"),
+        }
+)
+
 public class Sector {
 
     @Id
@@ -24,9 +35,8 @@ public class Sector {
     private ClimbingPlace climbingPlace;
 
 
-//    @Size(min = 50, max = 1000)
+    //    @Size(min = 50, max = 1000)
     private String travelGuide;
-
 
     private double longitude;
     private double latitude;
