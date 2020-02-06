@@ -45,6 +45,9 @@ public class Route {
     @OneToMany(mappedBy = "route")
     private List<Feedback> feedbacks = new ArrayList<>();
 
+    @OneToMany(mappedBy = "route")
+    private List<Rating> ratings = new ArrayList<>();
+
     private Orientation orientation;
     private SteepnessType steepnessType;
     private WeatherRain weatherRain;
