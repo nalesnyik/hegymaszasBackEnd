@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import progmatic.hegymaszas.modell.MyAuthority;
 import progmatic.hegymaszas.modell.MyUser;
-import progmatic.hegymaszas.modell.MyUserDto;
+import progmatic.hegymaszas.dto.MyUserDto;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;

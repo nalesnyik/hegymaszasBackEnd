@@ -13,14 +13,17 @@ public class Sector {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    //@OneToMany(mappedBy = "sector") TODO
-    //private List<Route> routes = new ArrayList<>();
+    @NotNull
+    @NotBlank
+    private String name;
+
+    @OneToMany(mappedBy = "sector")
+    private List<Route> routes = new ArrayList<>();
 
     @ManyToOne
     private ClimbingPlace climbingPlace;
 
-    @NotNull
-    @NotBlank
+
 //    @Size(min = 50, max = 1000)
     private String travelGuide;
 
@@ -42,7 +45,6 @@ public class Sector {
         this.id = id;
     }
 
-/*
 
     public List<Route> getRoutes() {
         return routes;
@@ -52,7 +54,6 @@ public class Sector {
     public void setRoutes(List<Route> routes) {
         this.routes = routes;
     }
-*/
 
 
     public ClimbingPlace getClimbingPlace() {
@@ -93,4 +94,15 @@ public class Sector {
     public void setLatitude(double latitude) {
         this.latitude = latitude;
     }
+
+
+    public String getName() {
+        return name;
+    }
+
+
+    public void setName(String name) {
+        this.name = name;
+    }
 }
+

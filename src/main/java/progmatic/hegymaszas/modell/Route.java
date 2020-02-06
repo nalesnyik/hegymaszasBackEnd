@@ -10,6 +10,7 @@ import progmatic.hegymaszas.modell.messages.Feedback;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Positive;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,8 +25,10 @@ public class Route {
     @NotBlank
     private String name;
 
+    @Positive
     private int height;
 
+    @Positive
     private int numOfBolts;
 
     @ManyToOne
@@ -34,12 +37,10 @@ public class Route {
     @OneToMany(mappedBy = "route")
     private List<ClimbingLog> climbingLogs = new ArrayList<>();
 
-    private String tags;
-
     @Lob
     private byte[] photos;
 
-    private double grade;
+    private String grade;
 
     @OneToMany(mappedBy = "route")
     private List<Feedback> feedbacks;
@@ -111,16 +112,6 @@ public class Route {
     }
 
 
-    public String getTags() {
-        return tags;
-    }
-
-
-    public void setTags(String tags) {
-        this.tags = tags;
-    }
-
-
     public byte[] getPhotos() {
         return photos;
     }
@@ -131,12 +122,12 @@ public class Route {
     }
 
 
-    public double getGrade() {
+    public String getGrade() {
         return grade;
     }
 
 
-    public void setGrade(double grade) {
+    public void setGrade(String grade) {
         this.grade = grade;
     }
 
