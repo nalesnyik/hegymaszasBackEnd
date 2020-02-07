@@ -6,5 +6,5 @@ import progmatic.hegymaszas.modell.ClimbingPlace;
 
 @Repository
 public interface ClimbingRepository extends JpaRepository<ClimbingPlace, Long>, ClimbingRepositoryCustom {
-
+    ClimbingPlace findByName(String name);
 }

@@ -31,14 +31,10 @@ public class RestRouteController {
         return routes;
     }
 
-    @RequestMapping(method = RequestMethod.GET)
+    @RequestMapping(method = RequestMethod.POST)
     public void allRoute(@Valid @RequestBody CreateRouteDto rDto){
         List<Route> routes = routeService.getAllRoute();
         List<RouteDto> routeDtos = new ArrayList<>();
-
-        
-
-
     }
 
 }

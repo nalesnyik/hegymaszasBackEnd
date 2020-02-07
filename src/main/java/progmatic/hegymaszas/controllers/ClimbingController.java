@@ -5,6 +5,8 @@ import org.springframework.web.bind.annotation.*;
 import progmatic.hegymaszas.dto.ClimbingPlaceDto;
 import progmatic.hegymaszas.dto.RouteCreateDto;
 import progmatic.hegymaszas.dto.SectorDto;
+import progmatic.hegymaszas.exceptions.RouteNameForSectorAlreadyExistsException;
+import progmatic.hegymaszas.exceptions.SectorNotFoundException;
 import progmatic.hegymaszas.services.ClimbingService;
 
 import java.util.List;
@@ -35,7 +37,7 @@ public class ClimbingController {
 
 
     @PostMapping("areas/route")
-    public void createRoute(@RequestParam("route") RouteCreateDto route) throws Exception {
+    public void createRoute(@RequestParam("route") RouteCreateDto route) throws SectorNotFoundException, RouteNameForSectorAlreadyExistsException {
         climbingService.createRoute(route);
     }
 }

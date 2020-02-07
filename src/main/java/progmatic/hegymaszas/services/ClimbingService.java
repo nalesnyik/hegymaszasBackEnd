@@ -5,6 +5,8 @@ import org.springframework.stereotype.Service;
 import progmatic.hegymaszas.dto.ClimbingPlaceDto;
 import progmatic.hegymaszas.dto.RouteCreateDto;
 import progmatic.hegymaszas.dto.SectorDto;
+import progmatic.hegymaszas.exceptions.RouteNameForSectorAlreadyExistsException;
+import progmatic.hegymaszas.exceptions.SectorNotFoundException;
 import progmatic.hegymaszas.modell.ClimbingPlace;
 import progmatic.hegymaszas.modell.Route;
 import progmatic.hegymaszas.modell.Sector;
@@ -52,13 +54,13 @@ public class ClimbingService {
     }
 
 
-    public void createRoute(RouteCreateDto route) throws Exception {
+    public void createRoute(RouteCreateDto route) throws SectorNotFoundException, RouteNameForSectorAlreadyExistsException {
         Sector sector = sectorRepository.findByName(route.getSectorName());
         if (sector == null) {
-            throw new Exception();
+            throw new SectorNotFoundException();
         }
         if (routeRepository.existsRouteBySectorAndName(sector, route.getRouteName())) {
-            throw new Exception();
+            throw new RouteNameForSectorAlreadyExistsException();
         }
 
 //        MyUser user = (MyUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
