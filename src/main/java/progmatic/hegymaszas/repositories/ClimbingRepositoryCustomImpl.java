@@ -1,4 +1,4 @@
-package progmatic.hegymaszas.repositoryes;
+package progmatic.hegymaszas.repositories;
 
 import progmatic.hegymaszas.modell.ClimbingPlace;
 import progmatic.hegymaszas.modell.Sector;
@@ -35,7 +35,7 @@ public class ClimbingRepositoryCustomImpl implements ClimbingRepositoryCustom {
 
 
     public int getNumOfFeedbacksOfSector(long sectorId) {
-        long numOfRoutes = em.createNamedQuery("getNumOfRoutesOfSector", Long.class)
+        long numOfRoutes = em.createNamedQuery("getNumOfFeedbacksOfSector", Long.class)
                 .setParameter("id", sectorId)
                 .getSingleResult();
         return (int) numOfRoutes;
@@ -51,7 +51,7 @@ public class ClimbingRepositoryCustomImpl implements ClimbingRepositoryCustom {
 
 
     public int getNumOfFeedbacksOfClimbingPlace(long climbingPlaceId) {
-        long numOfRoutes = em.createQuery("SELECT count(c) FROM ClimbingPlace c JOIN c.sectors as s JOIN  s.routes as r JOIN r.feedbacks as f WHERE c.id=:id ", Long.class)
+        long numOfRoutes = em.createQuery("SELECT count(c) FROM ClimbingPlace c JOIN c.sectors as s JOIN s.routes as r JOIN r.feedbacks as f WHERE c.id=:id", Long.class)
                 .setParameter("id", climbingPlaceId)
                 .getSingleResult();
         return (int) numOfRoutes;

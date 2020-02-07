@@ -1,11 +1,12 @@
 package progmatic.hegymaszas.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import progmatic.hegymaszas.dto.ClimbingPlaceDto;
+import progmatic.hegymaszas.dto.RouteCreateDto;
 import progmatic.hegymaszas.dto.SectorDto;
+import progmatic.hegymaszas.exceptions.RouteNameForSectorAlreadyExistsException;
+import progmatic.hegymaszas.exceptions.SectorNotFoundException;
 import progmatic.hegymaszas.services.ClimbingService;
 
 import java.util.List;
@@ -27,4 +28,17 @@ public class ClimbingController {
     public List<SectorDto> showSectorsOfClimbingPlace(@PathVariable(value = "climbingPlaceId") Integer id) {
         return climbingService.showSectorsOfClimbingPlace(id);
     }
+
+
+    @GetMapping("areas/route")
+    public RouteCreateDto showCreateRoute() {
+        return new RouteCreateDto();
+    }
+
+
+    @PostMapping("areas/route")
+    public void createRoute(@RequestParam("route") RouteCreateDto route) throws SectorNotFoundException, RouteNameForSectorAlreadyExistsException {
+        climbingService.createRoute(route);
+    }
 }
+

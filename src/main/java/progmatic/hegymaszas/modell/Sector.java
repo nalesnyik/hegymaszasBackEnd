@@ -14,7 +14,7 @@ import java.util.List;
                 @NamedQuery(name = "getNumOfRoutesOfSector",
                         query = "SELECT count(s) FROM Sector s JOIN s.routes as r WHERE s.id=:id"),
                 @NamedQuery(name = "getNumOfFeedbacksOfSector",
-                        query = "SELECT count(s) FROM Sector s JOIN  s.routes as r JOIN r.feedbacks as f WHERE s.id=:id"),
+                        query = "SELECT count(s) FROM Sector s JOIN s.routes as r JOIN r.feedbacks as f WHERE s.id=:id"),
         }
 )
 
