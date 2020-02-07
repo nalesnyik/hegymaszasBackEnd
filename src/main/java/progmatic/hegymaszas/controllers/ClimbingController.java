@@ -2,43 +2,53 @@ package progmatic.hegymaszas.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import progmatic.hegymaszas.dto.ClimbingPlaceDto;
-import progmatic.hegymaszas.dto.RouteCreateDto;
-import progmatic.hegymaszas.dto.SectorDto;
+import progmatic.hegymaszas.dto.*;
+import progmatic.hegymaszas.exceptions.ClimbingPlaceNotFoundException;
 import progmatic.hegymaszas.exceptions.RouteNameForSectorAlreadyExistsException;
 import progmatic.hegymaszas.exceptions.SectorNotFoundException;
 import progmatic.hegymaszas.services.ClimbingService;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
+@RequestMapping("areas")
 public class ClimbingController {
 
     @Autowired
     private ClimbingService climbingService;
 
 
-    @GetMapping("areas")
-    public List<ClimbingPlaceDto> showClimbingPlaces() {
+    @GetMapping
+    public Map<String, List<ClimbingPlaceDto>> showClimbingPlaces() {
         return climbingService.showClimbingPlaces();
     }
 
 
-    @GetMapping("areas/{climbingPlaceId}")
-    public List<SectorDto> showSectorsOfClimbingPlace(@PathVariable(value = "climbingPlaceId") Integer id) {
+    @GetMapping("/{climbingPlaceId}")
+    public Map<String, List<SectorsShowDto>> showSectorsOfClimbingPlace(@PathVariable(value = "climbingPlaceId") long id) {
         return climbingService.showSectorsOfClimbingPlace(id);
     }
 
 
-    @GetMapping("areas/route")
-    public RouteCreateDto showCreateRoute() {
-        return new RouteCreateDto();
+    @GetMapping("/{climbingPlaceId}/{sectorId}")
+    public Map<String, List<RoutesShowDto>> showRoutesOfSector(@PathVariable String climbingPlaceId, @PathVariable long sectorId) throws SectorNotFoundException {
+        return climbingService.showRoutesOfSector(sectorId);
+
+
     }
 
 
-    @PostMapping("areas/route")
-    public void createRoute(@RequestParam("route") RouteCreateDto route) throws SectorNotFoundException, RouteNameForSectorAlreadyExistsException {
+    @GetMapping("/{climbingPlaceId}/{sectorId}/{routeId}")
+    public RouteChosenShowDto showCreateRoute(@PathVariable long climbingPlaceId, @PathVariable long sectorId, @PathVariable long routeId) {
+        return null;
+    }
+
+
+    @PostMapping("/route")
+    public void createRoute(@RequestBody RouteCreateDto route) throws RouteNameForSectorAlreadyExistsException, ClimbingPlaceNotFoundException, SectorNotFoundException {
         climbingService.createRoute(route);
     }
+
 }
 

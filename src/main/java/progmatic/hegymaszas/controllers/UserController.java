@@ -27,6 +27,5 @@ public class UserController {
     @PostMapping(path = "/filter")
     public void filter(@RequestBody String grade, String name, int rating, int height, String climbingPlaceName) {
         List<Route> filteredRoutes = userService.loadFilteredRoutes(grade, name, rating, height, climbingPlaceName);
-
     }
 }

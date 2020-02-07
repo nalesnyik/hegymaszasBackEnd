@@ -19,6 +19,8 @@ public class RouteDto {
 
     private String grade;
 
+
+
     public RouteDto(@NonNull @NotBlank String name, String grade) {
         this.name = name;
         this.grade = grade;
