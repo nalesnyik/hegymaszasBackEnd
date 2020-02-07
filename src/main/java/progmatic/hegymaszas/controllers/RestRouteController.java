@@ -24,17 +24,29 @@ public class RestRouteController {
     public void RestController(RouteService routeService){
         this.routeService = routeService;
     }
-
+/*
     @RequestMapping(method =  RequestMethod.GET)
     public List<Route> allRoutes(){
         List<Route> routes = routeService.getAllRoute();
         return routes;
-    }
+    }*/
 
-    @RequestMapping(method = RequestMethod.POST)
-    public void allRoute(@Valid @RequestBody CreateRouteDto rDto){
+    @RequestMapping(method = RequestMethod.GET)
+    public List<RouteDto> allRoute(){
         List<Route> routes = routeService.getAllRoute();
         List<RouteDto> routeDtos = new ArrayList<>();
+
+        for (Route route : routes) {
+            RouteDto routeDto = new RouteDto();
+            routeDto.setName(route.getName());
+            routeDto.setGrade(route.getGrade());
+            routeDto.setId(route.getId());
+
+            routeDtos.add(routeDto);
+
+        }
+        return routeDtos;
+
     }
 
 }
