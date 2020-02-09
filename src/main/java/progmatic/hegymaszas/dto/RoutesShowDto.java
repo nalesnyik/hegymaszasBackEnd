@@ -1,30 +1,33 @@
 package progmatic.hegymaszas.dto;
 
+import progmatic.hegymaszas.modell.Route;
+
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
-public class SectorDto {
-
+public class RoutesShowDto {
     private long id;
 
     @NotNull
     @NotBlank
     private String name;
 
-    private int numOfRoutes;
-
     private int numOfFeedbacks;
 
 
-    public SectorDto() {
+    public RoutesShowDto(Route route) {
+        this.id = route.getId();
+        this.name = route.getName();
     }
 
 
-    public SectorDto(long id, String sectorName, int numOfRoutes, int numOfFeedbacks) {
+    public long getId() {
+        return id;
+    }
+
+
+    public void setId(long id) {
         this.id = id;
-        this.name = sectorName;
-        this.numOfRoutes = numOfRoutes;
-        this.numOfFeedbacks = numOfFeedbacks;
     }
 
 
@@ -38,16 +41,6 @@ public class SectorDto {
     }
 
 
-    public int getNumOfRoutes() {
-        return numOfRoutes;
-    }
-
-
-    public void setNumOfRoutes(int numOfRoutes) {
-        this.numOfRoutes = numOfRoutes;
-    }
-
-
     public int getNumOfFeedbacks() {
         return numOfFeedbacks;
     }
@@ -55,15 +48,5 @@ public class SectorDto {
 
     public void setNumOfFeedbacks(int numOfFeedbacks) {
         this.numOfFeedbacks = numOfFeedbacks;
-    }
-
-
-    public long getId() {
-        return id;
-    }
-
-
-    public void setId(long id) {
-        this.id = id;
     }
 }
