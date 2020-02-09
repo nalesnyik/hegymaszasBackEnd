@@ -26,10 +26,13 @@ public class UserService implements UserDetailsService {
     @PersistenceContext
     EntityManager em;
     PasswordEncoder passwordEncoder;
+    @Autowired
+    EmailService emailService;
 
     @Autowired
-    public UserService(PasswordEncoder passwordEncoder) {
+    public UserService(PasswordEncoder passwordEncoder, EmailService emailService) {
         this.passwordEncoder = passwordEncoder;
+        this.emailService = emailService;
     }
 
     @Override
@@ -53,6 +56,7 @@ public class UserService implements UserDetailsService {
         user.addAuthority(authority);
         user.setClimbingLogs(new ArrayList<>());
         em.persist(user);
+        emailService.sendRegistrationEmail(user);
     }
 
     @Transactional
