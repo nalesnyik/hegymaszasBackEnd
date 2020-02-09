@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import progmatic.hegymaszas.exceptions.RouteNameForSectorAlreadyExistsException;
+import progmatic.hegymaszas.exceptions.RouteNotFoundException;
 import progmatic.hegymaszas.exceptions.SectorNotFoundException;
 
 import java.util.HashMap;
@@ -24,6 +25,14 @@ public class MyControllerAdvice {
     public ResponseEntity<Map<String, String>> handleSectorNotFound(SectorNotFoundException ex) {
         HashMap<String, String> map = new HashMap<>();
         map.put("error", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(map);
+    }
+
+
+    @ExceptionHandler({SectorNotFoundException.class})
+    public ResponseEntity<Map<String, String>> handleRouteNotFound(RouteNotFoundException ex) {
+        HashMap<String, String> map = new HashMap<>();
+        map.put("error", "Route not found.");
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(map);
     }
 }

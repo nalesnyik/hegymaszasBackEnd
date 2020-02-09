@@ -1,6 +1,7 @@
 package progmatic.hegymaszas.dto;
 
 import progmatic.hegymaszas.modell.Rating;
+import progmatic.hegymaszas.modell.Route;
 import progmatic.hegymaszas.modell.enums.Orientation;
 import progmatic.hegymaszas.modell.enums.SteepnessType;
 import progmatic.hegymaszas.modell.enums.WeatherRain;
@@ -39,7 +40,21 @@ public class RouteChosenShowDto {
     private WeatherSun weatherSun;
 
 
-    public RouteChosenShowDto() {
+    public RouteChosenShowDto(Route route) {
+        this.name = route.getName();
+        this.sectorName = route.getSector().getName();
+        this.sectorId = route.getSector().getId();
+        this.climbingPlaceName = route.getSector().getClimbingPlace().getName();
+        this.climbingPlaceId = route.getSector().getClimbingPlace().getId();
+
+        this.height = route.getHeight();
+        this.numOfBolts = route.getNumOfBolts();
+        grade = route.getGrade();
+
+        orientation = route.getOrientation();
+        steepnessType = route.getSteepnessType();
+        weatherRain = route.getWeatherRain();
+        weatherSun = route.getWeatherSun();
     }
 
 

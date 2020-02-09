@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.*;
 import progmatic.hegymaszas.dto.*;
 import progmatic.hegymaszas.exceptions.ClimbingPlaceNotFoundException;
 import progmatic.hegymaszas.exceptions.RouteNameForSectorAlreadyExistsException;
+import progmatic.hegymaszas.exceptions.RouteNotFoundException;
 import progmatic.hegymaszas.exceptions.SectorNotFoundException;
 import progmatic.hegymaszas.services.ClimbingService;
 
@@ -34,14 +35,12 @@ public class ClimbingController {
     @GetMapping("/{climbingPlaceId}/{sectorId}")
     public Map<String, List<RoutesShowDto>> showRoutesOfSector(@PathVariable String climbingPlaceId, @PathVariable long sectorId) throws SectorNotFoundException {
         return climbingService.showRoutesOfSector(sectorId);
-
-
     }
 
 
     @GetMapping("/{climbingPlaceId}/{sectorId}/{routeId}")
-    public RouteChosenShowDto showCreateRoute(@PathVariable long climbingPlaceId, @PathVariable long sectorId, @PathVariable long routeId) {
-        return null;
+    public RouteChosenShowDto showCreateRoute(@PathVariable long climbingPlaceId, @PathVariable long sectorId, @PathVariable long routeId) throws RouteNotFoundException {
+        return climbingService.showChosenRoute(routeId);
     }
 
 

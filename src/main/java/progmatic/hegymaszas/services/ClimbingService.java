@@ -2,12 +2,10 @@ package progmatic.hegymaszas.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import progmatic.hegymaszas.dto.ClimbingPlaceDto;
-import progmatic.hegymaszas.dto.RouteCreateDto;
-import progmatic.hegymaszas.dto.RoutesShowDto;
-import progmatic.hegymaszas.dto.SectorsShowDto;
+import progmatic.hegymaszas.dto.*;
 import progmatic.hegymaszas.exceptions.ClimbingPlaceNotFoundException;
 import progmatic.hegymaszas.exceptions.RouteNameForSectorAlreadyExistsException;
+import progmatic.hegymaszas.exceptions.RouteNotFoundException;
 import progmatic.hegymaszas.exceptions.SectorNotFoundException;
 import progmatic.hegymaszas.modell.ClimbingPlace;
 import progmatic.hegymaszas.modell.Route;
@@ -26,17 +24,19 @@ import java.util.stream.Collectors;
 @Service
 public class ClimbingService {
 
-    @Autowired
-    private ClimbingRepository climbingRepository;
-
-    @Autowired
-    private SectorRepository sectorRepository;
-
-    @Autowired
-    private RouteRepository routeRepository;
-
     @PersistenceContext
     EntityManager em;
+
+    private ClimbingRepository climbingRepository;
+    private SectorRepository sectorRepository;
+    private RouteRepository routeRepository;
+
+    @Autowired
+    public ClimbingService(ClimbingRepository climbingRepository, SectorRepository sectorRepository, RouteRepository routeRepository) {
+        this.climbingRepository = climbingRepository;
+        this.sectorRepository = sectorRepository;
+        this.routeRepository = routeRepository;
+    }
 
 
     public Map<String, List<ClimbingPlaceDto>> showClimbingPlaces() {
@@ -101,5 +101,15 @@ public class ClimbingService {
         Map<String, List<RoutesShowDto>> map = new HashMap<>();
         map.put("routes", dtos);
         return map;
+    }
+
+
+    public RouteChosenShowDto showChosenRoute(long routeId) throws RouteNotFoundException {
+        Route route = em.find(Route.class, routeId);
+        if (route == null) {
+            throw new RouteNotFoundException();
+        }
+        RouteChosenShowDto dto = new RouteChosenShowDto(route);
+        return dto;
     }
 }
