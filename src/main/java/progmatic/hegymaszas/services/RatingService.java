@@ -56,6 +56,4 @@ public class RatingService {
         em.persist(newRating);
         return newRating;
     }
-
-
 }
