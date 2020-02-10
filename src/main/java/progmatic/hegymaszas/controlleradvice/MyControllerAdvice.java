@@ -29,7 +29,7 @@ public class MyControllerAdvice {
     }
 
 
-    @ExceptionHandler({SectorNotFoundException.class})
+    @ExceptionHandler({RouteNotFoundException.class})
     public ResponseEntity<Map<String, String>> handleRouteNotFound(RouteNotFoundException ex) {
         HashMap<String, String> map = new HashMap<>();
         map.put("error", "Route not found.");

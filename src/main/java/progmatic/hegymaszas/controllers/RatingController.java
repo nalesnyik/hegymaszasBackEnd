@@ -17,9 +17,10 @@ public class RatingController {
         this.ratingService = ratingService;
     }
 
-    @GetMapping("/route/rating")
-    public Rating showCreatedRating() {
-        return new Rating();
+    @GetMapping("/route/rating/{routeId}")
+    public Double showCreatedRating(@PathVariable long routeId) {
+        return ratingService.getAverageSafetyRating(routeId) + ratingService.getAverageBeautyRatings(routeId) +
+                ratingService.getAverageDifficultyRating(routeId);
     }
 
     @PostMapping("route/rating")
