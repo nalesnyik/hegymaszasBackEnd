@@ -26,10 +26,13 @@ public class UserService implements UserDetailsService {
     @PersistenceContext
     EntityManager em;
     PasswordEncoder passwordEncoder;
+    @Autowired
+    EmailService emailService;
 
     @Autowired
-    public UserService(PasswordEncoder passwordEncoder) {
+    public UserService(PasswordEncoder passwordEncoder, EmailService emailService) {
         this.passwordEncoder = passwordEncoder;
+        this.emailService = emailService;
     }
 
     @Override
@@ -53,6 +56,7 @@ public class UserService implements UserDetailsService {
         user.addAuthority(authority);
         user.setClimbingLogs(new ArrayList<>());
         em.persist(user);
+        emailService.sendRegistrationEmail(user);
     }
 
     @Transactional
@@ -72,32 +76,5 @@ public class UserService implements UserDetailsService {
         }
     }
 
-    public List<Route> loadFilteredRoutes(String grade, String name, int rating, int height, String climbingPlaceName) {
-        CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaQuery<Route> cQuery = cb.createQuery(Route.class);
-        Root<Route> routes = cQuery.from(Route.class);
-        List<Predicate> predicateList = new ArrayList<>();
 
-        if (!StringUtils.isEmpty(name)) {
-           String text = "%" + name + "%";
-            predicateList.add(cb.like(routes.get(Route_.name), text));
-        }
-        if (!StringUtils.isEmpty(height)) {
-            predicateList.add(cb.equal(routes.get(Route_.height), height));
-        }
-    //    if (!StringUtils.isEmpty(rating)) {
-    //        predicateList.add(cb.equal(routes.get(Route_.rating), rating));
-    //    }
-        if (!StringUtils.isEmpty(grade)) {
-            String gradeToFind = "%" + grade + "%";
-            predicateList.add(cb.like(routes.get(Route_.grade), gradeToFind));
-        }
-
-        if (!StringUtils.isEmpty(climbingPlaceName)) {
-            String chosenPlaceName = "%" + climbingPlaceName + "%";
-            predicateList.add(cb.like(routes.get(Route_.sector).get(Sector_.climbingPlace).get(ClimbingPlace_.name), chosenPlaceName));
-        }
-        cQuery.where(predicateList.toArray(new Predicate[predicateList.size()]));
-        return em.createQuery(cQuery).getResultList();
-    }
 }

@@ -41,7 +41,7 @@ public class Route {
     @Lob
     private byte[] photos;
 
-    private String grade;
+    private int grade;
 
     @OneToMany(mappedBy = "route")
     private List<Feedback> feedbacks = new ArrayList<>();
@@ -61,10 +61,22 @@ public class Route {
 
     public Route(RouteCreateDto route, Sector sector) {
         this.name = route.getRouteName();
-        this.grade = route.getGrade();
         this.height = route.getHeight();
         this.numOfBolts = route.getNumOfBolts();
         this.sector = sector;
+        switch (String.valueOf(route.getGrade().charAt(1))) {
+            case "-":
+                this.grade = 3 * (Character.getNumericValue(route.getGrade().charAt(0)) - 4) + 1;
+                break;
+            case "":
+                this.grade = 3 * (Character.getNumericValue(route.getGrade().charAt(0)) - 4) + 2;
+                break;
+            case "+":
+                this.grade = 3*(Character.getNumericValue(route.getGrade().charAt(0)) - 3);
+                break;
+            default:
+                break;
+        }
     }
 
 
@@ -139,12 +151,12 @@ public class Route {
     }
 
 
-    public String getGrade() {
+    public int getGrade() {
         return grade;
     }
 
 
-    public void setGrade(String grade) {
+    public void setGrade(int grade) {
         this.grade = grade;
     }
 
