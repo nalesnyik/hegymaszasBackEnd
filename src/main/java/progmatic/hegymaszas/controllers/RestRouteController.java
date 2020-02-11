@@ -44,7 +44,6 @@ public class RestRouteController {
             routeDtos.add(routeDto);
         }
         return routeDtos;
-
     }
 
 }

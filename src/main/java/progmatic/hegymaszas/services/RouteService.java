@@ -1,22 +1,13 @@
 package progmatic.hegymaszas.services;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
-import progmatic.hegymaszas.dto.RouteDto;
-import progmatic.hegymaszas.modell.ClimbingPlace_;
-import progmatic.hegymaszas.modell.Route;
-import progmatic.hegymaszas.modell.Route_;
-import progmatic.hegymaszas.modell.Sector_;
-import progmatic.hegymaszas.repositories.RouteRepository;
+import progmatic.hegymaszas.modell.*;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
+import javax.persistence.criteria.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,28 +17,19 @@ public class RouteService {
     @PersistenceContext
     EntityManager em;
 
-    private final RouteRepository routeRepository;
-    private RatingService ratingService;
-
-    @Autowired
-    public RouteService(RouteRepository routeRepository, RatingService ratingService) {
-        this.routeRepository = routeRepository;
-        this.ratingService = ratingService;
-    }
-
     @Transactional
     public List<Route> getAllRoute() {
         return em.createQuery("SELECT r from Route r", Route.class).getResultList();
         //return routeRepository.findAll();
-
     }
 
     public List<Route> loadFilteredRoutes(
-            String grade, String name, int averageRating,
-            int beautyRating, int difficultyRating, int safetyRating, int height, String climbingPlaceName) {
+            String grade, String name, String climbingPlaceName,
+            int beautyRating, int difficultyRating, int safetyRating, int height) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Route> cQuery = cb.createQuery(Route.class);
         Root<Route> routes = cQuery.from(Route.class);
+        ListJoin<Route, Rating> joinedRatings = routes.join(Route_.ratings);
         List<Predicate> predicateList = new ArrayList<>();
 
         if (!StringUtils.isEmpty(name)) {
@@ -57,18 +39,18 @@ public class RouteService {
         if (!StringUtils.isEmpty(height)) {
             predicateList.add(cb.equal(routes.get(Route_.height), height));
         }
-        /*if (!StringUtils.isEmpty(averageRating)) {
-            predicateList.add(cb.greaterThanOrEqualTo(routes.get(ratingService.getAverageRatingOfOneRoute()), averageRating));
-        }
         if (!StringUtils.isEmpty(beautyRating)) {
-            predicateList.add(cb.greaterThanOrEqualTo(routes.get(ratingService.getAverageBeautyRatings()), beautyRating));
+            predicateList.add(cb.greaterThanOrEqualTo(routes.get(Route_.avgRatingByBeauty),(double) beautyRating));
+           // predicateList.add(cb.greaterThanOrEqualTo(cb.avg(joinedRatings.get(Rating_.ratingByBeauty)), (double) beautyRating));
         }
         if (!StringUtils.isEmpty(difficultyRating)) {
-            predicateList.add(cb.greaterThanOrEqualTo(routes.get(ratingService.getAverageDifficultyRating()), difficultyRating));
+            predicateList.add(cb.greaterThanOrEqualTo(routes.get(Route_.avgRatingByDifficulty),(double) difficultyRating));
+           // predicateList.add(cb.greaterThanOrEqualTo(cb.avg(joinedRatings.get(Rating_.ratingByDifficulty)), (double) difficultyRating));
         }
         if (!StringUtils.isEmpty(safetyRating)) {
-            predicateList.add(cb.greaterThanOrEqualTo(routes.get(ratingService.getAverageSafetyRating()), safetyRating));
-        }*/
+            predicateList.add(cb.greaterThanOrEqualTo(routes.get(Route_.avgRatingBySafety),(double) safetyRating));
+           // predicateList.add(cb.greaterThanOrEqualTo(cb.avg(joinedRatings.get(Rating_.ratingBySafety)), (double) safetyRating));
+        }
         if (!StringUtils.isEmpty(grade)) {
             int gradeValue = Integer.parseInt(String.valueOf(grade.charAt(0)));
             predicateList.add(cb.greaterThanOrEqualTo((routes.get(Route_.grade)), gradeValue));
@@ -77,6 +59,7 @@ public class RouteService {
             String chosenPlaceName = "%" + climbingPlaceName + "%";
             predicateList.add(cb.like(routes.get(Route_.sector).get(Sector_.climbingPlace).get(ClimbingPlace_.name), chosenPlaceName));
         }
+       // cQuery.groupBy(routes.get(Route_.id));
         cQuery.where(predicateList.toArray(new Predicate[predicateList.size()]));
         return em.createQuery(cQuery).getResultList();
     }
