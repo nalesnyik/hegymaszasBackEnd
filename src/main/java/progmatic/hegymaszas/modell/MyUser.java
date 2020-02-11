@@ -43,6 +43,9 @@ public class MyUser implements UserDetails {
     @OneToMany(mappedBy = "user")
     private List<DirectMessage> receivedDirectMsgs = new ArrayList<>();
 
+    @OneToMany(mappedBy = "user")
+    private List<Rating> ratings = new ArrayList<>();
+
 
     public MyUser() {
     }
@@ -166,5 +169,15 @@ public class MyUser implements UserDetails {
 
     public void setReceivedDirectMsgs(List<DirectMessage> receivedDirectMsgs) {
         this.receivedDirectMsgs = receivedDirectMsgs;
+    }
+
+
+    public List<Rating> getRatings() {
+        return ratings;
+    }
+
+
+    public void setRatings(List<Rating> ratings) {
+        this.ratings = ratings;
     }
 }

@@ -16,6 +16,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@NamedQueries(
+        {
+                @NamedQuery(name = "getAverageBeautyRating",
+                        query = "SELECT avg (r.ratingByBeauty) from Rating r where r.route.id =: id"),
+                @NamedQuery(name = "getAverageDifficultyRating",
+                        query = "SELECT avg (r.ratingByDifficulty) from Rating r where r.route.id =:id"),
+                @NamedQuery(name = "getAverageSafetyRating",
+                        query = "SELECT avg (r.ratingBySafety) from Rating r where r.route.id = :id"),
+        }
+)
 public class Route {
 
     @Id
@@ -49,6 +59,10 @@ public class Route {
     @OneToMany(mappedBy = "route")
     private List<Rating> ratings = new ArrayList<>();
 
+    private double avgRatingByBeauty;
+    private double avgRatingByDifficulty;
+    private double avgRatingBySafety;
+
     private Orientation orientation;
     private SteepnessType steepnessType;
     private WeatherRain weatherRain;
@@ -72,7 +86,7 @@ public class Route {
                 this.grade = 3 * (Character.getNumericValue(route.getGrade().charAt(0)) - 4) + 2;
                 break;
             case "+":
-                this.grade = 3*(Character.getNumericValue(route.getGrade().charAt(0)) - 3);
+                this.grade = 3 * (Character.getNumericValue(route.getGrade().charAt(0)) - 3);
                 break;
             default:
                 break;
@@ -219,4 +233,35 @@ public class Route {
     public void setRatings(List<Rating> ratings) {
         this.ratings = ratings;
     }
+
+
+    public double getAvgRatingByBeauty() {
+        return avgRatingByBeauty;
+    }
+
+
+    public void setAvgRatingByBeauty(double avgRatingByBeauty) {
+        this.avgRatingByBeauty = avgRatingByBeauty;
+    }
+
+
+    public double getAvgRatingByDifficulty() {
+        return avgRatingByDifficulty;
+    }
+
+
+    public void setAvgRatingByDifficulty(double avgRatingByDifficulty) {
+        this.avgRatingByDifficulty = avgRatingByDifficulty;
+    }
+
+
+    public double getAvgRatingBySafety() {
+        return avgRatingBySafety;
+    }
+
+
+    public void setAvgRatingBySafety(double avgRatingBySafety) {
+        this.avgRatingBySafety = avgRatingBySafety;
+    }
 }
+
