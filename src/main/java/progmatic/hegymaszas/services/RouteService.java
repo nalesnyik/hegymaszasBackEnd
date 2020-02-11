@@ -57,17 +57,17 @@ public class RouteService {
         if (!StringUtils.isEmpty(height)) {
             predicateList.add(cb.equal(routes.get(Route_.height), height));
         }
-       /* if (!StringUtils.isEmpty(averageRating)) {
-            predicateList.add(cb.greaterThanOrEqualTo(routes.get(ratingService.getAverageRatingOfOneRoute), averageRating));
+        /*if (!StringUtils.isEmpty(averageRating)) {
+            predicateList.add(cb.greaterThanOrEqualTo(routes.get(ratingService.getAverageRatingOfOneRoute()), averageRating));
         }
-        if (!StringUtils.isEmpty(averageRating)) {
-            predicateList.add(cb.greaterThanOrEqualTo(routes.get(ratingService.getAverageBeautyRating), beautyRating));
+        if (!StringUtils.isEmpty(beautyRating)) {
+            predicateList.add(cb.greaterThanOrEqualTo(routes.get(ratingService.getAverageBeautyRatings()), beautyRating));
         }
-        if (!StringUtils.isEmpty(averageRating)) {
-            predicateList.add(cb.greaterThanOrEqualTo(routes.get(ratingService.getAverageDifficultyRating), difficultyRating));
+        if (!StringUtils.isEmpty(difficultyRating)) {
+            predicateList.add(cb.greaterThanOrEqualTo(routes.get(ratingService.getAverageDifficultyRating()), difficultyRating));
         }
-        if (!StringUtils.isEmpty(averageRating)) {
-            predicateList.add(cb.greaterThanOrEqualTo(routes.get(ratingService.getAverageSafetyRating), safetyRating));
+        if (!StringUtils.isEmpty(safetyRating)) {
+            predicateList.add(cb.greaterThanOrEqualTo(routes.get(ratingService.getAverageSafetyRating()), safetyRating));
         }*/
         if (!StringUtils.isEmpty(grade)) {
             int gradeValue = Integer.parseInt(String.valueOf(grade.charAt(0)));
