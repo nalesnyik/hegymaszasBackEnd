@@ -2,6 +2,7 @@ package progmatic.hegymaszas.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import progmatic.hegymaszas.dto.RatingDto;
 import progmatic.hegymaszas.modell.Rating;
 import progmatic.hegymaszas.services.RatingService;
 
@@ -24,7 +25,7 @@ public class RatingController {
     }
 
     @PostMapping("route/rating")
-    public void createRating(@RequestBody Rating rating) {
+    public void createRating(@RequestBody RatingDto rating) {
         ratingService.addRating(rating);
     }
 }

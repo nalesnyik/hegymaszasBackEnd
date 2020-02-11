@@ -5,14 +5,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import progmatic.hegymaszas.dto.MyUserDto;
-import progmatic.hegymaszas.modell.MyUser;
+import progmatic.hegymaszas.dto.RatingDto;
 import progmatic.hegymaszas.modell.Rating;
 import progmatic.hegymaszas.modell.Route;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import java.util.List;
 
 @Service
 public class RatingService {
@@ -67,14 +65,13 @@ public class RatingService {
     }
 
     @Transactional
-    public Rating addRating(Rating rating) {
-        Route route = new Route();
+    public void addRating(RatingDto ratingDto) {
+        //Route route = new Route();
         Rating newRating = new Rating();
-        route.setName(rating.getRoute().getName());
-        newRating.setRatingByBeauty(rating.getRatingByBeauty());
-        newRating.setRatingByDifficulty(rating.getRatingByDifficulty());
-        newRating.setRatingBySafety(rating.getRatingBySafety());
+        //route.setName(rating.getRoute().getName());
+        newRating.setRatingByBeauty(ratingDto.getRatingByBeauty());
+        newRating.setRatingByDifficulty(ratingDto.getRatingByDifficulty());
+        newRating.setRatingBySafety(ratingDto.getRatingBySafety());
         em.persist(newRating);
-        return newRating;
     }
 }

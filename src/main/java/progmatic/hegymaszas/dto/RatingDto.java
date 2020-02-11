@@ -27,6 +27,9 @@ public class RatingDto {
         this.ratingBySafety = ratingBySafety;
     }
 
+    public RatingDto() {
+    }
+
     public long getId() {
         return id;
     }
