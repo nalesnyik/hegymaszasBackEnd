@@ -10,7 +10,7 @@ import org.springframework.security.web.authentication.SimpleUrlAuthenticationFa
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-
+import javax.servlet.http.HttpServletResponse;
 import java.util.Arrays;
 
 @EnableWebSecurity
@@ -37,7 +37,9 @@ public class WebSecConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 //.loginPage("/login").permitAll()
                 .logout()
-                .logoutSuccessUrl("/login")
+                .logoutUrl("/logout")
+                .permitAll()
+                .logoutSuccessHandler((httpServletRequest, httpServletResponse, authentication) -> httpServletResponse.setStatus(HttpServletResponse.SC_OK))
                 .and()
                 .cors()
                 .and()
@@ -46,7 +48,7 @@ public class WebSecConfig extends WebSecurityConfigurerAdapter {
                         "/rest/route", "/sector", "/home", "/", "/registerUser", "/register", "/ws", "/ws/queue",
                         "/queue", "/queue/reply", "/ws.addUser").permitAll()
                 .antMatchers("/users", "/user/changeRole").hasRole("ADMIN")
-                .antMatchers("/areas", "/areas/**").permitAll()
+                .antMatchers("/areas", "/areas/**","/route**").permitAll()
                 .anyRequest().authenticated();
     }
 

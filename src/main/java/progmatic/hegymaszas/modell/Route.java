@@ -16,6 +16,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@NamedQueries(
+        {
+                @NamedQuery(name = "getAverageBeautyRating",
+                        query = "SELECT avg (r.ratingByBeauty) from Rating r where r.route.id =: id"),
+                @NamedQuery(name = "getAverageDifficultyRating",
+                        query = "SELECT avg (r.ratingByDifficulty) from Rating r where r.route.id =:id"),
+                @NamedQuery(name = "getAverageSafetyRating",
+                        query = "SELECT avg (r.ratingBySafety) from Rating r where r.route.id = :id"),
+        }
+)
 public class Route {
 
     @Id
@@ -41,13 +51,17 @@ public class Route {
     @Lob
     private byte[] photos;
 
-    private String grade;
+    private int grade;
 
     @OneToMany(mappedBy = "route")
     private List<Feedback> feedbacks = new ArrayList<>();
 
     @OneToMany(mappedBy = "route")
     private List<Rating> ratings = new ArrayList<>();
+
+    private double avgRatingByBeauty;
+    private double avgRatingByDifficulty;
+    private double avgRatingBySafety;
 
     private Orientation orientation;
     private SteepnessType steepnessType;
@@ -61,10 +75,22 @@ public class Route {
 
     public Route(RouteCreateDto route, Sector sector) {
         this.name = route.getRouteName();
-        this.grade = route.getGrade();
         this.height = route.getHeight();
         this.numOfBolts = route.getNumOfBolts();
         this.sector = sector;
+        switch (String.valueOf(route.getGrade().charAt(1))) {
+            case "-":
+                this.grade = 3 * (Character.getNumericValue(route.getGrade().charAt(0)) - 4) + 1;
+                break;
+            case "":
+                this.grade = 3 * (Character.getNumericValue(route.getGrade().charAt(0)) - 4) + 2;
+                break;
+            case "+":
+                this.grade = 3 * (Character.getNumericValue(route.getGrade().charAt(0)) - 3);
+                break;
+            default:
+                break;
+        }
     }
 
 
@@ -139,12 +165,12 @@ public class Route {
     }
 
 
-    public String getGrade() {
+    public int getGrade() {
         return grade;
     }
 
 
-    public void setGrade(String grade) {
+    public void setGrade(int grade) {
         this.grade = grade;
     }
 
@@ -207,4 +233,35 @@ public class Route {
     public void setRatings(List<Rating> ratings) {
         this.ratings = ratings;
     }
+
+
+    public double getAvgRatingByBeauty() {
+        return avgRatingByBeauty;
+    }
+
+
+    public void setAvgRatingByBeauty(double avgRatingByBeauty) {
+        this.avgRatingByBeauty = avgRatingByBeauty;
+    }
+
+
+    public double getAvgRatingByDifficulty() {
+        return avgRatingByDifficulty;
+    }
+
+
+    public void setAvgRatingByDifficulty(double avgRatingByDifficulty) {
+        this.avgRatingByDifficulty = avgRatingByDifficulty;
+    }
+
+
+    public double getAvgRatingBySafety() {
+        return avgRatingBySafety;
+    }
+
+
+    public void setAvgRatingBySafety(double avgRatingBySafety) {
+        this.avgRatingBySafety = avgRatingBySafety;
+    }
 }
+

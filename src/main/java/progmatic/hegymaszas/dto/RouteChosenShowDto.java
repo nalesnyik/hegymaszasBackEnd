@@ -49,7 +49,7 @@ public class RouteChosenShowDto {
 
         this.height = route.getHeight();
         this.numOfBolts = route.getNumOfBolts();
-        grade = route.getGrade();
+        grade = String.valueOf( route.getGrade());
 
         orientation = route.getOrientation();
         steepnessType = route.getSteepnessType();

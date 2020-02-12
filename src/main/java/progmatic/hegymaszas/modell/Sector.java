@@ -17,7 +17,6 @@ import java.util.List;
                         query = "SELECT count(s) FROM Sector s JOIN s.routes as r JOIN r.feedbacks as f WHERE s.id=:id"),
         }
 )
-
 public class Sector {
 
     @Id

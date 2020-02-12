@@ -33,14 +33,11 @@ public class RestRouteController {
         for (Route route : routes) {
             RouteDto routeDto = new RouteDto();
             routeDto.setName(route.getName());
-            routeDto.setGrade(route.getGrade());
+            routeDto.setGrade(String.valueOf( route.getGrade()));
             routeDto.setId(route.getId());
-
             routeDtos.add(routeDto);
-
         }
         return routeDtos;
-
     }
 
 }

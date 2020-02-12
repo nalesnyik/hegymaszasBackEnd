@@ -1,5 +1,6 @@
 package progmatic.hegymaszas.dto;
 
+import progmatic.hegymaszas.annotations.UniqueEmailConstraint;
 import progmatic.hegymaszas.annotations.UniqueUsernameConstraint;
 
 import javax.persistence.Column;
@@ -21,6 +22,7 @@ public class MyUserDto {
 
     @Email
     @Column(unique = true)
+    @UniqueEmailConstraint
     private String email;
 
     public MyUserDto() {
