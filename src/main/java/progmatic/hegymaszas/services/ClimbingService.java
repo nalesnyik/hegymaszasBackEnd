@@ -1,13 +1,13 @@
 package progmatic.hegymaszas.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import progmatic.hegymaszas.dto.*;
-import progmatic.hegymaszas.exceptions.ClimbingPlaceNotFoundException;
-import progmatic.hegymaszas.exceptions.RouteNameForSectorAlreadyExistsException;
-import progmatic.hegymaszas.exceptions.RouteNotFoundException;
-import progmatic.hegymaszas.exceptions.SectorNotFoundException;
+import progmatic.hegymaszas.exceptions.*;
 import progmatic.hegymaszas.modell.ClimbingPlace;
+import progmatic.hegymaszas.modell.MyUser;
 import progmatic.hegymaszas.modell.Route;
 import progmatic.hegymaszas.modell.Sector;
 import progmatic.hegymaszas.repositories.ClimbingRepository;
@@ -87,8 +87,15 @@ public class ClimbingService {
 
 //        MyUser user = (MyUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Route newRoute = new Route(route, sector);
-        routeRepository.save(newRoute);
-
+        MyUser user = (MyUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (user.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
+            newRoute.setRouteVerified(true);
+            routeRepository.save(newRoute);
+        } else {
+            newRoute.setRouteVerified(false);
+            newRoute.setVerificationCounter(0);
+            routeRepository.save(newRoute);
+        }
     }
 
 
@@ -111,5 +118,13 @@ public class ClimbingService {
         }
         RouteChosenShowDto dto = new RouteChosenShowDto(route);
         return dto;
+    }
+
+    public void verifyRouteService(long id) {
+        Route route = em.find(Route.class, id);
+        route.setVerificationCounter(route.getVerificationCounter()+1);
+        if (route.getVerificationCounter() >= 5) {
+            route.setRouteVerified(true);
+        }
     }
 }
