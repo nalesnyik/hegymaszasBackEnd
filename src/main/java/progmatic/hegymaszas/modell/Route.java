@@ -68,6 +68,10 @@ public class Route {
     private WeatherRain weatherRain;
     private WeatherSun weatherSun;
 
+    private boolean isRouteVerified;
+
+    private int verificationCounter;
+
 
     public Route() {
     }
@@ -93,6 +97,21 @@ public class Route {
         }
     }
 
+    public boolean isRouteVerified() {
+        return isRouteVerified;
+    }
+
+    public void setRouteVerified(boolean routeVerified) {
+        isRouteVerified = routeVerified;
+    }
+
+    public int getVerificationCounter() {
+        return verificationCounter;
+    }
+
+    public void setVerificationCounter(int verificationCounter) {
+        this.verificationCounter = verificationCounter;
+    }
 
     public long getId() {
         return id;

@@ -49,5 +49,10 @@ public class ClimbingController {
         climbingService.createRoute(route);
     }
 
+    @PostMapping("/{routeId}")
+    public void verifyRouteByUser(@PathVariable long routeId) {
+        climbingService.verifyRouteService(routeId);
+    }
+
 }
 
