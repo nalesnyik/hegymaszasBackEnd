@@ -42,7 +42,9 @@ public class WebSecConfig extends WebSecurityConfigurerAdapter {
                 .cors()
                 .and()
                 .authorizeRequests()
-                .antMatchers("/loginpage/beforelogin", "/climbingplace", "/map", "/rest/sector", "/rest/route", "/sector", "/home", "/", "/registerUser", "/register").permitAll()
+                .antMatchers("/loginpage/beforelogin", "/climbingplace", "/map", "/rest/sector",
+                        "/rest/route", "/sector", "/home", "/", "/registerUser", "/register", "/ws", "/ws/queue",
+                        "/queue", "/queue/reply", "/ws.addUser").permitAll()
                 .antMatchers("/users", "/user/changeRole").hasRole("ADMIN")
                 .antMatchers("/areas", "/areas/**").permitAll()
                 .anyRequest().authenticated();
@@ -51,6 +53,7 @@ public class WebSecConfig extends WebSecurityConfigurerAdapter {
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowCredentials(true);
         configuration.setAllowedOrigins(Arrays.asList("http://localhost:4200"));
         configuration.setAllowedMethods(Arrays.asList("GET","POST","DELETE","PUT","PATCH","HEAD","OPTIONS"));
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();

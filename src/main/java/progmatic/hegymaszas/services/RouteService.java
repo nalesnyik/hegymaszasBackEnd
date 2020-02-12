@@ -27,8 +27,7 @@ public class RouteService {
 
     @Transactional
     public List<Route> getAllRoute(){
-        return em.createQuery("SELECT r from Route r", Route.class).getResultList();
-        //return routeRepository.findAll();
+        return routeRepository.findAll();
 
     }
 }
