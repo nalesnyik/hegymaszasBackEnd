@@ -29,13 +29,13 @@ public class WebSecConfig extends WebSecurityConfigurerAdapter {
         RestAuthenticationEntryPoint restAuthenticationEntryPoint = new RestAuthenticationEntryPoint();
         http.csrf().disable()
                 .formLogin()
+                .permitAll()
                 .successHandler(mySuccessHandler)
                 .failureHandler(failureHandler)
                 .and()
                 .exceptionHandling()
-                .authenticationEntryPoint(restAuthenticationEntryPoint)
+                //.authenticationEntryPoint(restAuthenticationEntryPoint)
                 .and()
-                //.loginPage("/login").permitAll()
                 .logout()
                 .logoutUrl("/logout")
                 .permitAll()
@@ -46,7 +46,7 @@ public class WebSecConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/loginpage/beforelogin", "/climbingplace", "/map", "/rest/sector",
                         "/rest/route", "/sector", "/home", "/", "/registerUser", "/register", "/ws", "/ws/queue",
-                        "/queue", "/queue/reply", "/ws.addUser").permitAll()
+                        "/queue", "/queue/reply", "/ws.addUser", "/static/**", "/templates/**").permitAll()
                 .antMatchers("/users", "/user/changeRole").hasRole("ADMIN")
                 .antMatchers("/areas", "/areas/**","/route**").permitAll()
                 .anyRequest().authenticated();

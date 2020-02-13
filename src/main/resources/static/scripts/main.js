@@ -9,7 +9,8 @@ var messageArea = document.querySelector('#messageArea');
 var connectingElement = document.querySelector('.connecting');
 
 var stompClient = null;
-var username = null;
+var sentFrom = null;
+var sentTo = null;
 
 var colors = [
     '#2196F3', '#32c787', '#00BCD4', '#ff5652',
@@ -17,13 +18,14 @@ var colors = [
 ];
 
 function connect(event) {
-    username = document.querySelector('#name').value.trim();
+    sentFrom = document.querySelector('#name').value.trim();
+    sentTo = document.querySelector("#name2").value.trim();
 
-    if(username) {
+    if(sentFrom) {
         usernamePage.classList.add('hidden');
         chatPage.classList.remove('hidden');
 
-        var socket = new SockJS("/ws");
+        var socket = new SockJS("/ws"); //TODO 1
         stompClient = Stomp.over(socket);
 
         stompClient.connect({}, onConnected, onError);
@@ -33,13 +35,13 @@ function connect(event) {
 
 
 function onConnected() {
-    // Subscribe to the Public Topic
-    stompClient.subscribe('/topic/public', onMessageReceived);
-
+    // Subscribe to single Message Queue
+    stompClient.subscribe('/queue/user/' + sentFrom, onMessageReceived);
+    stompClient.subscribe('/queue/user/' + sentTo, onMessageReceived);
     // Tell your username to the server
-    stompClient.send("/app/chat.addUser",
+    stompClient.send("/queue/user/" + sentTo,
         {},
-        JSON.stringify({sender: username, type: 'JOIN'})
+        JSON.stringify({sender: sentFrom, type: 'JOIN'})
     )
 
     connectingElement.classList.add('hidden');
@@ -56,11 +58,11 @@ function sendMessage(event) {
     var messageContent = messageInput.value.trim();
     if(messageContent && stompClient) {
         var chatMessage = {
-            sender: username,
+            sender: sentFrom,
             content: messageInput.value,
             type: 'CHAT'
         };
-        stompClient.send("/app/chat.sendMessage", {}, JSON.stringify(chatMessage));
+        stompClient.send("/queue/user/" + sentTo, {}, JSON.stringify(chatMessage));
         messageInput.value = '';
     }
     event.preventDefault();
@@ -68,6 +70,7 @@ function sendMessage(event) {
 
 
 function onMessageReceived(payload) {
+
     var message = JSON.parse(payload.body);
 
     var messageElement = document.createElement('li');

@@ -1,12 +1,35 @@
 package progmatic.hegymaszas.modell;
 
+import java.time.LocalDate;
+
 public class ChatMessage {
     private MessageType type;
     private String content;
     private String sender;
+    private String sentTo;
+    private LocalDate time;
+
+    public ChatMessage(String sender, String sentTo, LocalDate time){
+        this.sentTo = sentTo;
+        this.sender = sender;
+        this.time = time;
+    }
+
+    public ChatMessage(String sender, String content, String sentTo) {
+        this.sender = sender;
+        this.content = content;
+        this.sentTo = sentTo;
+    }
+
+    public String getSentTo() {
+        return sentTo;
+    }
 
     public enum MessageType{
         CHAT, JOIN, LEAVE
+    }
+
+    public ChatMessage() {
     }
 
     public MessageType getType() {
