@@ -1,5 +1,6 @@
 package progmatic.hegymaszas.services;
 
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -40,16 +41,16 @@ public class RouteService {
             predicateList.add(cb.equal(routes.get(Route_.height), height));
         }
         if (!StringUtils.isEmpty(beautyRating)) {
-            predicateList.add(cb.greaterThanOrEqualTo(routes.get(Route_.avgRatingByBeauty),(double) beautyRating));
-           // predicateList.add(cb.greaterThanOrEqualTo(cb.avg(joinedRatings.get(Rating_.ratingByBeauty)), (double) beautyRating));
+            predicateList.add(cb.greaterThanOrEqualTo(routes.get(Route_.avgRatingByBeauty), (double) beautyRating));
+            // predicateList.add(cb.greaterThanOrEqualTo(cb.avg(joinedRatings.get(Rating_.ratingByBeauty)), (double) beautyRating));
         }
         if (!StringUtils.isEmpty(difficultyRating)) {
-            predicateList.add(cb.greaterThanOrEqualTo(routes.get(Route_.avgRatingByDifficulty),(double) difficultyRating));
-           // predicateList.add(cb.greaterThanOrEqualTo(cb.avg(joinedRatings.get(Rating_.ratingByDifficulty)), (double) difficultyRating));
+            predicateList.add(cb.greaterThanOrEqualTo(routes.get(Route_.avgRatingByDifficulty), (double) difficultyRating));
+            // predicateList.add(cb.greaterThanOrEqualTo(cb.avg(joinedRatings.get(Rating_.ratingByDifficulty)), (double) difficultyRating));
         }
         if (!StringUtils.isEmpty(safetyRating)) {
-            predicateList.add(cb.greaterThanOrEqualTo(routes.get(Route_.avgRatingBySafety),(double) safetyRating));
-           // predicateList.add(cb.greaterThanOrEqualTo(cb.avg(joinedRatings.get(Rating_.ratingBySafety)), (double) safetyRating));
+            predicateList.add(cb.greaterThanOrEqualTo(routes.get(Route_.avgRatingBySafety), (double) safetyRating));
+            // predicateList.add(cb.greaterThanOrEqualTo(cb.avg(joinedRatings.get(Rating_.ratingBySafety)), (double) safetyRating));
         }
         if (!StringUtils.isEmpty(grade)) {
             int gradeValue = Integer.parseInt(String.valueOf(grade.charAt(0)));
@@ -59,8 +60,10 @@ public class RouteService {
             String chosenPlaceName = "%" + climbingPlaceName + "%";
             predicateList.add(cb.like(routes.get(Route_.sector).get(Sector_.climbingPlace).get(ClimbingPlace_.name), chosenPlaceName));
         }
-       // cQuery.groupBy(routes.get(Route_.id));
+        // cQuery.groupBy(routes.get(Route_.id));
         cQuery.where(predicateList.toArray(new Predicate[predicateList.size()]));
         return em.createQuery(cQuery).getResultList();
     }
+
+
 }

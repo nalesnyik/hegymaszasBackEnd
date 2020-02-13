@@ -7,6 +7,8 @@ import progmatic.hegymaszas.exceptions.ClimbingPlaceNotFoundException;
 import progmatic.hegymaszas.exceptions.RouteNameForSectorAlreadyExistsException;
 import progmatic.hegymaszas.exceptions.RouteNotFoundException;
 import progmatic.hegymaszas.exceptions.SectorNotFoundException;
+import progmatic.hegymaszas.modell.Route;
+import progmatic.hegymaszas.modell.Sector;
 import progmatic.hegymaszas.services.ClimbingService;
 
 import java.util.List;
@@ -52,6 +54,11 @@ public class ClimbingController {
     @PostMapping("/{routeId}")
     public void verifyRouteByUser(@PathVariable long routeId) {
         climbingService.verifyRouteService(routeId);
+    }
+
+    @PostMapping("/{sectorId}/{routeId}")
+    public List<Sector> showSectorsByDistance(@RequestBody int dist, double userLong, double userLat) {
+        return climbingService.getSectorByDistance(dist, userLat, userLong);
     }
 
 }

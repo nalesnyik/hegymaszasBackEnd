@@ -16,6 +16,7 @@ import progmatic.hegymaszas.repositories.SectorRepository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -126,5 +127,30 @@ public class ClimbingService {
         if (route.getVerificationCounter() >= 5) {
             route.setRouteVerified(true);
         }
+    }
+
+    public double distance(double lat1, double lon1, double lat2, double lon2) {
+        if ((lat1 == lat2) && (lon1 == lon2)) {
+            return 0;
+        } else {
+            double theta = lon1 - lon2;
+            double dist = Math.sin(Math.toRadians(lat1)) * Math.sin(Math.toRadians(lat2)) +
+                    Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2)) * Math.cos(Math.toRadians(theta));
+            dist = Math.acos(dist);
+            dist = Math.toDegrees(dist);
+            dist = dist * 60 * 1.853159616;
+            return (dist);
+        }
+    }
+
+    public List<Sector> getSectorByDistance(int dist, double userLat, double userLong) {
+        List<Route> routes = em.createQuery("SELECT r from Route r", Route.class).getResultList();
+        List<Sector> routesByDistances = new ArrayList<>();
+        for (Route route1 : routes) {
+            if (distance(route1.getSector().getLatitude(), route1.getSector().getLongitude(), userLat, userLong) <= dist) {
+                routesByDistances.add(route1.getSector());
+            }
+        }
+        return routesByDistances;
     }
 }
