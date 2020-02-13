@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import progmatic.hegymaszas.dto.RatingCreateDto;
 import progmatic.hegymaszas.dto.RatingDto;
-import progmatic.hegymaszas.dto.RatingModifyDto;
 import progmatic.hegymaszas.dto.RatingShowDto;
 import progmatic.hegymaszas.exceptions.NotAppropriateNumberOfStarsForRatingException;
 import progmatic.hegymaszas.exceptions.RatingNotFoundException;
@@ -28,7 +27,6 @@ public class RatingService {
     private static final Logger logger = LoggerFactory.getLogger(RatingService.class);
     @PersistenceContext
     EntityManager em;
-
     RatingRepository ratingRepository;
 
 
@@ -70,7 +68,7 @@ public class RatingService {
 
 
     @Transactional
-    public RatingShowDto modifyRating(RatingModifyDto dto) throws RatingNotFoundException, NotAppropriateNumberOfStarsForRatingException {
+    public RatingShowDto modifyRating(RatingCreateDto dto) throws RatingNotFoundException, NotAppropriateNumberOfStarsForRatingException {
         Rating rating = getRating(dto);
         rating.setRatingByBeauty(dto.getRatingByBeauty());
         rating.setRatingByDifficulty(dto.getRatingByDifficulty());
@@ -82,9 +80,12 @@ public class RatingService {
     }
 
 
-    private Rating getRating(RatingModifyDto dto) throws NotAppropriateNumberOfStarsForRatingException, RatingNotFoundException {
+    private Rating getRating(RatingCreateDto dto) throws NotAppropriateNumberOfStarsForRatingException, RatingNotFoundException {
         checkRatingCreateDto(dto);
-        Rating rating = em.find(Rating.class, dto.getRatingId());
+
+        MyUser user = (MyUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Rating rating = ratingRepository.findByRouteIdAndUserName(dto.getRouteId(), user.getName());
+
         checkRatingBeforeModify(rating);
         return rating;
     }
@@ -98,9 +99,7 @@ public class RatingService {
 
 
     private void checkRatingBeforeModify(Rating rating) throws RatingNotFoundException {
-        MyUser user = (MyUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if (rating == null ||
-                !ratingRepository.areUsersMatchForModifyingRating(user.getName(), rating.getId())) {
+        if (rating == null) {
             throw new RatingNotFoundException();
         }
     }

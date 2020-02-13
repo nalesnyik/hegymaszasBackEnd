@@ -36,7 +36,6 @@ public class Route {
     @NotBlank
     private String name;
 
-    @Positive
     private int height;
 
     @Positive
@@ -50,6 +49,9 @@ public class Route {
 
     @Lob
     private byte[] photos;
+
+    @OneToMany(mappedBy = "route")
+    private List<ImageOfRoute> images = new ArrayList<>();
 
     private int grade;
 
