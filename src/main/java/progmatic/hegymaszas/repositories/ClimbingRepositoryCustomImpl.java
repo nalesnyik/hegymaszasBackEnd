@@ -56,6 +56,4 @@ public class ClimbingRepositoryCustomImpl implements ClimbingRepositoryCustom {
                 .getSingleResult();
         return (int) numOfRoutes;
     }
-
-
 }

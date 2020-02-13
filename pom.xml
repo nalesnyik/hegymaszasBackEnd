@@ -118,8 +118,16 @@
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
         </dependency>
-    </dependencies>
 
+        <dependency>
+            <groupId>org.imgscalr</groupId>
+            <artifactId>imgscalr-lib</artifactId>
+            <version>4.2</version>
+            <type>jar</type>
+            <scope>compile</scope>
+        </dependency>
+
+    </dependencies>
 
     <build>
         <plugins>
@@ -176,5 +184,6 @@
             </plugin>
 
         </plugins>
+
     </build>
 </project>

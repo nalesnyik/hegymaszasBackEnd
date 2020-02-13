@@ -36,7 +36,6 @@ public class Route {
     @NotBlank
     private String name;
 
-    @Positive
     private int height;
 
     @Positive
@@ -50,6 +49,9 @@ public class Route {
 
     @Lob
     private byte[] photos;
+
+    @OneToMany(mappedBy = "route")
+    private List<ImageOfRoute> images = new ArrayList<>();
 
     private int grade;
 
@@ -67,6 +69,10 @@ public class Route {
     private SteepnessType steepnessType;
     private WeatherRain weatherRain;
     private WeatherSun weatherSun;
+
+    private boolean isRouteVerified;
+
+    private int verificationCounter;
 
 
     public Route() {
@@ -93,6 +99,21 @@ public class Route {
         }
     }
 
+    public boolean isRouteVerified() {
+        return isRouteVerified;
+    }
+
+    public void setRouteVerified(boolean routeVerified) {
+        isRouteVerified = routeVerified;
+    }
+
+    public int getVerificationCounter() {
+        return verificationCounter;
+    }
+
+    public void setVerificationCounter(int verificationCounter) {
+        this.verificationCounter = verificationCounter;
+    }
 
     public long getId() {
         return id;

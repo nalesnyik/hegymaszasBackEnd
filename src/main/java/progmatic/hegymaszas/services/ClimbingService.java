@@ -1,13 +1,15 @@
 package progmatic.hegymaszas.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import progmatic.hegymaszas.dto.*;
-import progmatic.hegymaszas.exceptions.ClimbingPlaceNotFoundException;
-import progmatic.hegymaszas.exceptions.RouteNameForSectorAlreadyExistsException;
-import progmatic.hegymaszas.exceptions.RouteNotFoundException;
-import progmatic.hegymaszas.exceptions.SectorNotFoundException;
+import progmatic.hegymaszas.exceptions.*;
 import progmatic.hegymaszas.modell.ClimbingPlace;
+import progmatic.hegymaszas.modell.ImageOfRoute;
+import progmatic.hegymaszas.modell.MyUser;
 import progmatic.hegymaszas.modell.Route;
 import progmatic.hegymaszas.modell.Sector;
 import progmatic.hegymaszas.repositories.ClimbingRepository;
@@ -30,12 +32,15 @@ public class ClimbingService {
     private ClimbingRepository climbingRepository;
     private SectorRepository sectorRepository;
     private RouteRepository routeRepository;
+    private ImageDisplayService imageDisplayService;
+
 
     @Autowired
-    public ClimbingService(ClimbingRepository climbingRepository, SectorRepository sectorRepository, RouteRepository routeRepository) {
+    public ClimbingService(ClimbingRepository climbingRepository, SectorRepository sectorRepository, RouteRepository routeRepository, ImageDisplayService imageDisplayService) {
         this.climbingRepository = climbingRepository;
         this.sectorRepository = sectorRepository;
         this.routeRepository = routeRepository;
+        this.imageDisplayService = imageDisplayService;
     }
 
 
@@ -87,8 +92,15 @@ public class ClimbingService {
 
 //        MyUser user = (MyUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Route newRoute = new Route(route, sector);
-        routeRepository.save(newRoute);
-
+        MyUser user = (MyUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (user.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
+            newRoute.setRouteVerified(true);
+            routeRepository.save(newRoute);
+        } else {
+            newRoute.setRouteVerified(false);
+            newRoute.setVerificationCounter(0);
+            routeRepository.save(newRoute);
+        }
     }
 
 
@@ -105,11 +117,38 @@ public class ClimbingService {
 
 
     public RouteChosenShowDto showChosenRoute(long routeId) throws RouteNotFoundException {
-        Route route = em.find(Route.class, routeId);
+        Route route = routeRepository.routeWithEverything(routeId);
+        routeValidator(route);
+        RouteChosenShowDto dto = new RouteChosenShowDto(route);
+        List<Long> idOfMiniImages = routeRepository.idOfMiniImagesOfRoute(route.getId());
+        Map<Long, String> map = dto.getUrlOfImages();
+        for (Long id : idOfMiniImages) {
+            map.put(id - 1, "/areas/image/" + id);
+        }
+        return dto;
+    }
+
+    public void verifyRouteService(long id) {
+        Route route = em.find(Route.class, id);
+        route.setVerificationCounter(route.getVerificationCounter()+1);
+        if (route.getVerificationCounter() >= 5) {
+            route.setRouteVerified(true);
+        }
+    }
+
+
+    public ResponseEntity<byte[]> showImgOfRoute(long imageId) throws ImageNotFoundException {
+        ImageOfRoute image = em.find(ImageOfRoute.class, imageId);
+        if (image == null) throw new ImageNotFoundException();
+
+        return imageDisplayService.convertImageToResponseEntity(image);
+    }
+
+
+    public void routeValidator(Route route) throws RouteNotFoundException {
         if (route == null) {
             throw new RouteNotFoundException();
         }
-        RouteChosenShowDto dto = new RouteChosenShowDto(route);
-        return dto;
     }
+
 }

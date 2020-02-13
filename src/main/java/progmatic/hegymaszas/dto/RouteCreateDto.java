@@ -12,7 +12,6 @@ public class RouteCreateDto {
     public RouteCreateDto() {
     }
 
-
     public String getRouteName() {
         return routeName;
     }

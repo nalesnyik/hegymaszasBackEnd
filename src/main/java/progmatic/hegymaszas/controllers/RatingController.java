@@ -29,16 +29,18 @@ public class RatingController {
     }
 
 
-    @PostMapping("/route/rating")
-    public RatingShowDto createRating(@RequestBody RatingCreateDto rating) throws RouteNotFoundException, NotAppropriateNumberOfStarsForRatingException, RouteRatingByUserExistsException {
+    @PostMapping("/route/{routeId}/rating")
+    public RatingShowDto createRating(
+            @PathVariable("routeId") long Id,
+            @RequestBody RatingCreateDto rating) throws RouteNotFoundException, NotAppropriateNumberOfStarsForRatingException, RouteRatingByUserExistsException {
         return ratingService.addRating(rating);
     }
 
 
-    @PostMapping("/route/rating/{ratingId}")
+    @PatchMapping("/route/{routeId}/rating")
     public RatingShowDto modifyRating(
-            @PathVariable(value = "ratingId") long ratingId,
-            @RequestBody RatingModifyDto rating) throws NotAppropriateNumberOfStarsForRatingException, RatingNotFoundException {
+            @PathVariable("routeId") long Id,
+            @RequestBody RatingCreateDto rating) throws NotAppropriateNumberOfStarsForRatingException, RatingNotFoundException {
         return ratingService.modifyRating(rating);
     }
 }

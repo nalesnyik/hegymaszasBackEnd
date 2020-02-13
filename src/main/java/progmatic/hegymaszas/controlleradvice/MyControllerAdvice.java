@@ -41,13 +41,17 @@ public class MyControllerAdvice {
         map.put("error", "Number of stars are invalid.");
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(map);
     }
+
+
     @ExceptionHandler({RouteRatingByUserExistsException.class})
     public ResponseEntity<Map<String, String>> handleRouteRatingByUserExists(RouteRatingByUserExistsException ex) {
         HashMap<String, String> map = new HashMap<>();
         map.put("error", "Rating has already been created for this route.");
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(map);
     }
-   @ExceptionHandler({RatingNotFoundException.class})
+
+
+    @ExceptionHandler({RatingNotFoundException.class})
     public ResponseEntity<Map<String, String>> handleRouteRatingByUserExists(RatingNotFoundException ex) {
         HashMap<String, String> map = new HashMap<>();
         map.put("error", "Rating not found.");
