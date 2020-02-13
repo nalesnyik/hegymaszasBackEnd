@@ -53,5 +53,10 @@ public class ClimbingController {
             @PathVariable long imageId) throws ImageNotFoundException {
         return climbingService.showImgOfRoute(imageId);
     }
+    @PostMapping("/{routeId}")
+    public void verifyRouteByUser(@PathVariable long routeId) {
+        climbingService.verifyRouteService(routeId);
+    }
+
 }
 
