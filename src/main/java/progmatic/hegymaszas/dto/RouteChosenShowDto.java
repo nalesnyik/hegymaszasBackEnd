@@ -1,18 +1,16 @@
 package progmatic.hegymaszas.dto;
 
-import progmatic.hegymaszas.modell.Rating;
 import progmatic.hegymaszas.modell.Route;
 import progmatic.hegymaszas.modell.enums.Orientation;
 import progmatic.hegymaszas.modell.enums.SteepnessType;
 import progmatic.hegymaszas.modell.enums.WeatherRain;
 import progmatic.hegymaszas.modell.enums.WeatherSun;
-import progmatic.hegymaszas.modell.messages.ClimbingLog;
-import progmatic.hegymaszas.modell.messages.Feedback;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.stream.Collectors;
 
 public class RouteChosenShowDto {
     private String name;
@@ -25,9 +23,9 @@ public class RouteChosenShowDto {
     private int numOfBolts;
     private String grade;
 
-    private List<ClimbingLog> climbingLogs = new ArrayList<>();
-    private List<Feedback> feedbacks = new ArrayList<>();
-    private List<Rating> ratings = new ArrayList<>();
+    private List<ClimbingLogShowDto> climbingLogs = new ArrayList<>();
+    private List<FeedbackShowDto> feedbacks = new ArrayList<>();
+    private List<RatingShowDto> ratings = new ArrayList<>();
     private Map<Long, String> urlOfImages = new TreeMap();
 
 
@@ -53,6 +51,9 @@ public class RouteChosenShowDto {
         this.height = route.getHeight();
         this.numOfBolts = route.getNumOfBolts();
         grade = String.valueOf(route.getGrade());
+
+        this.climbingLogs = route.getClimbingLogs().stream().map(ClimbingLogShowDto::new).sorted((x1, x2) -> (int) (x1.getId() - x2.getId())).collect(Collectors.toList());
+        this.feedbacks = route.getFeedbacks().stream().map(FeedbackShowDto::new).sorted((x1, x2) -> (int) (x1.getId() - x2.getId())).collect(Collectors.toList());
 
         orientation = route.getOrientation();
         steepnessType = route.getSteepnessType();
@@ -145,32 +146,32 @@ public class RouteChosenShowDto {
     }
 
 
-    public List<ClimbingLog> getClimbingLogs() {
+    public List<ClimbingLogShowDto> getClimbingLogs() {
         return climbingLogs;
     }
 
 
-    public void setClimbingLogs(List<ClimbingLog> climbingLogs) {
+    public void setClimbingLogs(List<ClimbingLogShowDto> climbingLogs) {
         this.climbingLogs = climbingLogs;
     }
 
 
-    public List<Feedback> getFeedbacks() {
+    public List<FeedbackShowDto> getFeedbacks() {
         return feedbacks;
     }
 
 
-    public void setFeedbacks(List<Feedback> feedbacks) {
+    public void setFeedbacks(List<FeedbackShowDto> feedbacks) {
         this.feedbacks = feedbacks;
     }
 
 
-    public List<Rating> getRatings() {
+    public List<RatingShowDto> getRatings() {
         return ratings;
     }
 
 
-    public void setRatings(List<Rating> ratings) {
+    public void setRatings(List<RatingShowDto> ratings) {
         this.ratings = ratings;
     }
 

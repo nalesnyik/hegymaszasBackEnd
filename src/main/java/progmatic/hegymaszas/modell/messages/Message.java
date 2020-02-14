@@ -1,6 +1,7 @@
 package progmatic.hegymaszas.modell.messages;
 
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.security.core.context.SecurityContextHolder;
 import progmatic.hegymaszas.modell.MyUser;
 
 import javax.persistence.*;
@@ -14,12 +15,12 @@ public class Message {
     private long id;
 
     @ManyToOne
-    private MyUser user;
+    protected MyUser user;
 
-    private String text;
+    protected String text;
 
     @DateTimeFormat(pattern = "yyyy/MMM/dd HH:mm")
-    private LocalDateTime creationDate;
+    private LocalDateTime creationDate = LocalDateTime.now();
 
     private boolean isDeleted = false;
 
