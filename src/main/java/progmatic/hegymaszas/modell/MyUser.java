@@ -8,6 +8,7 @@ import progmatic.hegymaszas.modell.messages.Feedback;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Entity
@@ -27,6 +28,8 @@ public class MyUser implements UserDetails {
     @Email
     @Column(unique = true)
     private String email;
+
+    private LocalDateTime registrationDate;
 
     @ManyToMany(targetEntity = MyAuthority.class, mappedBy = "users")
     private Set<GrantedAuthority> roles = new HashSet<>();
@@ -84,6 +87,16 @@ public class MyUser implements UserDetails {
     @Override
     public String getUsername() {
         return name;
+    }
+
+
+    public LocalDateTime getRegistrationDate() {
+        return registrationDate;
+    }
+
+
+    public void setRegistrationDate(LocalDateTime registrationDate) {
+        this.registrationDate = registrationDate;
     }
 
 

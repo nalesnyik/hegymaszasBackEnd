@@ -12,7 +12,8 @@ public class RouteRepositoryCustomImpl implements RouteRepositoryCustom {
 
 
     public Route routeWithEverything(long routeId) {
-        return em.createQuery("SELECT r FROM Route r JOIN FETCH r.feedbacks JOIN FETCH r.climbingLogs", Route.class)
+        return em.createQuery("SELECT r FROM Route r LEFT JOIN FETCH r.feedbacks LEFT JOIN FETCH r.climbingLogs WHERE r.id=:id", Route.class)
+                .setParameter("id", routeId)
                 .getSingleResult();
     }
 

@@ -13,6 +13,7 @@ import progmatic.hegymaszas.modell.MyUser;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.servlet.ServletException;
+import java.time.LocalDateTime;
 
 @Service
 public class DBInitializer {
@@ -45,10 +46,12 @@ public class DBInitializer {
             admin.setName("admin");
             admin.setPassword(passwordEncoder.encode("admin"));
             admin.setEmail("admin@admin.hu");
+            admin.setRegistrationDate(LocalDateTime.now());
             MyUser user = new MyUser();
             user.setName("user");
             user.setPassword(passwordEncoder.encode("user"));
             user.setEmail("user@user.hu");
+            user.setRegistrationDate(LocalDateTime.now());
             MyAuthority myadmin = new MyAuthority("ROLE_ADMIN");
             MyAuthority myuser = new MyAuthority("ROLE_USER");
             em.persist(myadmin);
