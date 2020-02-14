@@ -161,4 +161,19 @@ public class ClimbingService {
         }
         return sectorsByDistances;
     }
+
+
+    public ResponseEntity<byte[]> showImgOfRoute(long imageId) throws ImageNotFoundException {
+        ImageOfRoute image = em.find(ImageOfRoute.class, imageId);
+        if (image == null) throw new ImageNotFoundException();
+
+        return imageDisplayService.convertImageToResponseEntity(image);
+    }
+
+
+    public void routeValidator(Route route) throws RouteNotFoundException {
+        if (route == null) {
+            throw new RouteNotFoundException();
+        }
+    }
 }

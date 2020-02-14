@@ -69,7 +69,7 @@ public class FileUploadService {
     }
 
 
-    /*@Transactional
+    @Transactional
     public void storePictureForRoute(long routeId, MultipartFile image) throws IOException, RouteNotFoundException {
         Route route = em.find(Route.class, routeId);
         climbingService.routeValidator(route);
@@ -79,7 +79,7 @@ public class FileUploadService {
         byte[] imgMiniByteArray = resize(image);
         ImageOfRoute imgMini = new ImageOfRoute(img, imgMiniByteArray);
         em.persist(imgMini);
-    }*/
+    }
 
 
     public static byte[] resize(MultipartFile image) throws IOException {
