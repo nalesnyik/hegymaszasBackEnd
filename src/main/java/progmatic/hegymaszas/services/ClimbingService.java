@@ -5,13 +5,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import progmatic.hegymaszas.dto.*;
 import progmatic.hegymaszas.exceptions.*;
-import progmatic.hegymaszas.modell.ClimbingPlace;
-import progmatic.hegymaszas.modell.ImageOfRoute;
-import progmatic.hegymaszas.modell.MyUser;
-import progmatic.hegymaszas.modell.Route;
-import progmatic.hegymaszas.modell.Sector;
+import progmatic.hegymaszas.modell.*;
+import progmatic.hegymaszas.modell.enums.AscentType;
+import progmatic.hegymaszas.modell.messages.ClimbingLog;
+import progmatic.hegymaszas.modell.messages.Feedback;
 import progmatic.hegymaszas.repositories.ClimbingRepository;
 import progmatic.hegymaszas.repositories.RouteRepository;
 import progmatic.hegymaszas.repositories.SectorRepository;
@@ -129,13 +129,15 @@ public class ClimbingService {
         return dto;
     }
 
+
     public void verifyRouteService(long id) {
         Route route = em.find(Route.class, id);
-        route.setVerificationCounter(route.getVerificationCounter()+1);
+        route.setVerificationCounter(route.getVerificationCounter() + 1);
         if (route.getVerificationCounter() >= 5) {
             route.setRouteVerified(true);
         }
     }
+
 
     public double distance(double lat1, double lon1, double lat2, double lon2) {
         if ((lat1 == lat2) && (lon1 == lon2)) {
@@ -150,6 +152,7 @@ public class ClimbingService {
             return (dist);
         }
     }
+
 
     public List<Sector> getSectorByDistance(int dist, double userLat, double userLong) {
         List<Route> routes = em.createQuery("SELECT r from Route r", Route.class).getResultList();
@@ -176,4 +179,31 @@ public class ClimbingService {
             throw new RouteNotFoundException();
         }
     }
+
+
+    @Transactional
+    public FeedbackShowDto createFeedback(FeedbackCreateDto feedback, long routeId) throws RouteNotFoundException, NotAppropriateNumberOfStarsForRatingException {
+        RatingService.checkRatingOfCreateDto(feedback.getRating(), 1, 5);
+        Route route = em.find(Route.class, routeId);
+        routeValidator(route);
+
+        Feedback newFeedback = new Feedback(feedback, route);
+        em.persist(newFeedback);
+
+        return new FeedbackShowDto(newFeedback);
+    }
+
+
+    @Transactional
+    public ClimbingLogShowDto createLog(ClimbingLogCreateDto log, long routeId) throws RouteNotFoundException, WrongAscentTypeException {
+        Route route = em.find(Route.class, routeId);
+        routeValidator(route);
+
+        ClimbingLog newLog = new ClimbingLog(log, route);
+        em.persist(newLog);
+
+        return new ClimbingLogShowDto(newLog);
+    }
+
+
 }

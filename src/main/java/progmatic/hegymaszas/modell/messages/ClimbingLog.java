@@ -1,5 +1,9 @@
 package progmatic.hegymaszas.modell.messages;
 
+import org.springframework.security.core.context.SecurityContextHolder;
+import progmatic.hegymaszas.dto.ClimbingLogCreateDto;
+import progmatic.hegymaszas.exceptions.WrongAscentTypeException;
+import progmatic.hegymaszas.modell.MyUser;
 import progmatic.hegymaszas.modell.Route;
 import progmatic.hegymaszas.modell.enums.AscentType;
 
@@ -17,6 +21,13 @@ public class ClimbingLog extends Message {
 
 
     public ClimbingLog() {
+    }
+
+
+    public ClimbingLog(ClimbingLogCreateDto log, Route route) throws WrongAscentTypeException {
+        this.type = AscentType.getAscentType(log.getType());
+        this.user = (MyUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        this.route = route;
     }
 
 

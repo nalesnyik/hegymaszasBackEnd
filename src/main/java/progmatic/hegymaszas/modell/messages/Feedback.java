@@ -1,5 +1,8 @@
 package progmatic.hegymaszas.modell.messages;
 
+import org.springframework.security.core.context.SecurityContextHolder;
+import progmatic.hegymaszas.dto.FeedbackCreateDto;
+import progmatic.hegymaszas.modell.MyUser;
 import progmatic.hegymaszas.modell.Route;
 
 import javax.persistence.Entity;
@@ -21,6 +24,14 @@ public class Feedback extends Message {
 
 
     public Feedback() {
+    }
+
+
+    public Feedback(FeedbackCreateDto feedback, Route route) {
+        this.rating = feedback.getRating();
+        this.text = feedback.getText();
+        this.route = route;
+        this.user = (MyUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
 
 

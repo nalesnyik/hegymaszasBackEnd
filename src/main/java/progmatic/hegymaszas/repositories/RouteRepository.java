@@ -9,4 +9,6 @@ public interface RouteRepository extends JpaRepository<Route, Long>, RouteReposi
     Route findById(long routeId);
 
     boolean existsRouteBySectorAndName(Sector sector, String routeName);
+
+    boolean existsRouteById(long routeId);
 }

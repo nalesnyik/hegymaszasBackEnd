@@ -48,7 +48,7 @@ public class RatingService {
 
     @Transactional
     public RatingShowDto addRating(RatingCreateDto dto) throws RouteNotFoundException, NotAppropriateNumberOfStarsForRatingException, RouteRatingByUserExistsException {
-        checkRatingCreateDto(dto);
+        checkRatingCreateDto(dto, 1, 10);
         Route route = em.find(Route.class, dto.getRouteId());
         if (route == null) throw new RouteNotFoundException();
         MyUser user = (MyUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -81,7 +81,7 @@ public class RatingService {
 
 
     private Rating getRating(RatingCreateDto dto) throws NotAppropriateNumberOfStarsForRatingException, RatingNotFoundException {
-        checkRatingCreateDto(dto);
+        checkRatingCreateDto(dto, 1, 10);
 
         MyUser user = (MyUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Rating rating = ratingRepository.findByRouteIdAndUserName(dto.getRouteId(), user.getName());
@@ -105,10 +105,16 @@ public class RatingService {
     }
 
 
-    public void checkRatingCreateDto(RatingDto dto) throws NotAppropriateNumberOfStarsForRatingException {
-        if (dto.getRatingByBeauty() > 10 || dto.getRatingByBeauty() < 1
-                || dto.getRatingByDifficulty() > 10 || dto.getRatingByDifficulty() < 1
-                || dto.getRatingBySafety() > 10 || dto.getRatingBySafety() < 1)
-            throw new NotAppropriateNumberOfStarsForRatingException();
+    public static void checkRatingOfCreateDto(int rating, int min, int max) throws NotAppropriateNumberOfStarsForRatingException {
+        if (rating > max || rating < min) throw new NotAppropriateNumberOfStarsForRatingException();
     }
+
+
+    private void checkRatingCreateDto(RatingDto dto, int min, int max) throws NotAppropriateNumberOfStarsForRatingException {
+        checkRatingOfCreateDto(dto.getRatingByBeauty(), min, max);
+        checkRatingOfCreateDto(dto.getRatingByDifficulty(), min, max);
+        checkRatingOfCreateDto(dto.getRatingBySafety(), min, max);
+    }
+
+
 }
