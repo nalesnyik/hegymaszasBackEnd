@@ -14,6 +14,7 @@ import progmatic.hegymaszas.modell.ChatMessage;
 
 import java.security.Principal;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Date;
 
 @Controller
@@ -43,7 +44,7 @@ public class ChatController {
     @MessageMapping("/ws.sendMessage")
     //@SendTo("/chat")
     public ChatMessage sendMessage(ChatMessage chatMessage) throws Exception {
-        String time = new SimpleDateFormat("HH:mm").format(new Date());
+        String time = new SimpleDateFormat("HH:mm").format((String.valueOf(LocalDate.now())));
         return new ChatMessage(chatMessage.getSender(), chatMessage.getContent(), time);
     }
 
