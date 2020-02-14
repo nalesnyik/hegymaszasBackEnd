@@ -9,7 +9,6 @@ import org.springframework.transaction.annotation.Transactional;
 import progmatic.hegymaszas.dto.*;
 import progmatic.hegymaszas.exceptions.*;
 import progmatic.hegymaszas.modell.*;
-import progmatic.hegymaszas.modell.enums.AscentType;
 import progmatic.hegymaszas.modell.messages.ClimbingLog;
 import progmatic.hegymaszas.modell.messages.Feedback;
 import progmatic.hegymaszas.repositories.ClimbingRepository;
@@ -124,7 +123,7 @@ public class ClimbingService {
         List<Long> idOfMiniImages = routeRepository.idOfMiniImagesOfRoute(route.getId());
         Map<Long, String> map = dto.getUrlOfImages();
         for (Long id : idOfMiniImages) {
-            map.put(id - 1, "/areas/image/" + id);
+            map.put(id - 1, "/image/" + id);
         }
         return dto;
     }
@@ -175,9 +174,7 @@ public class ClimbingService {
 
 
     public void routeValidator(Route route) throws RouteNotFoundException {
-        if (route == null) {
-            throw new RouteNotFoundException();
-        }
+        if (route == null) throw new RouteNotFoundException();
     }
 
 

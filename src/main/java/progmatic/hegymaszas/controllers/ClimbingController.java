@@ -48,7 +48,7 @@ public class ClimbingController {
     }
 
 
-    @GetMapping("areas/image/{imageId}")
+    @GetMapping("/image/{imageId}")
     public ResponseEntity<byte[]> showImgOfRoute(
             @PathVariable long imageId) throws ImageNotFoundException {
         return climbingService.showImgOfRoute(imageId);

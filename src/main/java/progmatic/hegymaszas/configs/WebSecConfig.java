@@ -48,7 +48,7 @@ public class WebSecConfig extends WebSecurityConfigurerAdapter {
                         "/rest/route", "/sector", "/home", "/", "/registerUser", "/register", "/ws", "/ws/queue",
                         "/queue", "/queue/reply", "/ws.addUser", "/static/**", "/templates/**").permitAll()
                 .antMatchers("/users", "/user/changeRole").hasRole("ADMIN")
-                .antMatchers("/areas", "/areas/**","/user/me/picture").permitAll()
+                .antMatchers("/areas", "/areas/**","/image/**","/user/me/picture").permitAll()
                 .anyRequest().authenticated();
     }
 

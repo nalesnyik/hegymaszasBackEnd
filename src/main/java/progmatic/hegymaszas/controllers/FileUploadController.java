@@ -39,10 +39,10 @@ public class FileUploadController {
     }
 
 
-    /*@PostMapping("/route/{routeId}")
+    @PostMapping("/route/{routeId}")
     public void uploadPictureForRoute(
             @PathVariable("routeId") long routeId,
             @RequestBody MultipartFile image) throws IOException, RouteNotFoundException {
         fileUploadService.storePictureForRoute(routeId, image);
-    }*/
+    }
 }

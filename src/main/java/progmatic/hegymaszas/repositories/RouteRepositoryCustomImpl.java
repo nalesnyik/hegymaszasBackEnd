@@ -19,6 +19,6 @@ public class RouteRepositoryCustomImpl implements RouteRepositoryCustom {
 
 
     public List<Long> idOfMiniImagesOfRoute(long routeId) {
-        return em.createQuery("SELECT i.originalImgId FROM Route r JOIN  r.images i WHERE i.originalImgId>0", Long.class).getResultList();
+        return em.createQuery("SELECT i.id FROM Route r JOIN  r.images i WHERE i.originalImgId>0 ORDER BY i.originalImgId DESC ", Long.class).getResultList();
     }
 }
