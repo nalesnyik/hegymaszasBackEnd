@@ -1,12 +1,14 @@
 package progmatic.hegymaszas.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import progmatic.hegymaszas.dto.*;
 import progmatic.hegymaszas.exceptions.*;
 import progmatic.hegymaszas.modell.ClimbingPlace;
+import progmatic.hegymaszas.modell.ImageOfRoute;
 import progmatic.hegymaszas.modell.MyUser;
 import progmatic.hegymaszas.modell.Route;
 import progmatic.hegymaszas.modell.Sector;
@@ -31,12 +33,15 @@ public class ClimbingService {
     private ClimbingRepository climbingRepository;
     private SectorRepository sectorRepository;
     private RouteRepository routeRepository;
+    private ImageDisplayService imageDisplayService;
+
 
     @Autowired
-    public ClimbingService(ClimbingRepository climbingRepository, SectorRepository sectorRepository, RouteRepository routeRepository) {
+    public ClimbingService(ClimbingRepository climbingRepository, SectorRepository sectorRepository, RouteRepository routeRepository, ImageDisplayService imageDisplayService) {
         this.climbingRepository = climbingRepository;
         this.sectorRepository = sectorRepository;
         this.routeRepository = routeRepository;
+        this.imageDisplayService = imageDisplayService;
     }
 
 
@@ -113,11 +118,14 @@ public class ClimbingService {
 
 
     public RouteChosenShowDto showChosenRoute(long routeId) throws RouteNotFoundException {
-        Route route = em.find(Route.class, routeId);
-        if (route == null) {
-            throw new RouteNotFoundException();
-        }
+        Route route = routeRepository.routeWithEverything(routeId);
+        //routeValidator(route);
         RouteChosenShowDto dto = new RouteChosenShowDto(route);
+        List<Long> idOfMiniImages = routeRepository.idOfMiniImagesOfRoute(route.getId());
+        Map<Long, String> map = dto.getUrlOfImages();
+        for (Long id : idOfMiniImages) {
+            map.put(id - 1, "/areas/image/" + id);
+        }
         return dto;
     }
 
@@ -145,12 +153,12 @@ public class ClimbingService {
 
     public List<Sector> getSectorByDistance(int dist, double userLat, double userLong) {
         List<Route> routes = em.createQuery("SELECT r from Route r", Route.class).getResultList();
-        List<Sector> routesByDistances = new ArrayList<>();
+        List<Sector> sectorsByDistances = new ArrayList<>();
         for (Route route1 : routes) {
             if (distance(route1.getSector().getLatitude(), route1.getSector().getLongitude(), userLat, userLong) <= dist) {
-                routesByDistances.add(route1.getSector());
+                sectorsByDistances.add(route1.getSector());
             }
         }
-        return routesByDistances;
+        return sectorsByDistances;
     }
 }

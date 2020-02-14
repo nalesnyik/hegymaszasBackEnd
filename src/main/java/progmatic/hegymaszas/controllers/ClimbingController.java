@@ -1,6 +1,7 @@
 package progmatic.hegymaszas.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import progmatic.hegymaszas.dto.*;
 import progmatic.hegymaszas.exceptions.ClimbingPlaceNotFoundException;
@@ -9,6 +10,7 @@ import progmatic.hegymaszas.exceptions.RouteNotFoundException;
 import progmatic.hegymaszas.exceptions.SectorNotFoundException;
 import progmatic.hegymaszas.modell.Route;
 import progmatic.hegymaszas.modell.Sector;
+import progmatic.hegymaszas.exceptions.*;
 import progmatic.hegymaszas.services.ClimbingService;
 
 import java.util.List;
@@ -40,8 +42,8 @@ public class ClimbingController {
     }
 
 
-    @GetMapping("/{climbingPlaceId}/{sectorId}/{routeId}")
-    public RouteChosenShowDto showCreateRoute(@PathVariable long climbingPlaceId, @PathVariable long sectorId, @PathVariable long routeId) throws RouteNotFoundException {
+    @GetMapping("/route/{routeId}")
+    public RouteChosenShowDto showCreateRoute(@PathVariable long routeId) throws RouteNotFoundException {
         return climbingService.showChosenRoute(routeId);
     }
 
@@ -51,6 +53,14 @@ public class ClimbingController {
         climbingService.createRoute(route);
     }
 
+
+    /*@GetMapping("/image/{imageId}")
+    public ResponseEntity<byte[]> showImgOfRoute(
+            @PathVariable long imageId) throws ImageNotFoundException {
+        return climbingService.showImgOfRoute(imageId);
+    }
+
+     */
     @PostMapping("/{routeId}")
     public void verifyRouteByUser(@PathVariable long routeId) {
         climbingService.verifyRouteService(routeId);

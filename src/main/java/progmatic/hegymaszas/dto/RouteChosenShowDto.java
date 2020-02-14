@@ -9,9 +9,10 @@ import progmatic.hegymaszas.modell.enums.WeatherSun;
 import progmatic.hegymaszas.modell.messages.ClimbingLog;
 import progmatic.hegymaszas.modell.messages.Feedback;
 
-import javax.persistence.OneToMany;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 public class RouteChosenShowDto {
     private String name;
@@ -24,24 +25,26 @@ public class RouteChosenShowDto {
     private int numOfBolts;
     private String grade;
 
-    private byte[] photos;
-    @OneToMany(mappedBy = "route")
     private List<ClimbingLog> climbingLogs = new ArrayList<>();
-
-    @OneToMany(mappedBy = "route")
     private List<Feedback> feedbacks = new ArrayList<>();
-
-    @OneToMany(mappedBy = "route")
     private List<Rating> ratings = new ArrayList<>();
+    private Map<Long, String> urlOfImages = new TreeMap();
+
 
     private Orientation orientation;
     private SteepnessType steepnessType;
     private WeatherRain weatherRain;
     private WeatherSun weatherSun;
 
+    private double avgRatingByBeauty;
+    private double avgRatingByDifficulty;
+    private double avgRatingBySafety;
+
 
     public RouteChosenShowDto(Route route) {
         this.name = route.getName();
+        System.out.println(this.name);
+        System.out.println(route.getSector());
         this.sectorName = route.getSector().getName();
         this.sectorId = route.getSector().getId();
         this.climbingPlaceName = route.getSector().getClimbingPlace().getName();
@@ -49,12 +52,16 @@ public class RouteChosenShowDto {
 
         this.height = route.getHeight();
         this.numOfBolts = route.getNumOfBolts();
-        grade = String.valueOf( route.getGrade());
+        grade = String.valueOf(route.getGrade());
 
         orientation = route.getOrientation();
         steepnessType = route.getSteepnessType();
         weatherRain = route.getWeatherRain();
         weatherSun = route.getWeatherSun();
+
+        avgRatingByBeauty = route.getAvgRatingByBeauty();
+        avgRatingByDifficulty = route.getAvgRatingByDifficulty();
+        avgRatingBySafety = route.getAvgRatingBySafety();
     }
 
 
@@ -138,16 +145,6 @@ public class RouteChosenShowDto {
     }
 
 
-    public byte[] getPhotos() {
-        return photos;
-    }
-
-
-    public void setPhotos(byte[] photos) {
-        this.photos = photos;
-    }
-
-
     public List<ClimbingLog> getClimbingLogs() {
         return climbingLogs;
     }
@@ -215,5 +212,45 @@ public class RouteChosenShowDto {
 
     public void setWeatherSun(WeatherSun weatherSun) {
         this.weatherSun = weatherSun;
+    }
+
+
+    public double getAvgRatingByBeauty() {
+        return avgRatingByBeauty;
+    }
+
+
+    public void setAvgRatingByBeauty(double avgRatingByBeauty) {
+        this.avgRatingByBeauty = avgRatingByBeauty;
+    }
+
+
+    public double getAvgRatingByDifficulty() {
+        return avgRatingByDifficulty;
+    }
+
+
+    public void setAvgRatingByDifficulty(double avgRatingByDifficulty) {
+        this.avgRatingByDifficulty = avgRatingByDifficulty;
+    }
+
+
+    public double getAvgRatingBySafety() {
+        return avgRatingBySafety;
+    }
+
+
+    public void setAvgRatingBySafety(double avgRatingBySafety) {
+        this.avgRatingBySafety = avgRatingBySafety;
+    }
+
+
+    public Map<Long, String> getUrlOfImages() {
+        return urlOfImages;
+    }
+
+
+    public void setUrlOfImages(Map<Long, String> urlOfImages) {
+        this.urlOfImages = urlOfImages;
     }
 }

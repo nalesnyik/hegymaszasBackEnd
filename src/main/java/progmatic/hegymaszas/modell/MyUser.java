@@ -46,6 +46,15 @@ public class MyUser implements UserDetails {
     @OneToMany(mappedBy = "user")
     private List<Rating> ratings = new ArrayList<>();
 
+    @OneToMany(mappedBy = "user")
+    private List<ImageOfRoute> images = new ArrayList<>();
+
+
+    @Lob
+    private byte[] profilePicture;
+
+    private String profilePictureContentType;
+
 
     public MyUser() {
     }
@@ -179,5 +188,35 @@ public class MyUser implements UserDetails {
 
     public void setRatings(List<Rating> ratings) {
         this.ratings = ratings;
+    }
+
+
+    public byte[] getProfilePicture() {
+        return profilePicture;
+    }
+
+
+    public void setProfilePicture(byte[] profilePicture) {
+        this.profilePicture = profilePicture;
+    }
+
+
+    public String getProfilePictureContentType() {
+        return profilePictureContentType;
+    }
+
+
+    public void setProfilePictureContentType(String profilePictureContentType) {
+        this.profilePictureContentType = profilePictureContentType;
+    }
+
+
+    public List<ImageOfRoute> getImages() {
+        return images;
+    }
+
+
+    public void setImages(List<ImageOfRoute> images) {
+        this.images = images;
     }
 }

@@ -46,7 +46,7 @@ public class WebSecConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/loginpage/beforelogin", "/climbingplace", "/map", "/rest/sector", "/rest/route", "/sector", "/home", "/", "/registerUser", "/register").permitAll()
                 .antMatchers("/users", "/user/changeRole").hasRole("ADMIN")
-                .antMatchers("/areas", "/areas/**","/route**").permitAll()
+                .antMatchers("/areas", "/areas/**","/route**","/user/me/picture").permitAll()
                 .anyRequest().authenticated();
     }
 
