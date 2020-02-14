@@ -29,13 +29,13 @@ public class WebSecConfig extends WebSecurityConfigurerAdapter {
         RestAuthenticationEntryPoint restAuthenticationEntryPoint = new RestAuthenticationEntryPoint();
         http.csrf().disable()
                 .formLogin()
+                .permitAll()
                 .successHandler(mySuccessHandler)
                 .failureHandler(failureHandler)
                 .and()
                 .exceptionHandling()
-                .authenticationEntryPoint(restAuthenticationEntryPoint)
+                //.authenticationEntryPoint(restAuthenticationEntryPoint)
                 .and()
-                //.loginPage("/login").permitAll()
                 .logout()
                 .logoutUrl("/logout")
                 .permitAll()
@@ -44,7 +44,9 @@ public class WebSecConfig extends WebSecurityConfigurerAdapter {
                 .cors()
                 .and()
                 .authorizeRequests()
-                .antMatchers("/loginpage/beforelogin", "/climbingplace", "/map", "/rest/sector", "/rest/route", "/sector", "/home", "/", "/registerUser", "/register").permitAll()
+                .antMatchers("/loginpage/beforelogin", "/climbingplace", "/map", "/rest/sector",
+                        "/rest/route", "/sector", "/home", "/", "/registerUser", "/register", "/ws", "/ws/queue",
+                        "/queue", "/queue/reply", "/ws.addUser", "/static/**", "/templates/**").permitAll()
                 .antMatchers("/users", "/user/changeRole").hasRole("ADMIN")
                 .antMatchers("/areas", "/areas/**","/route**","/user/me/picture").permitAll()
                 .anyRequest().authenticated();
@@ -53,6 +55,7 @@ public class WebSecConfig extends WebSecurityConfigurerAdapter {
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowCredentials(true);
         configuration.setAllowedOrigins(Arrays.asList("http://localhost:4200"));
         configuration.setAllowedMethods(Arrays.asList("GET","POST","DELETE","PUT","PATCH","HEAD","OPTIONS"));
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();

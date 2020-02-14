@@ -24,12 +24,6 @@ public class RestRouteController {
     public void RestController(RouteService routeService){
         this.routeService = routeService;
     }
-/*
-    @RequestMapping(method =  RequestMethod.GET)
-    public List<Route> allRoutes(){
-        List<Route> routes = routeService.getAllRoute();
-        return routes;
-    }*/
 
     @RequestMapping(method = RequestMethod.GET)
     public List<RouteDto> allRoute(){
