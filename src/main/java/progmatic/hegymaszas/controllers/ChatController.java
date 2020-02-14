@@ -7,15 +7,13 @@ import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.messaging.simp.annotation.SendToUser;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import progmatic.hegymaszas.modell.ChatMessage;
 
 import java.security.Principal;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Controller
 public class ChatController {
@@ -24,18 +22,18 @@ public class ChatController {
     private SimpMessagingTemplate simpMessagingTemplate;
 
     @RequestMapping("/chat")
-    public String startChat(){
+    public String startChat() {
         return "chatpage";
     }
 
     @MessageMapping("/ws")
     //@SendToUser("queue/specific-user")
     public void sendSpecific(@Payload ChatMessage chatMessage, Principal user,
-                             @Header("simpSessionId") String sessionId) throws Exception{
+                             @Header("simpSessionId") String sessionId) throws Exception {
         ChatMessage out = new ChatMessage(
                 chatMessage.getSender(),
                 chatMessage.getContent(),
-                new SimpleDateFormat("HH:mm").format(new Date()));
+                new SimpleDateFormat("HH:mm").format(LocalDateTime.now()));
         simpMessagingTemplate.convertAndSendToUser(chatMessage.getSentTo(),
                 "/ws/queue/specific-user", out);
 
@@ -44,7 +42,7 @@ public class ChatController {
     @MessageMapping("/ws.sendMessage")
     //@SendTo("/chat")
     public ChatMessage sendMessage(ChatMessage chatMessage) throws Exception {
-        String time = new SimpleDateFormat("HH:mm").format((String.valueOf(LocalDate.now())));
+        String time = new SimpleDateFormat("HH:mm").format((String.valueOf(LocalDateTime.now())));
         return new ChatMessage(chatMessage.getSender(), chatMessage.getContent(), time);
     }
 

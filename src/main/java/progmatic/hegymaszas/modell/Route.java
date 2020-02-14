@@ -13,7 +13,9 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Positive;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @NamedQueries(
@@ -45,7 +47,7 @@ public class Route {
     private Sector sector;
 
     @OneToMany(mappedBy = "route")
-    private List<ClimbingLog> climbingLogs = new ArrayList<>();
+    private Set<ClimbingLog> climbingLogs = new HashSet<>();
 
     @Lob
     private byte[] photos;
@@ -56,7 +58,7 @@ public class Route {
     private int grade;
 
     @OneToMany(mappedBy = "route")
-    private List<Feedback> feedbacks = new ArrayList<>();
+    private Set<Feedback> feedbacks = new HashSet<>();
 
     @OneToMany(mappedBy = "route")
     private List<Rating> ratings = new ArrayList<>();
@@ -99,21 +101,26 @@ public class Route {
         }
     }
 
+
     public boolean isRouteVerified() {
         return isRouteVerified;
     }
+
 
     public void setRouteVerified(boolean routeVerified) {
         isRouteVerified = routeVerified;
     }
 
+
     public int getVerificationCounter() {
         return verificationCounter;
     }
 
+
     public void setVerificationCounter(int verificationCounter) {
         this.verificationCounter = verificationCounter;
     }
+
 
     public long getId() {
         return id;
@@ -166,16 +173,6 @@ public class Route {
     }
 
 
-    public List<ClimbingLog> getClimbingLogs() {
-        return climbingLogs;
-    }
-
-
-    public void setClimbingLogs(List<ClimbingLog> climbingLogs) {
-        this.climbingLogs = climbingLogs;
-    }
-
-
     public byte[] getPhotos() {
         return photos;
     }
@@ -193,16 +190,6 @@ public class Route {
 
     public void setGrade(int grade) {
         this.grade = grade;
-    }
-
-
-    public List<Feedback> getFeedbacks() {
-        return feedbacks;
-    }
-
-
-    public void setFeedbacks(List<Feedback> feedbacks) {
-        this.feedbacks = feedbacks;
     }
 
 
@@ -283,6 +270,36 @@ public class Route {
 
     public void setAvgRatingBySafety(double avgRatingBySafety) {
         this.avgRatingBySafety = avgRatingBySafety;
+    }
+
+
+    public Set<ClimbingLog> getClimbingLogs() {
+        return climbingLogs;
+    }
+
+
+    public void setClimbingLogs(Set<ClimbingLog> climbingLogs) {
+        this.climbingLogs = climbingLogs;
+    }
+
+
+    public List<ImageOfRoute> getImages() {
+        return images;
+    }
+
+
+    public void setImages(List<ImageOfRoute> images) {
+        this.images = images;
+    }
+
+
+    public Set<Feedback> getFeedbacks() {
+        return feedbacks;
+    }
+
+
+    public void setFeedbacks(Set<Feedback> feedbacks) {
+        this.feedbacks = feedbacks;
     }
 }
 

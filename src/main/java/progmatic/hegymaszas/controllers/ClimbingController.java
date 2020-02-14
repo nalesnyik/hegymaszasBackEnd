@@ -4,6 +4,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import progmatic.hegymaszas.dto.*;
+import progmatic.hegymaszas.exceptions.ClimbingPlaceNotFoundException;
+import progmatic.hegymaszas.exceptions.RouteNameForSectorAlreadyExistsException;
+import progmatic.hegymaszas.exceptions.RouteNotFoundException;
+import progmatic.hegymaszas.exceptions.SectorNotFoundException;
+import progmatic.hegymaszas.modell.Route;
+import progmatic.hegymaszas.modell.Sector;
 import progmatic.hegymaszas.exceptions.*;
 import progmatic.hegymaszas.services.ClimbingService;
 
@@ -53,9 +59,16 @@ public class ClimbingController {
             @PathVariable long imageId) throws ImageNotFoundException {
         return climbingService.showImgOfRoute(imageId);
     }
+
+
     @PostMapping("/{routeId}")
     public void verifyRouteByUser(@PathVariable long routeId) {
         climbingService.verifyRouteService(routeId);
+    }
+
+    @PostMapping("/{sectorId}/{routeId}")
+    public List<Sector> showSectorsByDistance(@RequestBody int dist, double userLong, double userLat) {
+        return climbingService.getSectorByDistance(dist, userLat, userLong);
     }
 
 }
