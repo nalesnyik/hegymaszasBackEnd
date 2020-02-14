@@ -55,12 +55,12 @@ function onError(error) {
 
 
 function sendMessage(event) {
-    var messageContent = messageInput.value.trim();
+    var messageContent = messageInput.valulogine.trim();
     if(messageContent && stompClient) {
         var chatMessage = {
             sender: sentFrom,
             content: messageInput.value,
-            type: 'CHAT'
+            type: 'CHAT',
         };
         stompClient.send("/queue/user/" + sentTo, {}, JSON.stringify(chatMessage));
         messageInput.value = '';
