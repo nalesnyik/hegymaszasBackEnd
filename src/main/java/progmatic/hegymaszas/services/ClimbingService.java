@@ -89,7 +89,7 @@ public class ClimbingService {
 
         Route newRoute = new Route(route, sector);
         MyUser user = (MyUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if (user.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"))||
+        if (user.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN")) ||
                 user.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ORGANIZATION"))) {
             newRoute.setRouteVerified(true);
         } else {
@@ -105,24 +105,24 @@ public class ClimbingService {
         ClimbingService.sectorValidator(sector);
         SectorChosenShowDto dto = new SectorChosenShowDto(sector);
         List<Long> idOfMiniImages = sectorRepository.get9idOfMiniImagesOfSector(sectorId);
-        if (idOfMiniImages != null) dto.setUrlOfImages(createUrlMapOfImages(idOfMiniImages, "sector"));
+        if (idOfMiniImages != null) dto.setUrlOfImages(createUrlMapOfImages(idOfMiniImages, "route"));
 
         long idOfProfilePicture = sectorRepository.getProfileId(sectorId);
         if (idOfProfilePicture > 0) {
-            dto.setUrlOfPicture(getUrlOfPictureOfSector(sectorId, idOfProfilePicture));
+            dto.setUrlOfPicture(getUrlOfPictureOfSector(idOfProfilePicture));
         }
 
         long idOfMiniProfilePicture = sectorRepository.getMiniProfileId(sectorId);
         if (idOfMiniProfilePicture > 0) {
-            dto.setUrlOfMiniPicture(getUrlOfPictureOfSector(sectorId, idOfMiniProfilePicture));
+            dto.setUrlOfMiniPicture(getUrlOfPictureOfSector(idOfMiniProfilePicture));
         }
 
         return dto;
     }
 
 
-    private String getUrlOfPictureOfSector(long sectorId, long idOfPicture) {
-        return "localhost:8080/image/" + sectorId + "/" + idOfPicture;
+    private String getUrlOfPictureOfSector(long idOfPicture) {
+        return "localhost:8080/image/sector/" + idOfPicture;
     }
 
 
@@ -139,7 +139,7 @@ public class ClimbingService {
 
     public Map<Long, String> createUrlMapOfImages(List<Long> idOfMiniImages, String entity) {
         Map<Long, String> map = new TreeMap<>();
-        StringBuilder url = new StringBuilder("localhost:8080/image/");
+        StringBuilder url = new StringBuilder("localhost:8080/image");
         for (Long id : idOfMiniImages) {
             map.put((id - 1), url.toString() + "/" + entity + "/" + id);
         }
@@ -152,7 +152,7 @@ public class ClimbingService {
         MyUser user = (MyUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         route.setVerificationCounter(route.getVerificationCounter() + 1);
         if (route.getVerificationCounter() >= 5 ||
-            user.getAuthorities().contains((new SimpleGrantedAuthority("ROLE_ADMIN")))||
+                user.getAuthorities().contains((new SimpleGrantedAuthority("ROLE_ADMIN"))) ||
                 user.getAuthorities().contains((new SimpleGrantedAuthority("ROLE_ORGANIZATION")))) {
             route.setRouteVerified(true);
         }
@@ -256,6 +256,6 @@ public class ClimbingService {
     public Map<Long, String> showPhotosOfChosenSector(long sectorId) throws SectorNotFoundException {
         sectorValidator(sectorRepository.existsSectorById(sectorId));
         List<Long> idOfMiniPictures = sectorRepository.idOfMiniImagesOfSector(sectorId);
-        return createUrlMapOfImages(idOfMiniPictures, "sector");
+        return createUrlMapOfImages(idOfMiniPictures, "route");
     }
 }
