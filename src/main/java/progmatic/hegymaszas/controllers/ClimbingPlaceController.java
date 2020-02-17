@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import progmatic.hegymaszas.modell.ClimbingPlace;
 import progmatic.hegymaszas.services.ClimbingPlaceService;
-
 import java.util.List;
 
 @RestController
