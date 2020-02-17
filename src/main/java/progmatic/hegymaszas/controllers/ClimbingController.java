@@ -7,7 +7,6 @@ import progmatic.hegymaszas.dto.*;
 import progmatic.hegymaszas.exceptions.*;
 import progmatic.hegymaszas.modell.Sector;
 import progmatic.hegymaszas.services.ClimbingService;
-
 import java.util.List;
 import java.util.Map;
 
