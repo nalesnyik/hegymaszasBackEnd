@@ -1,10 +1,10 @@
 package progmatic.hegymaszas.services;
 
-import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import progmatic.hegymaszas.modell.*;
+import progmatic.hegymaszas.modell.enums.Orientation;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -26,20 +26,20 @@ public class RouteService {
 
     public List<Route> loadFilteredRoutes(
             String grade, String name, String climbingPlaceName,
-            int beautyRating, int difficultyRating, int safetyRating, int height) {
+            int beautyRating, int difficultyRating, int safetyRating, Orientation orientation) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Route> cQuery = cb.createQuery(Route.class);
         Root<Route> routes = cQuery.from(Route.class);
-        ListJoin<Route, Rating> joinedRatings = routes.join(Route_.ratings);
+       // ListJoin<Route, Rating> joinedRatings = routes.join(Route_.ratings);
         List<Predicate> predicateList = new ArrayList<>();
 
         if (!StringUtils.isEmpty(name)) {
             String text = "%" + name + "%";
             predicateList.add(cb.like(routes.get(Route_.name), text));
         }
-        if (!StringUtils.isEmpty(height)) {
-            predicateList.add(cb.equal(routes.get(Route_.height), height));
-        }
+       // if (!StringUtils.isEmpty(height)) {
+       //     predicateList.add(cb.equal(routes.get(Route_.height), height));
+       // }
         if (!StringUtils.isEmpty(beautyRating)) {
             predicateList.add(cb.greaterThanOrEqualTo(routes.get(Route_.avgRatingByBeauty), (double) beautyRating));
             // predicateList.add(cb.greaterThanOrEqualTo(cb.avg(joinedRatings.get(Rating_.ratingByBeauty)), (double) beautyRating));
@@ -62,8 +62,17 @@ public class RouteService {
         }
         // cQuery.groupBy(routes.get(Route_.id));
         cQuery.where(predicateList.toArray(new Predicate[predicateList.size()]));
-        return em.createQuery(cQuery).getResultList();
+       List<Route> listWithoutOrientation = em.createQuery(cQuery).getResultList();
+        if (!StringUtils.isEmpty(orientation)) {
+            List<Route> listWithOrientation=new ArrayList<>();
+            for (Route route : listWithoutOrientation) {
+                if(route.getOrientation()==orientation){
+                    listWithOrientation.add(route);
+                }
+            }
+            return listWithOrientation;
+        }
+        return listWithoutOrientation;
     }
-
 
 }

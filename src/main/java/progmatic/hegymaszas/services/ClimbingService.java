@@ -89,7 +89,8 @@ public class ClimbingService {
 
         Route newRoute = new Route(route, sector);
         MyUser user = (MyUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if (user.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
+        if (user.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"))||
+                user.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ORGANIZATION"))) {
             newRoute.setRouteVerified(true);
         } else {
             newRoute.setRouteVerified(false);
@@ -148,8 +149,11 @@ public class ClimbingService {
 
     public void verifyRouteService(long id) {
         Route route = em.find(Route.class, id);
+        MyUser user = (MyUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         route.setVerificationCounter(route.getVerificationCounter() + 1);
-        if (route.getVerificationCounter() >= 5) {
+        if (route.getVerificationCounter() >= 5 ||
+            user.getAuthorities().contains((new SimpleGrantedAuthority("ROLE_ADMIN")))||
+                user.getAuthorities().contains((new SimpleGrantedAuthority("ROLE_ORGANIZATION")))) {
             route.setRouteVerified(true);
         }
     }
