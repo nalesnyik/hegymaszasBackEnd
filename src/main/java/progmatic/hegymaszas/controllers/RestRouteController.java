@@ -2,18 +2,15 @@ package progmatic.hegymaszas.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import progmatic.hegymaszas.dto.CreateRouteDto;
 import progmatic.hegymaszas.dto.RouteDto;
 import progmatic.hegymaszas.modell.Route;
 import progmatic.hegymaszas.modell.enums.Orientation;
 import progmatic.hegymaszas.services.RouteService;
-
-import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping("/rest/")
+@RequestMapping("/crags")
 public class RestRouteController {
 
     private RouteService routeService;
