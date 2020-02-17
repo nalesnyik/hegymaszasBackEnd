@@ -3,6 +3,7 @@ package progmatic.hegymaszas.services;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import progmatic.hegymaszas.modell.Image;
 import progmatic.hegymaszas.modell.ImageOfRoute;
 
 import javax.persistence.EntityManager;
@@ -31,7 +32,7 @@ public class ImageDisplayService {
     }
 
 
-    public ResponseEntity<byte[]> convertImageToResponseEntity(ImageOfRoute image) {
+    public ResponseEntity<byte[]> convertImageToResponseEntity(Image image) {
         MediaType mediaType;
         switch (image.getImageContentType()) {
             case "image/png":

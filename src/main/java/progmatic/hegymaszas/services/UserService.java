@@ -85,7 +85,7 @@ public class UserService implements UserDetailsService {
 
 
     public MyUserChosenShowDto showMyProfile() {
-        MyUser user = (MyUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        MyUser user = getMyUser();
         return new MyUserChosenShowDto(em.find(MyUser.class, user.getName()));
     }
 
@@ -95,5 +95,10 @@ public class UserService implements UserDetailsService {
         MyUser user = em.find(MyUser.class, myUser.getName());
         byte[] image = user.getProfilePicture();
         return imageDisplayService.convertImageToResponseEntity(image, user.getProfilePictureContentType());
+    }
+
+
+    public static MyUser getMyUser() {
+        return (MyUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
 }

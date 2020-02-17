@@ -52,9 +52,6 @@ public class Route {
     @Lob
     private byte[] photos;
 
-    @OneToMany(mappedBy = "route")
-    private List<ImageOfRoute> images = new ArrayList<>();
-
     private int grade;
 
     @OneToMany(mappedBy = "route")
@@ -62,6 +59,9 @@ public class Route {
 
     @OneToMany(mappedBy = "route")
     private List<Rating> ratings = new ArrayList<>();
+
+    @OneToMany(mappedBy = "route")
+    private List<ImageOfRoute> images = new ArrayList<>();
 
     private double avgRatingByBeauty;
     private double avgRatingByDifficulty;
@@ -283,16 +283,6 @@ public class Route {
     }
 
 
-    public List<ImageOfRoute> getImages() {
-        return images;
-    }
-
-
-    public void setImages(List<ImageOfRoute> images) {
-        this.images = images;
-    }
-
-
     public Set<Feedback> getFeedbacks() {
         return feedbacks;
     }
@@ -300,6 +290,16 @@ public class Route {
 
     public void setFeedbacks(Set<Feedback> feedbacks) {
         this.feedbacks = feedbacks;
+    }
+
+
+    public List<ImageOfRoute> getImages() {
+        return images;
+    }
+
+
+    public void setImages(List<ImageOfRoute> images) {
+        this.images = images;
     }
 }
 
