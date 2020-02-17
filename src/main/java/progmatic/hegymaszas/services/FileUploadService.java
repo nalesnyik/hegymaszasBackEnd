@@ -2,13 +2,19 @@ package progmatic.hegymaszas.services;
 
 import org.imgscalr.Scalr;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import progmatic.hegymaszas.exceptions.RouteNotFoundException;
+import progmatic.hegymaszas.exceptions.SectorNotFoundException;
+import progmatic.hegymaszas.exceptions.SectorProfilePictureAlreadyExistsException;
 import progmatic.hegymaszas.modell.ImageOfRoute;
+import progmatic.hegymaszas.modell.ImageOfSector;
 import progmatic.hegymaszas.modell.Route;
+import progmatic.hegymaszas.modell.Sector;
 import progmatic.hegymaszas.repositories.RouteRepository;
+import progmatic.hegymaszas.repositories.SectorRepository;
 import progmatic.hegymaszas.repositories.UserRepository;
 
 import javax.imageio.ImageIO;
@@ -29,13 +35,16 @@ public class FileUploadService {
     UserRepository userRepository;
     RouteRepository routeRepository;
     ClimbingService climbingService;
+    SectorRepository sectorRepository;
 
 
     @Autowired
-    public FileUploadService(UserRepository userRepository, RouteRepository routeRepository, ClimbingService climbingService) {
+    public FileUploadService(UserRepository userRepository, RouteRepository routeRepository, ClimbingService climbingService, SectorRepository sectorRepository) {
         this.userRepository = userRepository;
         this.routeRepository = routeRepository;
         this.climbingService = climbingService;
+        this.sectorRepository = sectorRepository;
+
     }
 
 
@@ -93,4 +102,19 @@ public class FileUploadService {
     }
 
 
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @Transactional
+    public void storePictureForSector(long sectorId, MultipartFile image) throws SectorNotFoundException, IOException, SectorProfilePictureAlreadyExistsException {
+        if (sectorRepository.getMiniProfileId(sectorId) != 0) {
+            throw new SectorProfilePictureAlreadyExistsException();
+        }
+        Sector sector = em.find(Sector.class, sectorId);
+        ClimbingService.sectorValidator(sector);
+        ImageOfSector originalImage = new ImageOfSector(image, sector);
+        em.persist(originalImage);
+
+        byte[] miniImageByteArray = resize(image);
+        ImageOfSector miniImage = new ImageOfSector(originalImage, miniImageByteArray);
+        em.persist(miniImage);
+    }
 }

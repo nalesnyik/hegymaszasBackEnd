@@ -41,8 +41,7 @@ public class RouteChosenShowDto {
 
     public RouteChosenShowDto(Route route) {
         this.name = route.getName();
-        System.out.println(this.name);
-        System.out.println(route.getSector());
+
         this.sectorName = route.getSector().getName();
         this.sectorId = route.getSector().getId();
         this.climbingPlaceName = route.getSector().getClimbingPlace().getName();

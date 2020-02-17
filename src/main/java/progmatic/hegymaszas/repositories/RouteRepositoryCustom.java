@@ -8,4 +8,6 @@ public interface RouteRepositoryCustom {
     Route routeWithEverything(long routeId);
 
     List<Long> idOfMiniImagesOfRoute(long routeId);
+
+    List<Long> get9idOfMiniImagesOfRoute(long routeId);
 }

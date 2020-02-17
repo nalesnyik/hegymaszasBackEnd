@@ -22,7 +22,7 @@ public class MyControllerAdvice {
     @ExceptionHandler({SectorNotFoundException.class})
     public ResponseEntity<Map<String, String>> handleSectorNotFound(SectorNotFoundException ex) {
         HashMap<String, String> map = new HashMap<>();
-        map.put("error", ex.getMessage());
+        map.put("error", "Sector not found.");
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(map);
     }
 
@@ -57,11 +57,21 @@ public class MyControllerAdvice {
         map.put("error", "Rating not found.");
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(map);
     }
+
+
     @ExceptionHandler({WrongAscentTypeException.class})
     public ResponseEntity<Map<String, String>> handleWrongAscentType(WrongAscentTypeException ex) {
         HashMap<String, String> map = new HashMap<>();
         map.put("error", "Wrong ascenttype.");
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(map);
+    }
+
+
+    @ExceptionHandler({SectorProfilePictureAlreadyExistsException.class})
+    public ResponseEntity<Map<String, String>> handleSectorProfilePictureAlreadyExists(SectorProfilePictureAlreadyExistsException ex) {
+        HashMap<String, String> map = new HashMap<>();
+        map.put("error", "Profile picture for this sector already exists.");
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(map);
     }
 
 }
