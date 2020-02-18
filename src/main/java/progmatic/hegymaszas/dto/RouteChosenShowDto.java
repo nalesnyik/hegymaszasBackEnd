@@ -61,8 +61,9 @@ public class RouteChosenShowDto {
             case 2:
                 grade = String.valueOf(route.getGrade() / 3 + 4);
                 break;
+            default:
+                break;
         }
-        grade = String.valueOf(route.getGrade());
 
         this.climbingLogs = route.getClimbingLogs().stream().map(ClimbingLogShowDto::new).sorted((x1, x2) -> (int) (x1.getId() - x2.getId())).collect(Collectors.toList());
         this.feedbacks = route.getFeedbacks().stream().map(FeedbackShowDto::new).sorted((x1, x2) -> (int) (x1.getId() - x2.getId())).collect(Collectors.toList());
