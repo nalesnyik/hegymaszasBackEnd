@@ -26,7 +26,7 @@ public class RouteService {
 
     public List<Route> loadFilteredRoutes(
             String grade, String name, String climbingPlaceName,
-            int beautyRating, int difficultyRating, int safetyRating, Orientation orientation) {
+            double rating, Orientation orientation) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Route> cQuery = cb.createQuery(Route.class);
         Root<Route> routes = cQuery.from(Route.class);
@@ -40,17 +40,9 @@ public class RouteService {
        // if (!StringUtils.isEmpty(height)) {
        //     predicateList.add(cb.equal(routes.get(Route_.height), height));
        // }
-        if (!StringUtils.isEmpty(beautyRating)) {
-            predicateList.add(cb.greaterThanOrEqualTo(routes.get(Route_.avgRatingByBeauty), (double) beautyRating));
+        if (!StringUtils.isEmpty(rating)) {
+            predicateList.add(cb.greaterThanOrEqualTo(routes.get(Route_.avgRating), (double) rating));
             // predicateList.add(cb.greaterThanOrEqualTo(cb.avg(joinedRatings.get(Rating_.ratingByBeauty)), (double) beautyRating));
-        }
-        if (!StringUtils.isEmpty(difficultyRating)) {
-            predicateList.add(cb.greaterThanOrEqualTo(routes.get(Route_.avgRatingByDifficulty), (double) difficultyRating));
-            // predicateList.add(cb.greaterThanOrEqualTo(cb.avg(joinedRatings.get(Rating_.ratingByDifficulty)), (double) difficultyRating));
-        }
-        if (!StringUtils.isEmpty(safetyRating)) {
-            predicateList.add(cb.greaterThanOrEqualTo(routes.get(Route_.avgRatingBySafety), (double) safetyRating));
-            // predicateList.add(cb.greaterThanOrEqualTo(cb.avg(joinedRatings.get(Rating_.ratingBySafety)), (double) safetyRating));
         }
         if (!StringUtils.isEmpty(grade)) {
             int gradeValue = Integer.parseInt(String.valueOf(grade.charAt(0)));
