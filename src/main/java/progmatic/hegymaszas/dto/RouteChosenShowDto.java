@@ -49,6 +49,19 @@ public class RouteChosenShowDto {
 
         this.height = route.getHeight();
         this.numOfBolts = route.getNumOfBolts();
+        switch (route.getGrade() % 3) {
+            case 0:
+                grade = String.valueOf(route.getGrade() / 3 + 3);
+                grade = grade.concat("+");
+                break;
+            case 1:
+                grade = String.valueOf(route.getGrade() / 3 + 4);
+                grade = grade.concat("-");
+                break;
+            case 2:
+                grade = String.valueOf(route.getGrade() / 3 + 4);
+                break;
+        }
         grade = String.valueOf(route.getGrade());
 
         this.climbingLogs = route.getClimbingLogs().stream().map(ClimbingLogShowDto::new).sorted((x1, x2) -> (int) (x1.getId() - x2.getId())).collect(Collectors.toList());

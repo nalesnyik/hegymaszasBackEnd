@@ -3,6 +3,7 @@ package progmatic.hegymaszas.services;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
+import progmatic.hegymaszas.dto.RouteChosenShowDto;
 import progmatic.hegymaszas.modell.*;
 import progmatic.hegymaszas.modell.enums.Orientation;
 
@@ -24,24 +25,24 @@ public class RouteService {
         //return routeRepository.findAll();
     }
 
-    public List<Route> loadFilteredRoutes(
+    public List<RouteChosenShowDto> loadFilteredRoutes(
             String grade, String name, String climbingPlaceName,
             double rating, Orientation orientation) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Route> cQuery = cb.createQuery(Route.class);
         Root<Route> routes = cQuery.from(Route.class);
-       // ListJoin<Route, Rating> joinedRatings = routes.join(Route_.ratings);
+        // ListJoin<Route, Rating> joinedRatings = routes.join(Route_.ratings);
         List<Predicate> predicateList = new ArrayList<>();
 
         if (!StringUtils.isEmpty(name)) {
             String text = "%" + name + "%";
             predicateList.add(cb.like(routes.get(Route_.name), text));
         }
-       // if (!StringUtils.isEmpty(height)) {
-       //     predicateList.add(cb.equal(routes.get(Route_.height), height));
-       // }
+        // if (!StringUtils.isEmpty(height)) {
+        //     predicateList.add(cb.equal(routes.get(Route_.height), height));
+        // }
         if (!StringUtils.isEmpty(rating)) {
-            predicateList.add(cb.greaterThanOrEqualTo(routes.get(Route_.avgRating), (double) rating));
+            predicateList.add(cb.greaterThanOrEqualTo(routes.get(Route_.avgRating), rating));
             // predicateList.add(cb.greaterThanOrEqualTo(cb.avg(joinedRatings.get(Rating_.ratingByBeauty)), (double) beautyRating));
         }
         if (!StringUtils.isEmpty(grade)) {
@@ -54,17 +55,27 @@ public class RouteService {
         }
         // cQuery.groupBy(routes.get(Route_.id));
         cQuery.where(predicateList.toArray(new Predicate[predicateList.size()]));
-       List<Route> listWithoutOrientation = em.createQuery(cQuery).getResultList();
+        List<Route> listWithoutOrientation = em.createQuery(cQuery).getResultList();
         if (!StringUtils.isEmpty(orientation)) {
-            List<Route> listWithOrientation=new ArrayList<>();
+            List<Route> listWithOrientation = new ArrayList<>();
             for (Route route : listWithoutOrientation) {
-                if(route.getOrientation()==orientation){
+                if (route.getOrientation() == orientation) {
                     listWithOrientation.add(route);
                 }
             }
-            return listWithOrientation;
+            return createListToShow(listWithOrientation);
         }
-        return listWithoutOrientation;
+        return createListToShow(listWithoutOrientation);
+    }
+
+
+    private List<RouteChosenShowDto> createListToShow(List<Route> routeList) {
+        List<RouteChosenShowDto> routeListToShow = new ArrayList<>();
+        for (Route route : routeList) {
+            RouteChosenShowDto routeToShow = new RouteChosenShowDto(route);
+            routeListToShow.add(routeToShow);
+        }
+        return routeListToShow;
     }
 
 }
