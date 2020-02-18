@@ -7,6 +7,7 @@ import progmatic.hegymaszas.dto.*;
 import progmatic.hegymaszas.exceptions.*;
 import progmatic.hegymaszas.modell.Sector;
 import progmatic.hegymaszas.services.ClimbingService;
+
 import java.util.List;
 import java.util.Map;
 
@@ -81,8 +82,8 @@ public class ClimbingController {
 
 
     @PostMapping("/{sectorId}/{routeId}")
-    public List<Sector> showSectorsByDistance(@RequestBody int dist, double userLong, double userLat) {
-        return climbingService.getSectorByDistance(dist, userLat, userLong);
+    public List<SectorsShowDto> showSectorsByDistance(@RequestBody DistanceCheckerDto dto) {
+        return climbingService.getSectorByDistance(dto);
     }
 
 

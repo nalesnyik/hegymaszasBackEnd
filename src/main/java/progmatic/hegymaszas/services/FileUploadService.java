@@ -34,17 +34,14 @@ public class FileUploadService {
 
     UserRepository userRepository;
     RouteRepository routeRepository;
-    ClimbingService climbingService;
     SectorRepository sectorRepository;
 
 
     @Autowired
-    public FileUploadService(UserRepository userRepository, RouteRepository routeRepository, ClimbingService climbingService, SectorRepository sectorRepository) {
+    public FileUploadService(UserRepository userRepository, RouteRepository routeRepository, SectorRepository sectorRepository) {
         this.userRepository = userRepository;
         this.routeRepository = routeRepository;
-        this.climbingService = climbingService;
         this.sectorRepository = sectorRepository;
-
     }
 
 
@@ -81,7 +78,7 @@ public class FileUploadService {
     @Transactional
     public void storePictureForRoute(long routeId, MultipartFile image) throws IOException, RouteNotFoundException {
         Route route = em.find(Route.class, routeId);
-        climbingService.routeValidator(route);
+        ClimbingService.routeValidator(route);
         ImageOfRoute img = new ImageOfRoute(route, image);
         em.persist(img);
 
