@@ -3,7 +3,6 @@ package progmatic.hegymaszas.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import progmatic.hegymaszas.dto.RatingCreateDto;
-import progmatic.hegymaszas.dto.RatingModifyDto;
 import progmatic.hegymaszas.dto.RatingShowDto;
 import progmatic.hegymaszas.exceptions.NotAppropriateNumberOfStarsForRatingException;
 import progmatic.hegymaszas.exceptions.RatingNotFoundException;
@@ -29,17 +28,15 @@ public class RatingController {
     }
 
 
-    @PostMapping("/route/{routeId}/rating")
+    @PostMapping("/route/rating")
     public RatingShowDto createRating(
-            @PathVariable("routeId") long Id,
             @RequestBody RatingCreateDto rating) throws RouteNotFoundException, NotAppropriateNumberOfStarsForRatingException, RouteRatingByUserExistsException {
         return ratingService.addRating(rating);
     }
 
 
-    @PatchMapping("/route/{routeId}/rating")
+    @PatchMapping("/route/rating")
     public RatingShowDto modifyRating(
-            @PathVariable("routeId") long Id,
             @RequestBody RatingCreateDto rating) throws NotAppropriateNumberOfStarsForRatingException, RatingNotFoundException {
         return ratingService.modifyRating(rating);
     }

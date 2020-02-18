@@ -1,5 +1,5 @@
 package progmatic.hegymaszas.modell.enums;
 
 public enum Orientation {
-    NORTH, NORTH_EAST, EAST, SOUTH_EAST, SOUTH, SOUTH_WEST, WEST, NORTH_WEST;
+    ÉSZAK, ÉSZAK_KELET, KELET, DÉL_KELET, DÉL, DÉL_NYUGAT, NYUGAT, ÉSZAK_NYUGAT;
 }

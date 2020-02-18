@@ -52,9 +52,6 @@ public class Route {
     @Lob
     private byte[] photos;
 
-    @OneToMany(mappedBy = "route")
-    private List<ImageOfRoute> images = new ArrayList<>();
-
     private int grade;
 
     @OneToMany(mappedBy = "route")
@@ -63,9 +60,13 @@ public class Route {
     @OneToMany(mappedBy = "route")
     private List<Rating> ratings = new ArrayList<>();
 
+    @OneToMany(mappedBy = "route")
+    private List<ImageOfRoute> images = new ArrayList<>();
+
     private double avgRatingByBeauty;
     private double avgRatingByDifficulty;
     private double avgRatingBySafety;
+    private double avgRating;
 
     private Orientation orientation;
     private SteepnessType steepnessType;
@@ -250,6 +251,7 @@ public class Route {
 
     public void setAvgRatingByBeauty(double avgRatingByBeauty) {
         this.avgRatingByBeauty = avgRatingByBeauty;
+        setAvgRating();
     }
 
 
@@ -260,6 +262,7 @@ public class Route {
 
     public void setAvgRatingByDifficulty(double avgRatingByDifficulty) {
         this.avgRatingByDifficulty = avgRatingByDifficulty;
+        setAvgRating();
     }
 
 
@@ -270,6 +273,7 @@ public class Route {
 
     public void setAvgRatingBySafety(double avgRatingBySafety) {
         this.avgRatingBySafety = avgRatingBySafety;
+        setAvgRating();
     }
 
 
@@ -283,6 +287,16 @@ public class Route {
     }
 
 
+    public Set<Feedback> getFeedbacks() {
+        return feedbacks;
+    }
+
+
+    public void setFeedbacks(Set<Feedback> feedbacks) {
+        this.feedbacks = feedbacks;
+    }
+
+
     public List<ImageOfRoute> getImages() {
         return images;
     }
@@ -292,14 +306,12 @@ public class Route {
         this.images = images;
     }
 
-
-    public Set<Feedback> getFeedbacks() {
-        return feedbacks;
+    public double getAvgRating() {
+        return avgRating;
     }
 
-
-    public void setFeedbacks(Set<Feedback> feedbacks) {
-        this.feedbacks = feedbacks;
+    public void setAvgRating() {
+        this.avgRating = (avgRatingByBeauty+avgRatingByDifficulty+avgRatingBySafety)/3;
     }
 }
 

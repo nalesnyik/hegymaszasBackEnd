@@ -8,6 +8,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import progmatic.hegymaszas.exceptions.RouteNotFoundException;
+import progmatic.hegymaszas.exceptions.SectorNotFoundException;
+import progmatic.hegymaszas.exceptions.SectorProfilePictureAlreadyExistsException;
 import progmatic.hegymaszas.services.FileUploadService;
 
 import java.io.IOException;
@@ -44,5 +46,13 @@ public class FileUploadController {
             @PathVariable("routeId") long routeId,
             @RequestBody MultipartFile image) throws IOException, RouteNotFoundException {
         fileUploadService.storePictureForRoute(routeId, image);
+    }
+
+
+    @PostMapping("/sector/{sectorId}")
+    public void uploadPictureForSector(
+            @PathVariable("sectorId") long sectorId,
+            @RequestBody MultipartFile image) throws IOException, SectorNotFoundException, SectorProfilePictureAlreadyExistsException {
+        fileUploadService.storePictureForSector(sectorId, image);
     }
 }

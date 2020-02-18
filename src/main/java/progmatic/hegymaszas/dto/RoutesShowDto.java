@@ -11,13 +11,13 @@ public class RoutesShowDto {
     @NotNull
     @NotBlank
     private String name;
-
-    private int numOfFeedbacks;
+    private int grade;
 
 
     public RoutesShowDto(Route route) {
         this.id = route.getId();
         this.name = route.getName();
+        this.grade = route.getGrade();
     }
 
 
@@ -41,12 +41,12 @@ public class RoutesShowDto {
     }
 
 
-    public int getNumOfFeedbacks() {
-        return numOfFeedbacks;
+    public int getGrade() {
+        return grade;
     }
 
 
-    public void setNumOfFeedbacks(int numOfFeedbacks) {
-        this.numOfFeedbacks = numOfFeedbacks;
+    public void setGrade(int grade) {
+        this.grade = grade;
     }
 }

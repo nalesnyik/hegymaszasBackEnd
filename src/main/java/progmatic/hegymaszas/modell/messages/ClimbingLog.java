@@ -6,17 +6,17 @@ import progmatic.hegymaszas.exceptions.WrongAscentTypeException;
 import progmatic.hegymaszas.modell.MyUser;
 import progmatic.hegymaszas.modell.Route;
 import progmatic.hegymaszas.modell.enums.AscentType;
-
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
+import java.sql.Date;
 
 @Entity
 public class ClimbingLog extends Message {
     @NotNull
     @ManyToOne
     private Route route;
-
+    private Date dateOfClimb;
     private AscentType type;
 
 

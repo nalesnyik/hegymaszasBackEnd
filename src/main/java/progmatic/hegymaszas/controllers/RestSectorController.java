@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping("/rest/sector")
+@RequestMapping("/sector")
 public class RestSectorController {
 
     private SectorService sectorService;

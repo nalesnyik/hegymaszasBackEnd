@@ -15,6 +15,10 @@ import java.util.List;
                         query = "SELECT count(s) FROM Sector s JOIN s.routes as r WHERE s.id=:id"),
                 @NamedQuery(name = "getNumOfFeedbacksOfSector",
                         query = "SELECT count(s) FROM Sector s JOIN s.routes as r JOIN r.feedbacks as f WHERE s.id=:id"),
+                @NamedQuery(name = "getMiniProfileId",
+                        query = "SELECT i.id FROM Sector s LEFT JOIN s.images AS i WHERE i.originalImgId>0 AND i.sector.id=:sectorId"),
+                @NamedQuery(name = "getProfileId",
+                        query = "SELECT i.id FROM Sector s LEFT JOIN s.images AS i WHERE i.originalImgId=0 AND i.sector.id=:sectorId")
         }
 )
 public class Sector {
@@ -33,12 +37,14 @@ public class Sector {
     @ManyToOne
     private ClimbingPlace climbingPlace;
 
-
     //    @Size(min = 50, max = 1000)
     private String travelGuide;
 
     private double longitude;
     private double latitude;
+
+    @OneToMany(mappedBy = "sector")
+    private List<ImageOfSector> images = new ArrayList<>();
 
 
     public Sector() {
@@ -112,6 +118,16 @@ public class Sector {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+
+    public List<ImageOfSector> getImages() {
+        return images;
+    }
+
+
+    public void setImages(List<ImageOfSector> images) {
+        this.images = images;
     }
 }
 

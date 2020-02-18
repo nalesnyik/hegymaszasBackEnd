@@ -9,17 +9,18 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 
 @Entity
-public class ImageOfRoute extends Image {
+public class ImageOfSector extends Image {
+
     @ManyToOne
-    private Route route;
+    private Sector sector;
 
 
-    public ImageOfRoute() {
+    public ImageOfSector() {
     }
 
 
-    public ImageOfRoute(Route route, MultipartFile image) throws IOException {
-        this.route = route;
+    public ImageOfSector(MultipartFile image, Sector sector) throws IOException {
+        this.sector = sector;
         this.image = image.getBytes();
         this.imageContentType = image.getContentType();
         this.creationDate = LocalDateTime.now();
@@ -27,22 +28,22 @@ public class ImageOfRoute extends Image {
     }
 
 
-    public ImageOfRoute(ImageOfRoute originalImage, byte[] miniImage) {
-        this.creationDate = originalImage.creationDate;
-        this.imageContentType = originalImage.imageContentType;
-        this.route = originalImage.route;
-        this.user = originalImage.user;
+    public ImageOfSector(ImageOfSector originalImage, byte[] miniImage) {
+        this.sector = originalImage.sector;
         this.image = miniImage;
-        this.originalImgId = originalImage.getId();
+        this.imageContentType = originalImage.imageContentType;
+        this.creationDate = originalImage.creationDate;
+        this.originalImgId = originalImage.id;
+        this.user = originalImage.user;
     }
 
 
-    public Route getRoute() {
-        return route;
+    public Sector getSector() {
+        return sector;
     }
 
 
-    public void setRoute(Route route) {
-        this.route = route;
+    public void setSector(Sector sector) {
+        this.sector = sector;
     }
 }

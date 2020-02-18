@@ -17,10 +17,7 @@ import progmatic.hegymaszas.repositories.SectorRepository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -90,49 +87,73 @@ public class ClimbingService {
                     "\" for sector \"" + route.getSectorId() + "\" already exists.");
         }
 
-//        MyUser user = (MyUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Route newRoute = new Route(route, sector);
         MyUser user = (MyUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if (user.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
+        if (user.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN")) ||
+                user.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ORGANIZATION"))) {
             newRoute.setRouteVerified(true);
-            routeRepository.save(newRoute);
         } else {
             newRoute.setRouteVerified(false);
             newRoute.setVerificationCounter(0);
-            routeRepository.save(newRoute);
         }
+        routeRepository.save(newRoute);
     }
 
 
-    public Map<String, List<RoutesShowDto>> showRoutesOfSector(long sectorId) throws SectorNotFoundException {
+    public SectorChosenShowDto showChosenSector(long sectorId) throws SectorNotFoundException {
         Sector sector = sectorRepository.findWithRoutesById(sectorId);
-        if (sector == null) {
-            throw new SectorNotFoundException("Sector name \"" + sectorId + "\" not found.");
+        ClimbingService.sectorValidator(sector);
+        SectorChosenShowDto dto = new SectorChosenShowDto(sector);
+        List<Long> idOfMiniImages = sectorRepository.get9idOfMiniImagesOfSector(sectorId);
+        if (idOfMiniImages != null) dto.setUrlOfImages(createUrlMapOfImages(idOfMiniImages, "route"));
+
+        long idOfProfilePicture = sectorRepository.getProfileId(sectorId);
+        if (idOfProfilePicture > 0) {
+            dto.setUrlOfPicture(getUrlOfPictureOfSector(idOfProfilePicture));
         }
-        List<RoutesShowDto> dtos = sector.getRoutes().stream().map(RoutesShowDto::new).collect(Collectors.toList());
-        Map<String, List<RoutesShowDto>> map = new HashMap<>();
-        map.put("routes", dtos);
-        return map;
+
+        long idOfMiniProfilePicture = sectorRepository.getMiniProfileId(sectorId);
+        if (idOfMiniProfilePicture > 0) {
+            dto.setUrlOfMiniPicture(getUrlOfPictureOfSector(idOfMiniProfilePicture));
+        }
+
+        return dto;
+    }
+
+
+    private String getUrlOfPictureOfSector(long idOfPicture) {
+        return "localhost:8080/image/sector/" + idOfPicture;
     }
 
 
     public RouteChosenShowDto showChosenRoute(long routeId) throws RouteNotFoundException {
         Route route = routeRepository.routeWithEverything(routeId);
-        //routeValidator(route);
+        routeValidator(route);
         RouteChosenShowDto dto = new RouteChosenShowDto(route);
-        List<Long> idOfMiniImages = routeRepository.idOfMiniImagesOfRoute(route.getId());
-        Map<Long, String> map = dto.getUrlOfImages();
-        for (Long id : idOfMiniImages) {
-            map.put(id - 1, "/image/" + id);
-        }
+        List<Long> idOfMiniImages = routeRepository.get9idOfMiniImagesOfRoute(routeId);
+        Map<Long, String> map = createUrlMapOfImages(idOfMiniImages, "route");
+        dto.setUrlOfImages(map);
         return dto;
+    }
+
+
+    public Map<Long, String> createUrlMapOfImages(List<Long> idOfMiniImages, String entity) {
+        Map<Long, String> map = new TreeMap<>();
+        StringBuilder url = new StringBuilder("localhost:8080/image");
+        for (Long id : idOfMiniImages) {
+            map.put((id - 1), url.toString() + "/" + entity + "/" + id);
+        }
+        return map;
     }
 
 
     public void verifyRouteService(long id) {
         Route route = em.find(Route.class, id);
+        MyUser user = (MyUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         route.setVerificationCounter(route.getVerificationCounter() + 1);
-        if (route.getVerificationCounter() >= 5) {
+        if (route.getVerificationCounter() >= 5 ||
+                user.getAuthorities().contains((new SimpleGrantedAuthority("ROLE_ADMIN"))) ||
+                user.getAuthorities().contains((new SimpleGrantedAuthority("ROLE_ORGANIZATION")))) {
             route.setRouteVerified(true);
         }
     }
@@ -165,16 +186,11 @@ public class ClimbingService {
     }
 
 
-    public ResponseEntity<byte[]> showImgOfRoute(long imageId) throws ImageNotFoundException {
+    public ResponseEntity<byte[]> showPictureOfRoute(long imageId) throws ImageNotFoundException {
         ImageOfRoute image = em.find(ImageOfRoute.class, imageId);
         if (image == null) throw new ImageNotFoundException();
 
         return imageDisplayService.convertImageToResponseEntity(image);
-    }
-
-
-    public void routeValidator(Route route) throws RouteNotFoundException {
-        if (route == null) throw new RouteNotFoundException();
     }
 
 
@@ -203,4 +219,43 @@ public class ClimbingService {
     }
 
 
+    public static void routeValidator(Route route) throws RouteNotFoundException {
+        if (route == null) throw new RouteNotFoundException();
+    }
+
+
+    public static void routeValidator(boolean doesExist) throws RouteNotFoundException {
+        if (!doesExist) throw new RouteNotFoundException();
+    }
+
+
+    public static void sectorValidator(Sector sector) throws SectorNotFoundException {
+        if (sector == null) throw new SectorNotFoundException();
+    }
+
+
+    public static void sectorValidator(boolean doesExist) throws SectorNotFoundException {
+        if (!doesExist) throw new SectorNotFoundException();
+    }
+
+
+    public ResponseEntity<byte[]> showPictureOfSector(long pictureId) {
+        ImageOfSector image = em.find(ImageOfSector.class, pictureId);
+        return imageDisplayService.convertImageToResponseEntity(image);
+    }
+
+
+    public Map<Long, String> showPhotosOfChosenRoute(long routeId) throws RouteNotFoundException {
+        routeValidator(routeRepository.existsRouteById(routeId));
+        List<Long> idOfMiniPictures = routeRepository.idOfMiniImagesOfRoute(routeId);
+        return createUrlMapOfImages(idOfMiniPictures, "route");
+
+    }
+
+
+    public Map<Long, String> showPhotosOfChosenSector(long sectorId) throws SectorNotFoundException {
+        sectorValidator(sectorRepository.existsSectorById(sectorId));
+        List<Long> idOfMiniPictures = sectorRepository.idOfMiniImagesOfSector(sectorId);
+        return createUrlMapOfImages(idOfMiniPictures, "route");
+    }
 }
