@@ -2,6 +2,7 @@ package progmatic.hegymaszas.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import progmatic.hegymaszas.dto.RouteChosenShowDto;
 import progmatic.hegymaszas.dto.RouteDto;
 import progmatic.hegymaszas.modell.Route;
 import progmatic.hegymaszas.modell.enums.Orientation;
@@ -36,14 +37,12 @@ public class RestRouteController {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public List<Route> filteredRoutes(@RequestParam(name = "grade", defaultValue = "", required = false) String grade,
-                                      @RequestParam(name = "routeName", defaultValue = "", required = false) String routeName,
-                                      @RequestParam(name = "climbingPlaceName", defaultValue = "", required = false) String climbingPlaceName,
-                                      @RequestParam(name = "beautyRating", defaultValue = "1", required = false) int beautyRating,
-                                      @RequestParam(name = "difficultyRating", defaultValue = "1", required = false) int difficultyRating,
-                                      @RequestParam(name = "safetyRating", defaultValue = "1", required = false) int safetyRating,
-                                      @RequestParam(name = "orientation", defaultValue = "", required = false) Orientation orientation) {
+    public List<RouteChosenShowDto> filteredRoutes(@RequestParam(name = "grade", defaultValue = "", required = false) String grade,
+                                                   @RequestParam(name = "routeName", defaultValue = "", required = false) String routeName,
+                                                   @RequestParam(name = "climbingPlaceName", defaultValue = "", required = false) String climbingPlaceName,
+                                                   @RequestParam(name = "rating", defaultValue = "1", required = false) int rating,
+                                                   @RequestParam(name = "orientation", defaultValue = "", required = false) Orientation orientation) {
 
-        return routeService.loadFilteredRoutes(grade, routeName, climbingPlaceName, beautyRating, difficultyRating, safetyRating, orientation);
+        return routeService.loadFilteredRoutes(grade, routeName, climbingPlaceName, rating, orientation);
     }
 }

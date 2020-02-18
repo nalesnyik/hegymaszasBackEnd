@@ -1,13 +1,13 @@
 package progmatic.hegymaszas.dto;
 
 import progmatic.hegymaszas.modell.MyUser;
-
-import javax.persistence.Lob;
+import java.util.Date;
 
 public class MyUserChosenShowDto {
     private String name;
-
     private String email;
+    private Date dateOfBorn;
+    private Date dateOfFirstClimb;
 
 //    private List<ClimbingLog> climbingLogs = new ArrayList<>();
 
@@ -21,6 +21,13 @@ public class MyUserChosenShowDto {
         email = user.getEmail();
     }
 
+
+    public MyUserChosenShowDto(String name, String email, Date dateOfBorn, Date dateOfFirstClimb) {
+        this.name = name;
+        this.email = email;
+        this.dateOfBorn = dateOfBorn;
+        this.dateOfFirstClimb = dateOfFirstClimb;
+    }
 
     public String getName() {
         return name;
@@ -39,5 +46,21 @@ public class MyUserChosenShowDto {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public Date getDateOfBorn() {
+        return dateOfBorn;
+    }
+
+    public void setDateOfBorn(Date dateOfBorn) {
+        this.dateOfBorn = dateOfBorn;
+    }
+
+    public Date getDateOfFirstClimb() {
+        return dateOfFirstClimb;
+    }
+
+    public void setDateOfFirstClimb(Date dateOfFirstClimb) {
+        this.dateOfFirstClimb = dateOfFirstClimb;
     }
 }

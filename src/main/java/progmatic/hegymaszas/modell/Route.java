@@ -66,6 +66,7 @@ public class Route {
     private double avgRatingByBeauty;
     private double avgRatingByDifficulty;
     private double avgRatingBySafety;
+    private double avgRating;
 
     private Orientation orientation;
     private SteepnessType steepnessType;
@@ -250,6 +251,7 @@ public class Route {
 
     public void setAvgRatingByBeauty(double avgRatingByBeauty) {
         this.avgRatingByBeauty = avgRatingByBeauty;
+        setAvgRating();
     }
 
 
@@ -260,6 +262,7 @@ public class Route {
 
     public void setAvgRatingByDifficulty(double avgRatingByDifficulty) {
         this.avgRatingByDifficulty = avgRatingByDifficulty;
+        setAvgRating();
     }
 
 
@@ -270,6 +273,7 @@ public class Route {
 
     public void setAvgRatingBySafety(double avgRatingBySafety) {
         this.avgRatingBySafety = avgRatingBySafety;
+        setAvgRating();
     }
 
 
@@ -300,6 +304,14 @@ public class Route {
 
     public void setImages(List<ImageOfRoute> images) {
         this.images = images;
+    }
+
+    public double getAvgRating() {
+        return avgRating;
+    }
+
+    public void setAvgRating() {
+        this.avgRating = (avgRatingByBeauty+avgRatingByDifficulty+avgRatingBySafety)/3;
     }
 }
 

@@ -30,6 +30,24 @@ public class MyUser implements UserDetails {
     private String email;
 
     private LocalDateTime registrationDate;
+    private Date dateOfBorn;
+    private Date dateOfFirstClimb;
+
+    public Date getDateOfBorn() {
+        return dateOfBorn;
+    }
+
+    public void setDateOfBorn(Date dateOfBorn) {
+        this.dateOfBorn = dateOfBorn;
+    }
+
+    public Date getDateOfFirstClimb() {
+        return dateOfFirstClimb;
+    }
+
+    public void setDateOfFirstClimb(Date dateOfFirstClimb) {
+        this.dateOfFirstClimb = dateOfFirstClimb;
+    }
 
     @ManyToMany(targetEntity = MyAuthority.class, mappedBy = "users")
     private Set<GrantedAuthority> roles = new HashSet<>();
