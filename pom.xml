@@ -60,9 +60,12 @@
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
         </dependency>
+
+        <!-- https://mvnrepository.com/artifact/postgresql/postgresql -->
         <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-jpamodelgen</artifactId>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>42.2.10.jre7</version>
         </dependency>
 
         <dependency>
@@ -134,6 +137,15 @@
                         <processor>org.hibernate.jpamodelgen.JPAMetaModelEntityProcessor</processor>
                     </compilerArguments>
                 </configuration>
+                <executions>
+                    <execution>
+                        <configuration>
+                            <sources>
+                                <source>target/generated-sources/annotations</source>
+                            </sources>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
@@ -151,28 +163,7 @@
                 </executions>
             </plugin>
 
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.7.0</version>
-                <configuration>
-                    <source>11</source>
-                    <target>11</target>
-                    <encoding>UTF-8</encoding>
-                    <compilerArguments>
-                        <processor>org.hibernate.jpamodelgen.JPAMetaModelEntityProcessor</processor>
-                    </compilerArguments>
-                </configuration>
-                <executions>
-                    <execution>
-                        <configuration>
-                            <sources>
-                                <source>target/generated-sources/annotations</source>
-                            </sources>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
+
 
         </plugins>
 

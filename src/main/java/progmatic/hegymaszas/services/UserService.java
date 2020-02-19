@@ -13,15 +13,20 @@ import progmatic.hegymaszas.dto.MyUserChosenShowDto;
 import progmatic.hegymaszas.dto.MyUserDto;
 import progmatic.hegymaszas.dto.RouteChosenShowDto;
 import progmatic.hegymaszas.exceptions.RouteNotFoundException;
+import progmatic.hegymaszas.exceptions.UserNotFoundException;
 import progmatic.hegymaszas.modell.MyAuthority;
 import progmatic.hegymaszas.modell.MyUser;
 import progmatic.hegymaszas.modell.Route;
 import progmatic.hegymaszas.repositories.UserRepository;
-
+import progmatic.hegymaszas.modell.Route;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import progmatic.hegymaszas.dto.RouteChosenShowDto;
+import progmatic.hegymaszas.exceptions.RouteNotFoundException;
 import java.util.List;
 import java.util.Map;
 
@@ -29,6 +34,7 @@ import java.util.Map;
 public class UserService implements UserDetailsService {
     @PersistenceContext
     EntityManager em;
+
     PasswordEncoder passwordEncoder;
     EmailService emailService;
     UserRepository userRepository;
@@ -129,5 +135,17 @@ public class UserService implements UserDetailsService {
         Map<Long, String> map = climbingService.createUrlMapOfImages(idOfMiniImages, "user");
         dto.setUserImages(map);
         return dto;
+    }
+
+
+    public Map<Long, String> showPhotosOfChosenUser(String username) throws UserNotFoundException {
+        userValidator(userRepository.existsMyUserByName(username));
+        List<Long> idOfMiniPictures = userRepository.idOfMiniImagesOfSector(username);
+        return ClimbingService.createUrlMapOfImages(idOfMiniPictures, "route");
+    }
+
+
+    public static void userValidator(boolean doesExist) throws UserNotFoundException {
+        if (!doesExist) throw new UserNotFoundException();
     }
 }

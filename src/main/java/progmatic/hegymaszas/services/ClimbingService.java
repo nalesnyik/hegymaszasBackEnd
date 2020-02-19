@@ -29,15 +29,13 @@ public class ClimbingService {
     private ClimbingRepository climbingRepository;
     private SectorRepository sectorRepository;
     private RouteRepository routeRepository;
-    private ImageDisplayService imageDisplayService;
 
 
     @Autowired
-    public ClimbingService(ClimbingRepository climbingRepository, SectorRepository sectorRepository, RouteRepository routeRepository, ImageDisplayService imageDisplayService) {
+    public ClimbingService(ClimbingRepository climbingRepository, SectorRepository sectorRepository, RouteRepository routeRepository) {
         this.climbingRepository = climbingRepository;
         this.sectorRepository = sectorRepository;
         this.routeRepository = routeRepository;
-        this.imageDisplayService = imageDisplayService;
     }
 
 
@@ -137,7 +135,7 @@ public class ClimbingService {
     }
 
 
-    public Map<Long, String> createUrlMapOfImages(List<Long> idOfMiniImages, String entity) {
+    public static Map<Long, String> createUrlMapOfImages(List<Long> idOfMiniImages, String entity) {
         Map<Long, String> map = new TreeMap<>();
         StringBuilder url = new StringBuilder("localhost:8080/image");
         for (Long id : idOfMiniImages) {
@@ -174,15 +172,29 @@ public class ClimbingService {
     }
 
 
-    public List<Sector> getSectorByDistance(int dist, double userLat, double userLong) {
+    public List<SectorsShowDto> getSectorByDistance(DistanceCheckerDto dto) {
         List<Route> routes = em.createQuery("SELECT r from Route r", Route.class).getResultList();
         List<Sector> sectorsByDistances = new ArrayList<>();
         for (Route route1 : routes) {
-            if (distance(route1.getSector().getLatitude(), route1.getSector().getLongitude(), userLat, userLong) <= dist) {
+            if (distance(route1.getSector().getLatitude(), route1.getSector().getLongitude(),
+                    dto.getUserLat(), dto.getUserLong()) <= dto.getDist()) {
                 sectorsByDistances.add(route1.getSector());
             }
         }
-        return sectorsByDistances;
+
+        return convertSectorsToSectorsShowDto(sectorsByDistances);
+    }
+
+
+    public List<SectorsShowDto> convertSectorsToSectorsShowDto(List<Sector> sectors) {
+        List<SectorsShowDto> list = new ArrayList<>();
+        for (Sector sector : sectors) {
+            int numOfRoutes = climbingRepository.getNumOfRoutesOfSector(sector.getId());
+            int numOfFeedbacks = climbingRepository.getNumOfFeedbacksOfSector(sector.getId());
+            SectorsShowDto dto = new SectorsShowDto(sector.getId(), sector.getName(), numOfRoutes, numOfFeedbacks);
+            list.add(dto);
+        }
+        return list;
     }
 
 
@@ -190,7 +202,7 @@ public class ClimbingService {
         ImageOfRoute image = em.find(ImageOfRoute.class, imageId);
         if (image == null) throw new ImageNotFoundException();
 
-        return imageDisplayService.convertImageToResponseEntity(image);
+        return ImageDisplayService.convertImageToResponseEntity(image);
     }
 
 
@@ -241,7 +253,7 @@ public class ClimbingService {
 
     public ResponseEntity<byte[]> showPictureOfSector(long pictureId) {
         ImageOfSector image = em.find(ImageOfSector.class, pictureId);
-        return imageDisplayService.convertImageToResponseEntity(image);
+        return ImageDisplayService.convertImageToResponseEntity(image);
     }
 
 

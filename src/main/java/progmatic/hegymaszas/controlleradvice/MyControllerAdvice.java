@@ -74,4 +74,12 @@ public class MyControllerAdvice {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(map);
     }
 
+
+    @ExceptionHandler({UserNotFoundException.class})
+    public ResponseEntity<Map<String, String>> handleUserNotFound(UserNotFoundException ex) {
+        HashMap<String, String> map = new HashMap<>();
+        map.put("error", "User not found.");
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(map);
+    }
+
 }
