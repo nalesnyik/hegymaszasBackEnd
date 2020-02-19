@@ -5,7 +5,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import progmatic.hegymaszas.modell.messages.ClimbingLog;
 import progmatic.hegymaszas.modell.messages.DirectMessage;
 import progmatic.hegymaszas.modell.messages.Feedback;
-
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.time.LocalDateTime;
@@ -30,42 +29,33 @@ public class MyUser implements UserDetails {
     private String email;
 
     private LocalDateTime registrationDate;
-    private Date dateOfBorn;
+    private Date dateOfBirth;
     private Date dateOfFirstClimb;
 
-    public Date getDateOfBorn() {
-        return dateOfBorn;
-    }
-
-    public void setDateOfBorn(Date dateOfBorn) {
-        this.dateOfBorn = dateOfBorn;
-    }
-
-    public Date getDateOfFirstClimb() {
-        return dateOfFirstClimb;
-    }
-
-    public void setDateOfFirstClimb(Date dateOfFirstClimb) {
-        this.dateOfFirstClimb = dateOfFirstClimb;
-    }
 
     @ManyToMany(targetEntity = MyAuthority.class, mappedBy = "users")
     private Set<GrantedAuthority> roles = new HashSet<>();
 
+
     @OneToMany(mappedBy = "user")
     private List<ClimbingLog> climbingLogs = new ArrayList<>();
+
 
     @OneToMany(mappedBy = "user")
     private List<Feedback> feedbacks = new ArrayList<>();
 
+
     @OneToMany(mappedBy = "user")
     private List<DirectMessage> sentDirectMsgs = new ArrayList<>();
+
 
     @OneToMany(mappedBy = "user")
     private List<DirectMessage> receivedDirectMsgs = new ArrayList<>();
 
+
     @OneToMany(mappedBy = "user")
     private List<Rating> ratings = new ArrayList<>();
+
 
     @OneToMany(mappedBy = "user")
     private List<ImageOfRoute> images = new ArrayList<>();
@@ -73,6 +63,7 @@ public class MyUser implements UserDetails {
 
     @Lob
     private byte[] profilePicture;
+
 
     private String profilePictureContentType;
 
@@ -249,5 +240,25 @@ public class MyUser implements UserDetails {
 
     public void setImages(List<ImageOfRoute> images) {
         this.images = images;
+    }
+
+
+    public Date getDateOfBirth() {
+        return dateOfBirth;
+    }
+
+
+    public void setDateOfBirth(Date dateOfBorn) {
+        this.dateOfBirth = dateOfBorn;
+    }
+
+
+    public Date getDateOfFirstClimb() {
+        return dateOfFirstClimb;
+    }
+
+
+    public void setDateOfFirstClimb(Date dateOfFirstClimb) {
+        this.dateOfFirstClimb = dateOfFirstClimb;
     }
 }

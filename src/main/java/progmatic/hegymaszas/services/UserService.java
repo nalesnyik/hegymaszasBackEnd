@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import progmatic.hegymaszas.dto.MyUserChosenShowDto;
 import progmatic.hegymaszas.dto.MyUserDto;
+import progmatic.hegymaszas.exceptions.RouteNotFoundException;
 import progmatic.hegymaszas.exceptions.UserNotFoundException;
 import progmatic.hegymaszas.modell.MyAuthority;
 import progmatic.hegymaszas.modell.MyUser;
@@ -32,14 +33,16 @@ public class UserService implements UserDetailsService {
     EmailService emailService;
     UserRepository userRepository;
     ImageDisplayService imageDisplayService;
+    ClimbingService climbingService;
 
 
     @Autowired
-    public UserService(PasswordEncoder passwordEncoder, EmailService emailService, UserRepository userRepository, ImageDisplayService imageDisplayService) {
+    public UserService(PasswordEncoder passwordEncoder, EmailService emailService, UserRepository userRepository, ImageDisplayService imageDisplayService, ClimbingService climbingService) {
         this.passwordEncoder = passwordEncoder;
         this.emailService = emailService;
         this.userRepository = userRepository;
         this.imageDisplayService = imageDisplayService;
+        this.climbingService= climbingService;
     }
 
 
@@ -106,10 +109,32 @@ public class UserService implements UserDetailsService {
         return (MyUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
 
+    public List<Long> get9idOfMiniImagesOfUser(String userName) {
+        List<Long> idList;
+        try {
+            idList = em.createQuery("SELECT i.id FROM MyUser s  LEFT JOIN s.images i WHERE s.name=:userName AND i.originalImgId>0 ORDER BY i.originalImgId DESC", Long.class)
+                    .setMaxResults(9)
+                    .setParameter("userName", userName)
+                    .getResultList();
+        } catch (NoResultException ex) {
+            return null;
+        }
+        return idList;
+    }
+
+    public MyUserChosenShowDto showChosenUser(String userName) throws RouteNotFoundException {
+        MyUser user = em.find(MyUser.class, userName);
+        MyUserChosenShowDto dto = new MyUserChosenShowDto(user);
+        List<Long> idOfMiniImages = get9idOfMiniImagesOfUser(userName);
+        Map<Long, String> map = climbingService.createUrlMapOfImages(idOfMiniImages, "user");
+        dto.setUserImages(map);
+        return dto;
+    }
+
 
     public Map<Long, String> showPhotosOfChosenUser(String username) throws UserNotFoundException {
         userValidator(userRepository.existsMyUserByName(username));
-        List<Long> idOfMiniPictures = userRepository.idOfMiniImagesOfSector(username);
+        List<Long> idOfMiniPictures = userRepository.idOfMiniImagesOfUser(username);
         return ClimbingService.createUrlMapOfImages(idOfMiniPictures, "route");
     }
 

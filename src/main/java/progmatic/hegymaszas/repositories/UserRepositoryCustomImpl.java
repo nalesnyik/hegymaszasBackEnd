@@ -28,7 +28,7 @@ public class UserRepositoryCustomImpl implements UserRepositoryCustom {
     }
 
 
-    public List<Long> idOfMiniImagesOfSector(String username) {
+    public List<Long> idOfMiniImagesOfUser(String username) {
         return em.createQuery("SELECT i.id FROM Route r JOIN r.images i WHERE i.user.name=:name", Long.class)
                 .setParameter("name", username)
                 .getResultList();

@@ -23,8 +23,8 @@ public class RouteChosenShowDto {
     private int numOfBolts;
     private String grade;
 
-    private List<ClimbingLogShowDto> climbingLogs = new ArrayList<>();
-    private List<FeedbackShowDto> feedbacks = new ArrayList<>();
+    private List<ClimbingLogShowDto> climbingLogs;
+    private List<FeedbackShowDto> feedbacks;
     private List<RatingShowDto> ratings = new ArrayList<>();
     private Map<Long, String> urlOfImages = new TreeMap();
 
