@@ -30,8 +30,8 @@ public class ClimbingController {
     }
 
 
-    @GetMapping("areas/{climbingPlaceId}/{sectorId}")
-    public SectorChosenShowDto showChosenSector(@PathVariable String climbingPlaceId, @PathVariable long sectorId) throws SectorNotFoundException {
+    @GetMapping("areas/sector/{sectorId}")
+    public SectorChosenShowDto showChosenSector(@PathVariable long sectorId) throws SectorNotFoundException {
         return climbingService.showChosenSector(sectorId);
     }
 
