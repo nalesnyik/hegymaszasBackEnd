@@ -10,5 +10,5 @@ public interface UserRepositoryCustom {
 
     byte[] getMyProfilePicture();
 
-    List<Long> idOfMiniImagesOfSector(String username);
+    List<Long> idOfMiniImagesOfUser(String username);
 }
