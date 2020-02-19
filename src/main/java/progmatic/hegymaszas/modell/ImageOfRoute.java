@@ -2,7 +2,6 @@ package progmatic.hegymaszas.modell;
 
 import org.springframework.web.multipart.MultipartFile;
 import progmatic.hegymaszas.services.UserService;
-
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import java.io.IOException;
