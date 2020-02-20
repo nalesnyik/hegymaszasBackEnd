@@ -24,6 +24,7 @@ import progmatic.hegymaszas.repositories.UserRepository;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -71,6 +72,7 @@ public class UserService implements UserDetailsService {
         user.setPassword(passwordEncoder.encode(userDto.getPassword()));
         MyAuthority authority = em.find(MyAuthority.class, "ROLE_USER");
         authority.getUsers().add(user);
+        user.setRegistrationDate(LocalDateTime.now());
         user.setClimbingLogs(new ArrayList<>());
         user.setDateOfBirth(userDto.getDateOfBirth());
         user.setDateOfFirstClimb(userDto.getDateOfFirstClimb());
@@ -106,6 +108,7 @@ public class UserService implements UserDetailsService {
 
     public ResponseEntity<byte[]> showProfilePicture() {
         MyUser user = (MyUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
         byte[] image = user.getProfilePicture();
         return imageDisplayService.convertImageToResponseEntity(image, user.getProfilePictureContentType());
     }
@@ -150,6 +153,7 @@ public class UserService implements UserDetailsService {
     public static void userValidator(boolean doesExist) throws UserNotFoundException {
         if (!doesExist) throw new UserNotFoundException();
     }
+
 
     public void createUserLog(long routeId, String type) throws WrongAscentTypeException {
         Route route = em.find(Route.class, routeId);

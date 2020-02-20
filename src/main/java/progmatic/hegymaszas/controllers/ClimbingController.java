@@ -18,7 +18,7 @@ public class ClimbingController {
     private ClimbingService climbingService;
 
 
-    @GetMapping
+    @GetMapping("/areas/")
     public Map<String, List<ClimbingPlaceDto>> showClimbingPlaces() {
         return climbingService.showClimbingPlaces();
     }
