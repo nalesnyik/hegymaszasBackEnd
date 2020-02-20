@@ -201,8 +201,6 @@ public class ClimbingService {
     @Transactional
     public ResponseEntity<byte[]> showPictureOfRoute(long imageId) throws ImageNotFoundException {
         ImageOfRoute image = em.find(ImageOfRoute.class, imageId);
-        if (image == null) throw new ImageNotFoundException();
-
         return imageDisplayService.convertImageToResponseEntity(image);
     }
 
@@ -232,6 +230,9 @@ public class ClimbingService {
     }
 
 
+
+
+
     public static void routeValidator(Route route) throws RouteNotFoundException {
         if (route == null) throw new RouteNotFoundException();
     }
@@ -253,7 +254,7 @@ public class ClimbingService {
 
 
     @Transactional
-    public ResponseEntity<byte[]> showPictureOfSector(long pictureId) {
+    public ResponseEntity<byte[]> showPictureOfSector(long pictureId) throws ImageNotFoundException {
         ImageOfSector image = em.find(ImageOfSector.class, pictureId);
         return imageDisplayService.convertImageToResponseEntity(image);
     }

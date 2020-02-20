@@ -39,7 +39,7 @@ public class ClimbingController {
     @GetMapping("/image/sector/{pictureId}")
     public ResponseEntity<byte[]> showPictureOfSector(
             @PathVariable long pictureId
-    ) {
+    ) throws ImageNotFoundException {
         return climbingService.showPictureOfSector(pictureId);
     }
 
