@@ -6,6 +6,7 @@ import progmatic.hegymaszas.annotations.UniqueUsernameConstraint;
 import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.validation.constraints.*;
+import java.util.Date;
 
 public class MyUserDto {
     @Id
@@ -24,6 +25,11 @@ public class MyUserDto {
     @Column(unique = true)
     @UniqueEmailConstraint
     private String email;
+
+    private Date dateOfBirth;
+
+
+    private Date dateOfFirstClimb;
 
 
     public MyUserDto() {
@@ -57,5 +63,21 @@ public class MyUserDto {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public Date getDateOfBirth() {
+        return dateOfBirth;
+    }
+
+    public void setDateOfBirth(Date dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
+    }
+
+    public Date getDateOfFirstClimb() {
+        return dateOfFirstClimb;
+    }
+
+    public void setDateOfFirstClimb(Date dateOfFirstClimb) {
+        this.dateOfFirstClimb = dateOfFirstClimb;
     }
 }

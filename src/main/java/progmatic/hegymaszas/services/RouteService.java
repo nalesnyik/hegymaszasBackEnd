@@ -3,9 +3,13 @@ package progmatic.hegymaszas.services;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
+import progmatic.hegymaszas.dto.ClimbingLogCreateDto;
 import progmatic.hegymaszas.dto.RouteChosenShowDto;
+import progmatic.hegymaszas.exceptions.WrongAscentTypeException;
 import progmatic.hegymaszas.modell.*;
+import progmatic.hegymaszas.modell.enums.AscentType;
 import progmatic.hegymaszas.modell.enums.Orientation;
+import progmatic.hegymaszas.modell.messages.ClimbingLog;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -77,5 +81,6 @@ public class RouteService {
         }
         return routeListToShow;
     }
+
 
 }

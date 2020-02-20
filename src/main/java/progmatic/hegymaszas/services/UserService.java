@@ -9,12 +9,16 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import progmatic.hegymaszas.dto.ClimbingLogCreateDto;
 import progmatic.hegymaszas.dto.MyUserChosenShowDto;
 import progmatic.hegymaszas.dto.MyUserDto;
 import progmatic.hegymaszas.exceptions.RouteNotFoundException;
 import progmatic.hegymaszas.exceptions.UserNotFoundException;
+import progmatic.hegymaszas.exceptions.WrongAscentTypeException;
 import progmatic.hegymaszas.modell.MyAuthority;
 import progmatic.hegymaszas.modell.MyUser;
+import progmatic.hegymaszas.modell.Route;
+import progmatic.hegymaszas.modell.messages.ClimbingLog;
 import progmatic.hegymaszas.repositories.UserRepository;
 
 import javax.persistence.EntityManager;
@@ -68,6 +72,8 @@ public class UserService implements UserDetailsService {
         MyAuthority authority = em.find(MyAuthority.class, "ROLE_USER");
         authority.getUsers().add(user);
         user.setClimbingLogs(new ArrayList<>());
+        user.setDateOfBirth(userDto.getDateOfBirth());
+        user.setDateOfFirstClimb(userDto.getDateOfFirstClimb());
         em.persist(user);
         emailService.sendRegistrationEmail(user);
     }
@@ -143,5 +149,16 @@ public class UserService implements UserDetailsService {
 
     public static void userValidator(boolean doesExist) throws UserNotFoundException {
         if (!doesExist) throw new UserNotFoundException();
+    }
+
+    public void createUserLog(long routeId, String type) throws WrongAscentTypeException {
+        Route route = em.find(Route.class, routeId);
+        ClimbingLogCreateDto logCreate = new ClimbingLogCreateDto();
+        logCreate.setType(type);
+        ClimbingLog log = new ClimbingLog(logCreate, route);
+        MyUser user = (MyUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        List<ClimbingLog> userLogs = user.getClimbingLogs();
+        userLogs.add(log);
+        user.setClimbingLogs(userLogs);
     }
 }
