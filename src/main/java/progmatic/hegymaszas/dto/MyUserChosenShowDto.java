@@ -8,7 +8,7 @@ import java.util.*;
 public class MyUserChosenShowDto {
     private String name;
     private String email;
-    private Date dateOfBorn;
+    private Date dateOfBirth;
     private Date dateOfFirstClimb;
 
     private List<ClimbingLog> climbingLogs = new ArrayList<>();
@@ -21,16 +21,16 @@ public class MyUserChosenShowDto {
     public MyUserChosenShowDto(MyUser user) {
         name = user.getName();
         email = user.getEmail();
-        dateOfBorn = user.getDateOfBirth();
+        dateOfBirth = user.getDateOfBirth();
         dateOfFirstClimb = user.getDateOfFirstClimb();
         climbingLogs = user.getClimbingLogs();
     }
 
 
-    public MyUserChosenShowDto(String name, String email, Date dateOfBorn, Date dateOfFirstClimb) {
+    public MyUserChosenShowDto(String name, String email, Date dateOfBirth, Date dateOfFirstClimb) {
         this.name = name;
         this.email = email;
-        this.dateOfBorn = dateOfBorn;
+        this.dateOfBirth = dateOfBirth;
         this.dateOfFirstClimb = dateOfFirstClimb;
     }
 
@@ -53,12 +53,12 @@ public class MyUserChosenShowDto {
         this.email = email;
     }
 
-    public Date getDateOfBorn() {
-        return dateOfBorn;
+    public Date getDateOfBirth() {
+        return dateOfBirth;
     }
 
-    public void setDateOfBorn(Date dateOfBorn) {
-        this.dateOfBorn = dateOfBorn;
+    public void setDateOfBirth(Date dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
     }
 
     public Date getDateOfFirstClimb() {
