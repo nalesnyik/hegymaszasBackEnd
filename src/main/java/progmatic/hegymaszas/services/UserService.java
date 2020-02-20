@@ -24,6 +24,7 @@ import progmatic.hegymaszas.repositories.UserRepository;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -154,6 +155,7 @@ public class UserService implements UserDetailsService {
         ClimbingLogCreateDto logCreate = new ClimbingLogCreateDto();
         logCreate.setType(type);
         ClimbingLog log = new ClimbingLog(logCreate, route);
+        log.setDateOfClimb(LocalDate.now());
         MyUser user = (MyUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         List<ClimbingLog> userLogs = user.getClimbingLogs();
         userLogs.add(log);

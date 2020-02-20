@@ -10,13 +10,14 @@ import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 import java.sql.Date;
+import java.time.LocalDate;
 
 @Entity
 public class ClimbingLog extends Message {
     @NotNull
     @ManyToOne
     private Route route;
-    private Date dateOfClimb;
+    private LocalDate dateOfClimb;
     private AscentType type;
 
 
@@ -48,5 +49,13 @@ public class ClimbingLog extends Message {
 
     public void setType(AscentType type) {
         this.type = type;
+    }
+
+    public LocalDate getDateOfClimb() {
+        return dateOfClimb;
+    }
+
+    public void setDateOfClimb(LocalDate dateOfClimb) {
+        this.dateOfClimb = dateOfClimb;
     }
 }
