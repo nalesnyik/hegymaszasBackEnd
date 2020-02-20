@@ -107,8 +107,7 @@ public class UserService implements UserDetailsService {
 
 
     public ResponseEntity<byte[]> showProfilePicture() {
-        MyUser user = (MyUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
+        MyUser user = em.find(MyUser.class, UserService.getMyUser().getName());
         byte[] image = user.getProfilePicture();
         return imageDisplayService.convertImageToResponseEntity(image, user.getProfilePictureContentType());
     }
