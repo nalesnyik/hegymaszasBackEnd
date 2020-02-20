@@ -24,13 +24,13 @@ public class ClimbingController {
     }
 
 
-    @GetMapping("areas/{climbingPlaceId}")
+    @GetMapping("/areas/{climbingPlaceId}")
     public Map<String, List<SectorsShowDto>> showSectorsOfClimbingPlace(@PathVariable(value = "climbingPlaceId") long id) {
         return climbingService.showSectorsOfClimbingPlace(id);
     }
 
 
-    @GetMapping("areas/sector/{sectorId}")
+    @GetMapping("/areas/sector/{sectorId}")
     public SectorChosenShowDto showChosenSector(@PathVariable long sectorId) throws SectorNotFoundException {
         return climbingService.showChosenSector(sectorId);
     }
@@ -44,7 +44,7 @@ public class ClimbingController {
     }
 
 
-    @GetMapping("areas/route/{routeId}")
+    @GetMapping("/areas/route/{routeId}")
     public RouteChosenShowDto showChosenRoute(@PathVariable long routeId) throws RouteNotFoundException {
         return climbingService.showChosenRoute(routeId);
     }

@@ -16,7 +16,7 @@ public class ImageDisplayService {
     EntityManager em;
 
 
-    public static ResponseEntity<byte[]> convertImageToResponseEntity(byte[] image, String contentType) {
+    public ResponseEntity<byte[]> convertImageToResponseEntity(byte[] image, String contentType) {
         MediaType mediaType;
         switch (contentType) {
             case "image/png":
@@ -32,7 +32,7 @@ public class ImageDisplayService {
     }
 
 
-    public static ResponseEntity<byte[]> convertImageToResponseEntity(Image image) {
+    public ResponseEntity<byte[]> convertImageToResponseEntity(Image image) {
         MediaType mediaType;
         switch (image.getImageContentType()) {
             case "image/png":

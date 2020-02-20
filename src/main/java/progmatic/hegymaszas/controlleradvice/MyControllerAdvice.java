@@ -11,26 +11,19 @@ import java.util.Map;
 
 @ControllerAdvice
 public class MyControllerAdvice {
-    @ExceptionHandler({RouteNameForSectorAlreadyExistsException.class})
-    public ResponseEntity<Map<String, String>> handleRouteNameForSectorAlreadyExists(RouteNameForSectorAlreadyExistsException ex) {
+
+    @ExceptionHandler({ClimbingPlaceNotFoundException.class})
+    public ResponseEntity<Map<String, String>> handleClimbingPlaceNotFound(ClimbingPlaceNotFoundException ex) {
         HashMap<String, String> map = new HashMap<>();
-        map.put("error", ex.getMessage());
+        map.put("error", "Climbingplace not found");
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(map);
     }
 
 
-    @ExceptionHandler({SectorNotFoundException.class})
-    public ResponseEntity<Map<String, String>> handleSectorNotFound(SectorNotFoundException ex) {
+    @ExceptionHandler({ImageNotFoundException.class})
+    public ResponseEntity<Map<String, String>> handleImageNotFound(ImageNotFoundException ex) {
         HashMap<String, String> map = new HashMap<>();
-        map.put("error", "Sector not found.");
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(map);
-    }
-
-
-    @ExceptionHandler({RouteNotFoundException.class})
-    public ResponseEntity<Map<String, String>> handleRouteNotFound(RouteNotFoundException ex) {
-        HashMap<String, String> map = new HashMap<>();
-        map.put("error", "Route not found.");
+        map.put("error", "Image not found.");
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(map);
     }
 
@@ -43,14 +36,6 @@ public class MyControllerAdvice {
     }
 
 
-    @ExceptionHandler({RouteRatingByUserExistsException.class})
-    public ResponseEntity<Map<String, String>> handleRouteRatingByUserExists(RouteRatingByUserExistsException ex) {
-        HashMap<String, String> map = new HashMap<>();
-        map.put("error", "Rating has already been created for this route.");
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(map);
-    }
-
-
     @ExceptionHandler({RatingNotFoundException.class})
     public ResponseEntity<Map<String, String>> handleRouteRatingByUserExists(RatingNotFoundException ex) {
         HashMap<String, String> map = new HashMap<>();
@@ -59,10 +44,34 @@ public class MyControllerAdvice {
     }
 
 
-    @ExceptionHandler({WrongAscentTypeException.class})
-    public ResponseEntity<Map<String, String>> handleWrongAscentType(WrongAscentTypeException ex) {
+    @ExceptionHandler({RouteNameForSectorAlreadyExistsException.class})
+    public ResponseEntity<Map<String, String>> handleRouteNameForSectorAlreadyExists(RouteNameForSectorAlreadyExistsException ex) {
         HashMap<String, String> map = new HashMap<>();
-        map.put("error", "Wrong ascenttype.");
+        map.put("error", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(map);
+    }
+
+
+    @ExceptionHandler({RouteNotFoundException.class})
+    public ResponseEntity<Map<String, String>> handleRouteNotFound(RouteNotFoundException ex) {
+        HashMap<String, String> map = new HashMap<>();
+        map.put("error", "Route not found.");
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(map);
+    }
+
+
+    @ExceptionHandler({RouteRatingByUserExistsException.class})
+    public ResponseEntity<Map<String, String>> handleRouteRatingByUserExists(RouteRatingByUserExistsException ex) {
+        HashMap<String, String> map = new HashMap<>();
+        map.put("error", "Rating has already been created for this route.");
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(map);
+    }
+
+
+    @ExceptionHandler({SectorNotFoundException.class})
+    public ResponseEntity<Map<String, String>> handleSectorNotFound(SectorNotFoundException ex) {
+        HashMap<String, String> map = new HashMap<>();
+        map.put("error", "Sector not found.");
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(map);
     }
 
@@ -81,5 +90,14 @@ public class MyControllerAdvice {
         map.put("error", "User not found.");
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(map);
     }
+
+
+    @ExceptionHandler({WrongAscentTypeException.class})
+    public ResponseEntity<Map<String, String>> handleWrongAscentType(WrongAscentTypeException ex) {
+        HashMap<String, String> map = new HashMap<>();
+        map.put("error", "Wrong ascenttype.");
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(map);
+    }
+
 
 }

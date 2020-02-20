@@ -32,21 +32,22 @@ public class UserService implements UserDetailsService {
     PasswordEncoder passwordEncoder;
     EmailService emailService;
     UserRepository userRepository;
-    ImageDisplayService imageDisplayService;
     ClimbingService climbingService;
+    ImageDisplayService imageDisplayService;
 
 
     @Autowired
-    public UserService(PasswordEncoder passwordEncoder, EmailService emailService, UserRepository userRepository, ImageDisplayService imageDisplayService, ClimbingService climbingService) {
+    public UserService(PasswordEncoder passwordEncoder, EmailService emailService, UserRepository userRepository, ClimbingService climbingService, ImageDisplayService imageDisplayService) {
         this.passwordEncoder = passwordEncoder;
         this.emailService = emailService;
         this.userRepository = userRepository;
+        this.climbingService = climbingService;
         this.imageDisplayService = imageDisplayService;
-        this.climbingService= climbingService;
     }
 
 
     @Override
+    @Transactional
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         MyUser user;
         try {
@@ -98,8 +99,7 @@ public class UserService implements UserDetailsService {
 
 
     public ResponseEntity<byte[]> showProfilePicture() {
-        MyUser myUser = (MyUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        MyUser user = em.find(MyUser.class, myUser.getName());
+        MyUser user = (MyUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         byte[] image = user.getProfilePicture();
         return imageDisplayService.convertImageToResponseEntity(image, user.getProfilePictureContentType());
     }
@@ -108,6 +108,7 @@ public class UserService implements UserDetailsService {
     public static MyUser getMyUser() {
         return (MyUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
+
 
     public List<Long> get9idOfMiniImagesOfUser(String userName) {
         List<Long> idList;
@@ -122,11 +123,12 @@ public class UserService implements UserDetailsService {
         return idList;
     }
 
+
     public MyUserChosenShowDto showChosenUser(String userName) throws RouteNotFoundException {
         MyUser user = em.find(MyUser.class, userName);
         MyUserChosenShowDto dto = new MyUserChosenShowDto(user);
         List<Long> idOfMiniImages = get9idOfMiniImagesOfUser(userName);
-        Map<Long, String> map = climbingService.createUrlMapOfImages(idOfMiniImages, "user");
+        Map<Long, String> map = ClimbingService.createUrlMapOfImages(idOfMiniImages, "user");
         dto.setUserImages(map);
         return dto;
     }
