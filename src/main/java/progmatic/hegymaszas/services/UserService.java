@@ -25,6 +25,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -37,21 +38,22 @@ public class UserService implements UserDetailsService {
     PasswordEncoder passwordEncoder;
     EmailService emailService;
     UserRepository userRepository;
-    ImageDisplayService imageDisplayService;
     ClimbingService climbingService;
+    ImageDisplayService imageDisplayService;
 
 
     @Autowired
-    public UserService(PasswordEncoder passwordEncoder, EmailService emailService, UserRepository userRepository, ImageDisplayService imageDisplayService, ClimbingService climbingService) {
+    public UserService(PasswordEncoder passwordEncoder, EmailService emailService, UserRepository userRepository, ClimbingService climbingService, ImageDisplayService imageDisplayService) {
         this.passwordEncoder = passwordEncoder;
         this.emailService = emailService;
         this.userRepository = userRepository;
+        this.climbingService = climbingService;
         this.imageDisplayService = imageDisplayService;
-        this.climbingService= climbingService;
     }
 
 
     @Override
+    @Transactional
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         MyUser user;
         try {
@@ -71,6 +73,7 @@ public class UserService implements UserDetailsService {
         user.setPassword(passwordEncoder.encode(userDto.getPassword()));
         MyAuthority authority = em.find(MyAuthority.class, "ROLE_USER");
         authority.getUsers().add(user);
+        user.setRegistrationDate(LocalDateTime.now());
         user.setClimbingLogs(new ArrayList<>());
         user.setDateOfBirth(userDto.getDateOfBirth());
         user.setDateOfFirstClimb(userDto.getDateOfFirstClimb());
@@ -105,8 +108,7 @@ public class UserService implements UserDetailsService {
 
 
     public ResponseEntity<byte[]> showProfilePicture() {
-        MyUser myUser = (MyUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        MyUser user = em.find(MyUser.class, myUser.getName());
+        MyUser user = em.find(MyUser.class, UserService.getMyUser().getName());
         byte[] image = user.getProfilePicture();
         return imageDisplayService.convertImageToResponseEntity(image, user.getProfilePictureContentType());
     }
@@ -115,6 +117,7 @@ public class UserService implements UserDetailsService {
     public static MyUser getMyUser() {
         return (MyUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
+
 
     public List<Long> get9idOfMiniImagesOfUser(String userName) {
         List<Long> idList;
@@ -129,11 +132,12 @@ public class UserService implements UserDetailsService {
         return idList;
     }
 
+
     public MyUserChosenShowDto showChosenUser(String userName) throws RouteNotFoundException {
         MyUser user = em.find(MyUser.class, userName);
         MyUserChosenShowDto dto = new MyUserChosenShowDto(user);
         List<Long> idOfMiniImages = get9idOfMiniImagesOfUser(userName);
-        Map<Long, String> map = climbingService.createUrlMapOfImages(idOfMiniImages, "user");
+        Map<Long, String> map = ClimbingService.createUrlMapOfImages(idOfMiniImages, "user");
         dto.setUserImages(map);
         return dto;
     }
@@ -149,6 +153,7 @@ public class UserService implements UserDetailsService {
     public static void userValidator(boolean doesExist) throws UserNotFoundException {
         if (!doesExist) throw new UserNotFoundException();
     }
+
 
     public void createUserLog(long routeId, String type) throws WrongAscentTypeException {
         Route route = em.find(Route.class, routeId);

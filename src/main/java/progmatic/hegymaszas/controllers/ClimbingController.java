@@ -18,19 +18,19 @@ public class ClimbingController {
     private ClimbingService climbingService;
 
 
-    @GetMapping
+    @GetMapping("/areas/")
     public Map<String, List<ClimbingPlaceDto>> showClimbingPlaces() {
         return climbingService.showClimbingPlaces();
     }
 
 
-    @GetMapping("areas/{climbingPlaceId}")
+    @GetMapping("/areas/{climbingPlaceId}")
     public Map<String, List<SectorsShowDto>> showSectorsOfClimbingPlace(@PathVariable(value = "climbingPlaceId") long id) {
         return climbingService.showSectorsOfClimbingPlace(id);
     }
 
 
-    @GetMapping("areas/sector/{sectorId}")
+    @GetMapping("/areas/sector/{sectorId}")
     public SectorChosenShowDto showChosenSector(@PathVariable long sectorId) throws SectorNotFoundException {
         return climbingService.showChosenSector(sectorId);
     }
@@ -39,12 +39,12 @@ public class ClimbingController {
     @GetMapping("/image/sector/{pictureId}")
     public ResponseEntity<byte[]> showPictureOfSector(
             @PathVariable long pictureId
-    ) {
+    ) throws ImageNotFoundException {
         return climbingService.showPictureOfSector(pictureId);
     }
 
 
-    @GetMapping("areas/route/{routeId}")
+    @GetMapping("/areas/route/{routeId}")
     public RouteChosenShowDto showChosenRoute(@PathVariable long routeId) throws RouteNotFoundException {
         return climbingService.showChosenRoute(routeId);
     }

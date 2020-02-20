@@ -1,6 +1,5 @@
 package progmatic.hegymaszas.services;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -29,13 +28,14 @@ public class ClimbingService {
     private ClimbingRepository climbingRepository;
     private SectorRepository sectorRepository;
     private RouteRepository routeRepository;
+    private ImageDisplayService imageDisplayService;
 
 
-    @Autowired
-    public ClimbingService(ClimbingRepository climbingRepository, SectorRepository sectorRepository, RouteRepository routeRepository) {
+    public ClimbingService(ClimbingRepository climbingRepository, SectorRepository sectorRepository, RouteRepository routeRepository, ImageDisplayService imageDisplayService) {
         this.climbingRepository = climbingRepository;
         this.sectorRepository = sectorRepository;
         this.routeRepository = routeRepository;
+        this.imageDisplayService = imageDisplayService;
     }
 
 
@@ -198,11 +198,10 @@ public class ClimbingService {
     }
 
 
+    @Transactional
     public ResponseEntity<byte[]> showPictureOfRoute(long imageId) throws ImageNotFoundException {
         ImageOfRoute image = em.find(ImageOfRoute.class, imageId);
-        if (image == null) throw new ImageNotFoundException();
-
-        return ImageDisplayService.convertImageToResponseEntity(image);
+        return imageDisplayService.convertImageToResponseEntity(image);
     }
 
 
@@ -231,6 +230,9 @@ public class ClimbingService {
     }
 
 
+
+
+
     public static void routeValidator(Route route) throws RouteNotFoundException {
         if (route == null) throw new RouteNotFoundException();
     }
@@ -251,9 +253,10 @@ public class ClimbingService {
     }
 
 
-    public ResponseEntity<byte[]> showPictureOfSector(long pictureId) {
+    @Transactional
+    public ResponseEntity<byte[]> showPictureOfSector(long pictureId) throws ImageNotFoundException {
         ImageOfSector image = em.find(ImageOfSector.class, pictureId);
-        return ImageDisplayService.convertImageToResponseEntity(image);
+        return imageDisplayService.convertImageToResponseEntity(image);
     }
 
 
