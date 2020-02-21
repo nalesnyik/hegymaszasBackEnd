@@ -41,7 +41,6 @@ public class Sector {
     @ManyToOne
     private ClimbingPlace climbingPlace;
 
-    //    @Size(min = 50, max = 1000)
     private String travelGuide;
 
     private double longitude;

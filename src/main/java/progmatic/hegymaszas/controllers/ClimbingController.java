@@ -111,6 +111,7 @@ public class ClimbingController {
         return climbingService.createLog(log, routeId);
     }
 
-
+//    @PostMapping("/sector/distance")
+//    public List<String>
 }
 

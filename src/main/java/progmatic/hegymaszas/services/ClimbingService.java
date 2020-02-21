@@ -26,6 +26,8 @@ import javax.persistence.PersistenceContext;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -283,19 +285,16 @@ public class ClimbingService {
 
     @Transactional
     public void uploadsectorfromfile(MultipartFile file) throws IOException {
-        Reader reader = new InputStreamReader(file.getInputStream());
+        Reader reader = new InputStreamReader(file.getInputStream(), StandardCharsets.UTF_8);
         CSVParser parser = new CSVParser(reader, CSVFormat.EXCEL);
         List<CSVRecord> list = parser.getRecords();
-        long id = 11;
-        for (CSVRecord record : list) {
+         for (CSVRecord record : list) {
             Sector sector = new Sector();
             GeometryFactory geometryFactory = new GeometryFactory();
             Point point = geometryFactory.createPoint(new Coordinate(Double.parseDouble(record.get(2)), Double.parseDouble(record.get(1))));
             sector.setLocation(point);
             sector.setName(record.get(3));
             sector.setClimbingPlace(em.find(ClimbingPlace.class, Long.parseLong(record.get(4))));
-            sector.setId(id++);
-            em.merge(sector);
             em.persist(sector);
         }
     }
