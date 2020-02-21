@@ -34,20 +34,19 @@ public class UserController {
 
 
     @GetMapping("/user/{userName}")
-    public MyUserChosenShowDto showUserProfile(@PathVariable String userName) throws RouteNotFoundException {
+    public MyUserChosenShowDto showUserProfile(@PathVariable String userName) {
         return userService.showChosenUser(userName);
     }
 
     @GetMapping("/me")
-    @Transactional
-    public MyUserChosenShowDto showMyProfile() throws RouteNotFoundException {
+    public MyUserChosenShowDto showMyProfile() {
         MyUser user = (MyUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String userName= user.getUsername();
         return userService.showChosenUser(userName);
     }
 
 
-    @GetMapping("/user/me/picture")
+    @GetMapping("/me/picture")
     public ResponseEntity<byte[]> showProfilePicture() throws IOException {
         return userService.showProfilePicture();
     }

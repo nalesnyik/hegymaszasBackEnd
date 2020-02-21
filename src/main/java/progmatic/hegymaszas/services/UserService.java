@@ -12,7 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 import progmatic.hegymaszas.dto.ClimbingLogCreateDto;
 import progmatic.hegymaszas.dto.MyUserChosenShowDto;
 import progmatic.hegymaszas.dto.MyUserDto;
-import progmatic.hegymaszas.exceptions.RouteNotFoundException;
 import progmatic.hegymaszas.exceptions.UserNotFoundException;
 import progmatic.hegymaszas.exceptions.WrongAscentTypeException;
 import progmatic.hegymaszas.modell.MyAuthority;
@@ -107,6 +106,7 @@ public class UserService implements UserDetailsService {
     }
 
 
+    @Transactional
     public ResponseEntity<byte[]> showProfilePicture() {
         MyUser user = em.find(MyUser.class, UserService.getMyUser().getName());
         byte[] image = user.getProfilePicture();
@@ -122,7 +122,7 @@ public class UserService implements UserDetailsService {
     public List<Long> get9idOfMiniImagesOfUser(String userName) {
         List<Long> idList;
         try {
-            idList = em.createQuery("SELECT i.id FROM MyUser s  LEFT JOIN s.images i WHERE s.name=:userName AND i.originalImgId>0 ORDER BY i.originalImgId DESC", Long.class)
+            idList = em.createQuery("SELECT i.id FROM MyUser u LEFT JOIN u.images i WHERE u.name=:userName AND i.originalImgId>0 ORDER BY i.originalImgId DESC", Long.class)
                     .setMaxResults(9)
                     .setParameter("userName", userName)
                     .getResultList();
@@ -133,12 +133,14 @@ public class UserService implements UserDetailsService {
     }
 
 
-    public MyUserChosenShowDto showChosenUser(String userName) throws RouteNotFoundException {
+    @Transactional
+    public MyUserChosenShowDto showChosenUser(String userName) {
         MyUser user = em.find(MyUser.class, userName);
         MyUserChosenShowDto dto = new MyUserChosenShowDto(user);
         List<Long> idOfMiniImages = get9idOfMiniImagesOfUser(userName);
-        Map<Long, String> map = ClimbingService.createUrlMapOfImages(idOfMiniImages, "user");
+        Map<Long, String> map = ClimbingService.createUrlMapOfImages(idOfMiniImages, "route");
         dto.setUserImages(map);
+        dto.setProfilePictureUrl("/me/picture");
         return dto;
     }
 

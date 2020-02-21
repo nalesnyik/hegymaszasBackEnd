@@ -147,9 +147,8 @@ public class ClimbingService {
 
     public static Map<Long, String> createUrlMapOfImages(List<Long> idOfMiniImages, String entity) {
         Map<Long, String> map = new TreeMap<>();
-        StringBuilder url = new StringBuilder("localhost:8080/image");
         for (Long id : idOfMiniImages) {
-            map.put((id - 1), url.toString() + "/" + entity + "/" + id);
+            map.put((id - 1), "/image/" + entity + "/" + id);
         }
         return map;
     }

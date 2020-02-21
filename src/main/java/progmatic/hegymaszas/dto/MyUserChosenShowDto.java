@@ -13,6 +13,7 @@ public class MyUserChosenShowDto {
 
     private List<ClimbingLog> climbingLogs = new ArrayList<>();
     private Map<Long, String> userImages;
+    private String profilePictureUrl;
 
 
     public MyUserChosenShowDto() {
@@ -85,4 +86,13 @@ public class MyUserChosenShowDto {
         this.userImages = userImages;
     }
 
+
+    public String getProfilePictureUrl() {
+        return profilePictureUrl;
+    }
+
+
+    public void setProfilePictureUrl(String profilePictureUrl) {
+        this.profilePictureUrl = profilePictureUrl;
+    }
 }
