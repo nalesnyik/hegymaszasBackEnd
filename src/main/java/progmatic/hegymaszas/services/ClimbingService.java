@@ -148,10 +148,11 @@ public class ClimbingService {
 
 
     private String getUrlOfPictureOfSector(long idOfPicture) {
-        return "localhost:8080/image/sector/" + idOfPicture;
+        return "/image/sector/" + idOfPicture;
     }
 
 
+    @Transactional
     public RouteChosenShowDto showChosenRoute(long routeId) throws RouteNotFoundException {
         Route route = routeRepository.routeWithEverything(routeId);
         routeValidator(route);
