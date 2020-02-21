@@ -1,5 +1,9 @@
 package progmatic.hegymaszas.modell;
 
+import com.vividsolutions.jts.geom.Point;
+import org.hibernate.annotations.GeneratorType;
+import org.hibernate.annotations.Type;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -42,6 +46,8 @@ public class Sector {
 
     private double longitude;
     private double latitude;
+
+    private Point location;
 
     @OneToMany(mappedBy = "sector")
     private List<ImageOfSector> images = new ArrayList<>();
@@ -128,6 +134,16 @@ public class Sector {
 
     public void setImages(List<ImageOfSector> images) {
         this.images = images;
+    }
+
+
+    public Point getLocation() {
+        return location;
+    }
+
+
+    public void setLocation(Point location) {
+        this.location = location;
     }
 }
 

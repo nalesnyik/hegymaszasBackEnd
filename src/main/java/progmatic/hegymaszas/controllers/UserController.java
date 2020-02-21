@@ -3,6 +3,7 @@ package progmatic.hegymaszas.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import progmatic.hegymaszas.dto.MyUserChosenShowDto;
 import progmatic.hegymaszas.dto.MyUserDto;
@@ -38,6 +39,7 @@ public class UserController {
     }
 
     @GetMapping("/me")
+    @Transactional
     public MyUserChosenShowDto showMyProfile() throws RouteNotFoundException {
         MyUser user = (MyUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String userName= user.getUsername();
@@ -57,7 +59,7 @@ public class UserController {
     }
 
     @PostMapping("/areas/route/{routeid}")
-    private void createUserLog(@PathVariable(value = "routeId") long routeId, @RequestBody String type) throws WrongAscentTypeException {
+    public void createUserLog(@PathVariable(value = "routeId") long routeId, @RequestBody String type) throws WrongAscentTypeException {
         userService.createUserLog(routeId, type);
     }
 }

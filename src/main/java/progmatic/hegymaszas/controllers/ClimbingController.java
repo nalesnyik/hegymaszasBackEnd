@@ -2,12 +2,14 @@ package progmatic.hegymaszas.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import progmatic.hegymaszas.dto.*;
 import progmatic.hegymaszas.exceptions.*;
-import progmatic.hegymaszas.modell.Sector;
 import progmatic.hegymaszas.services.ClimbingService;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -68,6 +70,13 @@ public class ClimbingController {
     }
 
 
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @PostMapping("/uploadsectorfromfile")
+    public void uploadsectorfromfile(@RequestBody MultipartFile file) throws IOException {
+        climbingService.uploadsectorfromfile(file);
+    }
+
+
     @GetMapping("/image/route/{imageId}")
     public ResponseEntity<byte[]> showPictureOfRoute(
             @PathVariable long imageId) throws ImageNotFoundException {
@@ -101,6 +110,7 @@ public class ClimbingController {
             @RequestBody ClimbingLogCreateDto log) throws RouteNotFoundException, WrongAscentTypeException {
         return climbingService.createLog(log, routeId);
     }
+
 
 }
 

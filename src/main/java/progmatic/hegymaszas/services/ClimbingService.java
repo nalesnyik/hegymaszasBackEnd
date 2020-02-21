@@ -1,10 +1,17 @@
 package progmatic.hegymaszas.services;
 
+import com.vividsolutions.jts.geom.Coordinate;
+import com.vividsolutions.jts.geom.GeometryFactory;
+import com.vividsolutions.jts.geom.Point;
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVParser;
+import org.apache.commons.csv.CSVRecord;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 import progmatic.hegymaszas.dto.*;
 import progmatic.hegymaszas.exceptions.*;
 import progmatic.hegymaszas.modell.*;
@@ -16,6 +23,9 @@ import progmatic.hegymaszas.repositories.SectorRepository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -230,9 +240,6 @@ public class ClimbingService {
     }
 
 
-
-
-
     public static void routeValidator(Route route) throws RouteNotFoundException {
         if (route == null) throw new RouteNotFoundException();
     }
@@ -272,5 +279,25 @@ public class ClimbingService {
         sectorValidator(sectorRepository.existsSectorById(sectorId));
         List<Long> idOfMiniPictures = sectorRepository.idOfMiniImagesOfSector(sectorId);
         return createUrlMapOfImages(idOfMiniPictures, "route");
+    }
+
+
+    @Transactional
+    public void uploadsectorfromfile(MultipartFile file) throws IOException {
+        Reader reader = new InputStreamReader(file.getInputStream());
+        CSVParser parser = new CSVParser(reader, CSVFormat.EXCEL);
+        List<CSVRecord> list = parser.getRecords();
+        long id = 11;
+        for (CSVRecord record : list) {
+            Sector sector = new Sector();
+            GeometryFactory geometryFactory = new GeometryFactory();
+            Point point = geometryFactory.createPoint(new Coordinate(Double.parseDouble(record.get(2)), Double.parseDouble(record.get(1))));
+            sector.setLocation(point);
+            sector.setName(record.get(3));
+            sector.setClimbingPlace(em.find(ClimbingPlace.class, Long.parseLong(record.get(4))));
+            sector.setId(id++);
+            em.merge(sector);
+            em.persist(sector);
+        }
     }
 }
