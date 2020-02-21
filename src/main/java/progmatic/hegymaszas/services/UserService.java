@@ -10,6 +10,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import progmatic.hegymaszas.dto.ClimbingLogCreateDto;
+import progmatic.hegymaszas.dto.FeedbackShowDto;
 import progmatic.hegymaszas.dto.MyUserChosenShowDto;
 import progmatic.hegymaszas.dto.MyUserDto;
 import progmatic.hegymaszas.exceptions.UserNotFoundException;
@@ -18,6 +19,7 @@ import progmatic.hegymaszas.modell.MyAuthority;
 import progmatic.hegymaszas.modell.MyUser;
 import progmatic.hegymaszas.modell.Route;
 import progmatic.hegymaszas.modell.messages.ClimbingLog;
+import progmatic.hegymaszas.modell.messages.Feedback;
 import progmatic.hegymaszas.repositories.UserRepository;
 
 import javax.persistence.EntityManager;
@@ -100,12 +102,6 @@ public class UserService implements UserDetailsService {
     }
 
 
-    public MyUserChosenShowDto showMyProfile() {
-        MyUser user = getMyUser();
-        return new MyUserChosenShowDto(em.find(MyUser.class, user.getName()));
-    }
-
-
     @Transactional
     public ResponseEntity<byte[]> showProfilePicture() {
         MyUser user = em.find(MyUser.class, UserService.getMyUser().getName());
@@ -136,7 +132,8 @@ public class UserService implements UserDetailsService {
     @Transactional
     public MyUserChosenShowDto showChosenUser(String userName) {
         MyUser user = em.find(MyUser.class, userName);
-        MyUserChosenShowDto dto = new MyUserChosenShowDto(user);
+        ClimbingService climbingService = new ClimbingService();
+        MyUserChosenShowDto dto = new MyUserChosenShowDto(user, climbingService);
         List<Long> idOfMiniImages = get9idOfMiniImagesOfUser(userName);
         Map<Long, String> map = ClimbingService.createUrlMapOfImages(idOfMiniImages, "route");
         dto.setUserImages(map);

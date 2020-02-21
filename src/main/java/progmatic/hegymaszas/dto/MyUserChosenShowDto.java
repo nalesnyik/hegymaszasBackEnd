@@ -1,7 +1,8 @@
 package progmatic.hegymaszas.dto;
 
 import progmatic.hegymaszas.modell.MyUser;
-import progmatic.hegymaszas.modell.messages.ClimbingLog;
+import progmatic.hegymaszas.services.ClimbingService;;
+
 import java.util.*;
 
 
@@ -10,8 +11,8 @@ public class MyUserChosenShowDto {
     private String email;
     private Date dateOfBirth;
     private Date dateOfFirstClimb;
-
-    private List<ClimbingLog> climbingLogs = new ArrayList<>();
+    private List<FeedbackShowDto> feedbacks = new ArrayList<>();
+    private List<ClimbingLogShowDto> climbingLogs = new ArrayList<>();
     private Map<Long, String> userImages;
     private String profilePictureUrl;
 
@@ -19,12 +20,13 @@ public class MyUserChosenShowDto {
     public MyUserChosenShowDto() {
     }
 
-    public MyUserChosenShowDto(MyUser user) {
+    public MyUserChosenShowDto(MyUser user, ClimbingService climbingService) {
         name = user.getName();
         email = user.getEmail();
         dateOfBirth = user.getDateOfBirth();
         dateOfFirstClimb = user.getDateOfFirstClimb();
-        climbingLogs = user.getClimbingLogs();
+        climbingLogs = climbingService.createClimbingLogShow(user.getClimbingLogs());
+        feedbacks = climbingService.createFeedbackShow(user.getFeedbacks());
     }
 
 
@@ -70,13 +72,6 @@ public class MyUserChosenShowDto {
         this.dateOfFirstClimb = dateOfFirstClimb;
     }
 
-    public List<ClimbingLog> getClimbingLogs() {
-        return climbingLogs;
-    }
-
-    public void setClimbingLogs(List<ClimbingLog> climbingLogs) {
-        this.climbingLogs = climbingLogs;
-    }
 
     public Map<Long, String> getUserImages() {
         return userImages;
@@ -94,5 +89,21 @@ public class MyUserChosenShowDto {
 
     public void setProfilePictureUrl(String profilePictureUrl) {
         this.profilePictureUrl = profilePictureUrl;
+    }
+
+    public List<FeedbackShowDto> getFeedbacks() {
+        return feedbacks;
+    }
+
+    public void setFeedbacks(List<FeedbackShowDto> feedbacks) {
+        this.feedbacks = feedbacks;
+    }
+
+    public List<ClimbingLogShowDto> getClimbingLogs() {
+        return climbingLogs;
+    }
+
+    public void setClimbingLogs(List<ClimbingLogShowDto> climbingLogs) {
+        this.climbingLogs = climbingLogs;
     }
 }

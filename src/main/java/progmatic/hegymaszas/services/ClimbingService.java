@@ -50,6 +50,8 @@ public class ClimbingService {
         this.imageDisplayService = imageDisplayService;
     }
 
+    public ClimbingService() {
+    }
 
     public Map<String, List<ClimbingPlaceDto>> showClimbingPlaces() {
         List<ClimbingPlace> climbingPlaces = climbingRepository.findAll();
@@ -297,5 +299,21 @@ public class ClimbingService {
             sector.setClimbingPlace(em.find(ClimbingPlace.class, Long.parseLong(record.get(4))));
             em.persist(sector);
         }
+    }
+
+    public List<FeedbackShowDto> createFeedbackShow(List<Feedback> feedbacks){
+        List<FeedbackShowDto> feedbackShowList= new ArrayList<>();
+        for (Feedback feedback : feedbacks) {
+            feedbackShowList.add(new FeedbackShowDto(feedback));
+        }
+        return feedbackShowList;
+    }
+
+    public List<ClimbingLogShowDto> createClimbingLogShow(List<ClimbingLog> climbingLogs){
+        List<ClimbingLogShowDto> climbingLogShowList= new ArrayList<>();
+        for (ClimbingLog climbingLog : climbingLogs) {
+            climbingLogShowList.add(new ClimbingLogShowDto(climbingLog));
+        }
+        return climbingLogShowList;
     }
 }
