@@ -111,7 +111,15 @@ public class ClimbingController {
         return climbingService.createLog(log, routeId);
     }
 
-//    @PostMapping("/sector/distance")
-//    public List<String>
+
+    @PostMapping("/sector/distance")
+    public List<String> showSectorsWithinDistance(@RequestBody LocationDto dto) {
+        return climbingService.showSectorsWithinDistance(dto);
+    }
+
+    @GetMapping("/coordinate/{sectorId}")
+    public ShowCoordinateDto vmi(@PathVariable(value = "sectorId") long id){
+      return   climbingService.vmi(id);
+    }
 }
 

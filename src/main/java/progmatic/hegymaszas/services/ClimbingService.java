@@ -6,6 +6,9 @@ import com.vividsolutions.jts.geom.Point;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -18,6 +21,7 @@ import progmatic.hegymaszas.modell.*;
 import progmatic.hegymaszas.modell.messages.ClimbingLog;
 import progmatic.hegymaszas.modell.messages.Feedback;
 import progmatic.hegymaszas.repositories.ClimbingRepository;
+import progmatic.hegymaszas.repositories.PostGisRepository;
 import progmatic.hegymaszas.repositories.RouteRepository;
 import progmatic.hegymaszas.repositories.SectorRepository;
 
@@ -26,7 +30,6 @@ import javax.persistence.PersistenceContext;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -34,6 +37,7 @@ import java.util.stream.Collectors;
 @Service
 public class ClimbingService {
 
+    private static final Logger logger = LoggerFactory.getLogger(ClimbingService.class);
     @PersistenceContext
     EntityManager em;
 
@@ -41,17 +45,27 @@ public class ClimbingService {
     private SectorRepository sectorRepository;
     private RouteRepository routeRepository;
     private ImageDisplayService imageDisplayService;
+    private PostGisRepository postGisRepository;
 
 
-    public ClimbingService(ClimbingRepository climbingRepository, SectorRepository sectorRepository, RouteRepository routeRepository, ImageDisplayService imageDisplayService) {
+    @Autowired
+    public ClimbingService(ClimbingRepository climbingRepository,
+                           SectorRepository sectorRepository,
+                           RouteRepository routeRepository,
+                           ImageDisplayService imageDisplayService,
+                           PostGisRepository postGisRepository
+    ) {
         this.climbingRepository = climbingRepository;
         this.sectorRepository = sectorRepository;
         this.routeRepository = routeRepository;
         this.imageDisplayService = imageDisplayService;
+        this.postGisRepository = postGisRepository;
     }
+
 
     public ClimbingService() {
     }
+
 
     public Map<String, List<ClimbingPlaceDto>> showClimbingPlaces() {
         List<ClimbingPlace> climbingPlaces = climbingRepository.findAll();
@@ -290,7 +304,7 @@ public class ClimbingService {
         Reader reader = new InputStreamReader(file.getInputStream(), StandardCharsets.UTF_8);
         CSVParser parser = new CSVParser(reader, CSVFormat.EXCEL);
         List<CSVRecord> list = parser.getRecords();
-         for (CSVRecord record : list) {
+        for (CSVRecord record : list) {
             Sector sector = new Sector();
             GeometryFactory geometryFactory = new GeometryFactory();
             Point point = geometryFactory.createPoint(new Coordinate(Double.parseDouble(record.get(2)), Double.parseDouble(record.get(1))));
@@ -301,19 +315,37 @@ public class ClimbingService {
         }
     }
 
-    public List<FeedbackShowDto> createFeedbackShow(List<Feedback> feedbacks){
-        List<FeedbackShowDto> feedbackShowList= new ArrayList<>();
+
+    public List<FeedbackShowDto> createFeedbackShow(List<Feedback> feedbacks) {
+        List<FeedbackShowDto> feedbackShowList = new ArrayList<>();
         for (Feedback feedback : feedbacks) {
             feedbackShowList.add(new FeedbackShowDto(feedback));
         }
         return feedbackShowList;
     }
 
-    public List<ClimbingLogShowDto> createClimbingLogShow(List<ClimbingLog> climbingLogs){
-        List<ClimbingLogShowDto> climbingLogShowList= new ArrayList<>();
+
+    public List<ClimbingLogShowDto> createClimbingLogShow(List<ClimbingLog> climbingLogs) {
+        List<ClimbingLogShowDto> climbingLogShowList = new ArrayList<>();
         for (ClimbingLog climbingLog : climbingLogs) {
             climbingLogShowList.add(new ClimbingLogShowDto(climbingLog));
         }
         return climbingLogShowList;
+    }
+
+
+    public List<String> showSectorsWithinDistance(LocationDto dto) {
+        logger.info("{}", dto);
+        List<Sector> sectorList = postGisRepository.getSectorsWithinDistanceOfLocation2(dto.getLon(), dto.getLat(), dto.getDist());
+        if (sectorList == null) {
+            return new ArrayList<>();
+        }
+        return sectorList.stream().map(Sector::getName).collect(Collectors.toList());
+    }
+
+
+    public ShowCoordinateDto vmi(long id) {
+        Sector sector = em.find(Sector.class, id);
+        return new ShowCoordinateDto(sector.getLocation());
     }
 }

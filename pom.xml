@@ -93,7 +93,6 @@
             <artifactId>spring-boot-starter-websocket</artifactId>
         </dependency>
 
-
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-messaging</artifactId>
@@ -106,7 +105,6 @@
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
         </dependency>
-
 
         <dependency>
             <groupId>com.google.code.gson</groupId>
@@ -146,6 +144,13 @@
             <artifactId>commons-io</artifactId>
             <version>2.4</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.geotools</groupId>
+            <artifactId>gt-mark-wkt</artifactId>
+            <version>11.5</version>
+        </dependency>
+
 
     </dependencies>
 
@@ -191,4 +196,12 @@
         </plugins>
 
     </build>
+
+    <repositories>
+        <repository>
+            <id>my-repoX</id>
+            <name>MY REPO</name>
+            <url>https://mvnrepository.com/artifact/</url>
+        </repository>
+    </repositories>
 </project>
