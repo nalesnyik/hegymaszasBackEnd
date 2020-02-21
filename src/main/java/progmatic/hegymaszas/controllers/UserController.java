@@ -41,7 +41,7 @@ public class UserController {
     @GetMapping("/me")
     public MyUserChosenShowDto showMyProfile() {
         MyUser user = (MyUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String userName= user.getUsername();
+        String userName = user.getUsername();
         return userService.showChosenUser(userName);
     }
 
